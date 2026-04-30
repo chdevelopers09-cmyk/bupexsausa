@@ -16,10 +16,7 @@ const navItems = [
     children: [
       { label: 'All Chapters', href: '/chapters' },
       { label: 'Texas', href: '/chapters/texas' },
-      { label: 'Georgia', href: '/chapters/georgia' },
-      { label: 'California', href: '/chapters/california' },
-      { label: 'Maryland / DC', href: '/chapters/maryland-dc' },
-      { label: 'New York', href: '/chapters/new-york' },
+      { label: 'DMV (DC, MD & VA)', href: '/chapters/maryland-dc' },
     ],
   },
   {

@@ -1,4 +1,4 @@
-import { LucideIcon, Star, Users, Heart, Globe, Award, Book } from 'lucide-react';
+import { LucideIcon, Star, Users, Heart, Globe, Award, Book, Database, Shield, Zap, Target, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface CardItem {
@@ -9,6 +9,7 @@ interface CardItem {
 
 interface CardGridSectionProps {
   variant?: 'three-col' | 'two-col';
+  bgVariant?: 'white' | 'sky' | 'purple';
   heading?: string;
   cards?: CardItem[];
 }
@@ -20,6 +21,11 @@ const ICONS: Record<string, LucideIcon> = {
   globe: Globe,
   award: Award,
   book: Book,
+  database: Database,
+  shield: Shield,
+  zap: Zap,
+  target: Target,
+  bookOpen: BookOpen,
 };
 
 const defaultCards: CardItem[] = [
@@ -30,11 +36,18 @@ const defaultCards: CardItem[] = [
 
 export default function CardGridSection({
   variant = 'three-col',
+  bgVariant = 'white',
   heading = 'Why Join Us',
   cards = defaultCards,
 }: CardGridSectionProps) {
+  const bgClasses = {
+    white: 'bg-white',
+    sky: 'bg-bg-blue',
+    purple: 'bg-bg-purple',
+  };
+
   return (
-    <section className="section-padding bg-white">
+    <section className={cn("section-padding", bgClasses[bgVariant])}>
       <div className="container-wide">
         {heading && (
           <div className="text-center mb-12">
@@ -50,14 +63,14 @@ export default function CardGridSection({
             const Icon = card.icon ? ICONS[card.icon] : null;
             return (
               <div key={index} className="card p-10 group relative border-none shadow-card hover:shadow-2xl transition-all duration-500 rounded-[2.5rem]">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2.5rem]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/5 to-blue-700/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2.5rem]" />
                 <div className="relative z-10">
                   {Icon && (
-                    <div className="h-16 w-16 rounded-2xl bg-purple-50 flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-primary transition-all duration-500 shadow-sm group-hover:shadow-purple">
-                      <Icon className="h-8 w-8 text-primary group-hover:text-white transition-colors duration-500" />
+                    <div className="h-16 w-16 rounded-2xl bg-blue-50 flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-blue-900 transition-all duration-500 shadow-sm">
+                      <Icon className="h-8 w-8 text-blue-900 group-hover:text-white transition-colors duration-500" />
                     </div>
                   )}
-                  <h3 className="text-2xl font-black text-dark mb-4 leading-tight group-hover:text-primary transition-colors">{card.title}</h3>
+                  <h3 className="text-2xl font-black text-dark mb-4 leading-tight group-hover:text-blue-900 transition-colors">{card.title}</h3>
                   <p className="text-gray-500 text-lg leading-relaxed">{card.body}</p>
                 </div>
               </div>

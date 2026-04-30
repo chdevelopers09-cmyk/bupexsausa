@@ -11,8 +11,8 @@ export default function ChapterSpotlightSection({
   heading = 'Explore Our Local Chapters',
   ctaLabel = 'View All Chapters',
 }: ChapterSpotlightSectionProps) {
-  // Show 3 major chapters as spotlight
-  const chapters = MOCK_CHAPTERS.slice(0, 3);
+  // Show all chapters
+  const chapters = MOCK_CHAPTERS;
 
   return (
     <section className="section-padding bg-white relative overflow-hidden">
@@ -34,7 +34,7 @@ export default function ChapterSpotlightSection({
           </Link>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {chapters.map((chapter) => (
             <Link
               key={chapter.id}

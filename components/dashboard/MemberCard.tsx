@@ -18,6 +18,32 @@ export default function MemberCardModal({ profile, onClose }: { profile: any, on
       const canvas = await html2canvas(cardRef.current, {
         scale: 2,
         backgroundColor: null,
+        logging: false,
+        useCORS: true,
+        onclone: (clonedDoc) => {
+          // html2canvas doesn't support modern color functions like oklch or oklab
+          // We need to strip these from the cloned document's stylesheets to prevent crashes
+          try {
+            const sheets = clonedDoc.styleSheets;
+            for (let i = 0; i < sheets.length; i++) {
+              const sheet = sheets[i];
+              try {
+                const rules = sheet.cssRules;
+                if (!rules) continue;
+                for (let j = rules.length - 1; j >= 0; j--) {
+                  const rule = rules[j];
+                  if (rule && rule.cssText && (rule.cssText.includes('oklch') || rule.cssText.includes('oklab'))) {
+                    sheet.deleteRule(j);
+                  }
+                }
+              } catch (e) {
+                // Ignore cross-origin stylesheet errors
+              }
+            }
+          } catch (e) {
+            console.error('Error cleaning styles for html2canvas:', e);
+          }
+        }
       });
       
       const image = canvas.toDataURL("image/png");

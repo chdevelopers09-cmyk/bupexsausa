@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, ChevronDown } from 'lucide-react';
 import { SITE_CONFIG } from '@/lib/mock-data';
 
 interface ContactFormSectionProps {
@@ -93,40 +93,43 @@ export default function ContactFormSection({
             </div>
           </div>
 
-          <div className="bg-gray-50 p-10 rounded-3xl border border-gray-100 shadow-xl">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="label-field">Full Name</label>
-                  <input type="text" className="input-field" placeholder="John Doe" required />
+          <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-[14px] font-bold text-gray-700 ml-1">Full Name</label>
+                  <input type="text" className="w-full px-6 py-4 rounded-xl bg-[#2D2D2D] text-white focus:ring-2 focus:ring-[#8B5CF6] outline-none transition-all placeholder:text-gray-500 font-medium" placeholder="John Doe" required />
                 </div>
-                <div>
-                  <label className="label-field">Email Address</label>
-                  <input type="email" className="input-field" placeholder="john@example.com" required />
+                <div className="space-y-2">
+                  <label className="text-[14px] font-bold text-gray-700 ml-1">Email Address</label>
+                  <input type="email" className="w-full px-6 py-4 rounded-xl bg-[#2D2D2D] text-white focus:ring-2 focus:ring-[#8B5CF6] outline-none transition-all placeholder:text-gray-500 font-medium" placeholder="john@example.com" required />
                 </div>
               </div>
 
-              <div>
-                <label className="label-field">Subject</label>
-                <select className="input-field cursor-pointer">
-                  <option>General Inquiry</option>
-                  <option>Membership Question</option>
-                  <option>New Chapter Interest</option>
-                  <option>Donation Inquiry</option>
-                  <option>Website Support</option>
-                </select>
+              <div className="space-y-2">
+                <label className="text-[14px] font-bold text-gray-700 ml-1">Subject</label>
+                <div className="relative">
+                  <select className="w-full px-6 py-4 rounded-xl bg-[#2D2D2D] text-white focus:ring-2 focus:ring-[#8B5CF6] outline-none appearance-none cursor-pointer font-medium">
+                    <option>General Inquiry</option>
+                    <option>Membership Question</option>
+                    <option>New Chapter Interest</option>
+                    <option>Donation Inquiry</option>
+                    <option>Website Support</option>
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
+                </div>
               </div>
 
-              <div>
-                <label className="label-field">Your Message</label>
+              <div className="space-y-2">
+                <label className="text-[14px] font-bold text-gray-700 ml-1">Your Message</label>
                 <textarea
-                  className="input-field min-h-[150px] resize-none"
+                  className="w-full px-6 py-4 rounded-xl bg-[#2D2D2D] text-white focus:ring-2 focus:ring-[#8B5CF6] outline-none transition-all placeholder:text-gray-500 font-medium min-h-[150px] resize-none"
                   placeholder="How can we help you?"
                   required
                 ></textarea>
               </div>
 
-              <button type="submit" className="btn-primary w-full justify-center text-lg py-4">
+              <button type="submit" className="w-full py-5 rounded-2xl bg-[#8B5CF6] text-white font-bold text-lg shadow-lg shadow-purple-200 hover:scale-[1.01] transition-transform flex items-center justify-center gap-2">
                 Send Message <Send className="h-5 w-5" />
               </button>
             </form>

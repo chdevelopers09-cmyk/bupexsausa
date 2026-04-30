@@ -103,26 +103,38 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Main Panel Content */}
       <div className="flex-1 flex flex-col min-w-0">
         <header className="h-20 bg-white border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40 shadow-sm">
-           <div className="flex items-center gap-6 flex-1">
-              <button
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="p-2 rounded-lg hover:bg-slate-50 text-slate-400 hover:text-slate-900 transition-colors"
-                title="Toggle Navigation"
-              >
-                {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </button>
+            <div className="flex items-center gap-6 flex-1">
+               <button
+                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                 className="p-2 rounded-lg hover:bg-slate-50 text-slate-400 hover:text-slate-900 transition-colors"
+                 title="Toggle Navigation"
+               >
+                 {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+               </button>
 
-              <div className="max-w-md w-full relative hidden md:block">
-                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                 <input
-                   type="text"
-                   placeholder="Search members, events, payments..."
-                   className="w-full pl-10 pr-4 py-2 rounded-full border border-slate-100 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none text-sm transition-all"
-                   value={searchQuery}
-                   onChange={(e) => setSearchQuery(e.target.value)}
-                 />
-              </div>
-           </div>
+               {/* Breadcrumbs */}
+               <nav className="flex items-center gap-2 text-sm font-medium">
+                  <Link href="/admin" className="text-slate-400 hover:text-primary transition-colors">Admin</Link>
+                  {pathname !== '/admin' && pathname.split('/').filter(Boolean).slice(1).map((segment, idx, arr) => {
+                    const href = `/admin/${arr.slice(0, idx + 1).join('/')}`;
+                    const isLast = idx === arr.length - 1;
+                    return (
+                      <div key={href} className="flex items-center gap-2">
+                        <ChevronRight className="h-4 w-4 text-slate-300" />
+                        <Link 
+                          href={href} 
+                          className={cn(
+                            "capitalize transition-colors",
+                            isLast ? "text-slate-900 font-bold pointer-events-none" : "text-slate-400 hover:text-primary"
+                          )}
+                        >
+                          {segment.replace(/-/g, ' ')}
+                        </Link>
+                      </div>
+                    );
+                  })}
+               </nav>
+            </div>
 
            <div className="flex items-center gap-5">
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100">

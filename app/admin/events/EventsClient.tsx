@@ -15,7 +15,7 @@ export default function AdminEventsClient({ initialEvents }: { initialEvents: an
     const supabase = createClient();
 
     const filtered = events.filter(e => 
-        e.title.toLowerCase().includes(searchTerm.toLowerCase())
+        e.title?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const togglePublish = async (id: string, current: boolean) => {

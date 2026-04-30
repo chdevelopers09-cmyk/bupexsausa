@@ -8,11 +8,14 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import ProofModal from './ProofModal';
+import { approvePayment } from './actions';
 
 export default function AdminPaymentsClient({ initialPayments }: { initialPayments: any[] }) {
     const [payments, setPayments] = useState(initialPayments);
     const [tab, setTab] = useState<'ALL' | 'MEMBERSHIP' | 'DONATION'>('ALL');
     const [statusFilter, setStatusFilter] = useState('ALL');
+    const [selectedPayment, setSelectedPayment] = useState<any>(null);
     const supabase = createClient();
 
     const filtered = payments.filter(p => {
@@ -30,25 +33,13 @@ export default function AdminPaymentsClient({ initialPayments }: { initialPaymen
         }
     };
 
-    const handleApprove = async (id: string, memberId: string) => {
-        if (!confirm('Are you sure you want to approve this payment and activate the membership?')) return;
-        
-        try {
-            // In a real app, this should be an EDGE FUNCTION to ensure atomic updates
-            // and correct membership ID generation/expiry calculations.
-            
-            // Step 1: Update payment status
-            const { error: pError } = await supabase.from('payments').update({ status: 'COMPLETED' }).eq('id', id);
-            if (pError) throw pError;
-
-            // Step 2: Update member status
-            const { error: mError } = await supabase.from('members').update({ status: 'ACTIVE' }).eq('id', memberId);
-            if (mError) throw mError;
-
+    const handleQuickApprove = async (id: string, memberId: string) => {
+        if (!confirm('Quick approve this payment?')) return;
+        const res = await approvePayment(id, memberId);
+        if (res.success) {
             setPayments(payments.map(p => p.id === id ? { ...p, status: 'COMPLETED' } : p));
-            alert('Payment approved and member activated.');
-        } catch (err: any) {
-            alert(err.message);
+        } else {
+            alert(res.error);
         }
     };
 
@@ -165,36 +156,47 @@ export default function AdminPaymentsClient({ initialPayments }: { initialPaymen
                                         <p className="text-xs text-slate-500 font-medium">{p.method}</p>
                                     </td>
                                     <td className="px-8 py-6 text-right space-x-2">
-                                        {p.status === 'PENDING_VERIFICATION' && (
-                                            <>
-                                                {p.proof_storage_path && (
-                                                    <a 
-                                                        href={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/payment-proofs/${p.proof_storage_path}`}
-                                                        target="_blank" 
-                                                        rel="noopener noreferrer"
-                                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors"
-                                                    >
-                                                        <ImageIcon size={12} /> View Proof
-                                                    </a>
-                                                )}
-                                                <button 
-                                                    onClick={() => handleApprove(p.id, p.member_id)}
-                                                    className="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold hover:bg-primary-dark shadow-md shadow-primary/20 transition-all"
-                                                >
-                                                    Approve
-                                                </button>
-                                            </>
-                                        )}
-                                        <button className="p-2 text-slate-300 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors">
-                                            <MoreVertical size={16} />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    );
-}
+                                         {p.status === 'PENDING_VERIFICATION' && (
+                                             <>
+                                                 {p.proof_storage_path && (
+                                                     <button 
+                                                         onClick={() => setSelectedPayment(p)}
+                                                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-colors"
+                                                     >
+                                                         <ImageIcon size={12} /> View Proof
+                                                     </button>
+                                                 )}
+                                                 <button 
+                                                     onClick={() => handleQuickApprove(p.id, p.member_id)}
+                                                     className="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-bold hover:bg-primary-dark shadow-md shadow-primary/20 transition-all"
+                                                 >
+                                                     Approve
+                                                 </button>
+                                             </>
+                                         )}
+                                         <button className="p-2 text-slate-300 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors">
+                                             <MoreVertical size={16} />
+                                         </button>
+                                     </td>
+                                 </tr>
+                             ))}
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+
+             {selectedPayment && (
+                <ProofModal 
+                    payment={selectedPayment} 
+                    onClose={() => {
+                        setSelectedPayment(null);
+                        // Refresh status locally if it was approved in modal
+                        // This is a bit tricky since modal handles its own actions,
+                        // but revalidatePath will handle the server side.
+                        // For instant UI update, we could pass a callback.
+                    }} 
+                />
+             )}
+         </div>
+     );
+ }

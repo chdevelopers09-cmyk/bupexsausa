@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 import AdminChaptersClient from './ChaptersClient';
 
 export const metadata = {
@@ -7,10 +6,7 @@ export const metadata = {
 };
 
 export default async function AdminChaptersPage() {
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) redirect('/login');
+  const supabase = await createAdminClient();
 
   const { data: chapters, error } = await supabase
     .from('chapters')

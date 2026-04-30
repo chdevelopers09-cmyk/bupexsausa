@@ -1,4 +1,6 @@
 'use client';
+// Refreshed to resolve ChunkLoadError
+
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -20,6 +22,7 @@ import { cn } from '@/lib/utils';
 import { SITE_CONFIG } from '@/lib/mock-data';
 import { createClient } from '@/lib/supabase/client';
 import NotificationBell from '@/components/dashboard/NotificationBell';
+import MembershipExpiryPopup from '@/components/dashboard/MembershipExpiryPopup';
 
 const sidebarLinks = [
   { label: 'Overview', href: '/dashboard', icon: LayoutDashboard },
@@ -220,6 +223,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         <main className="p-8 pb-16 animate-fade-in">
+          <MembershipExpiryPopup
+            memberName={profile?.full_name}
+            expiryDate={profile?.membership_expiry_date}
+          />
           {children}
         </main>
       </div>

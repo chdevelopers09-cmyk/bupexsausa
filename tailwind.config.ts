@@ -20,7 +20,7 @@ const config: Config = {
         },
         dark: '#1E1B4B',
         'bg-purple': '#F5F3FF', // Violet 50
-        'bg-blue': '#F0F9FF',   // Sky 50
+        'bg-blue': '#bef0ff',   // Sky light (user requested)
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

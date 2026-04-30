@@ -4,25 +4,25 @@ import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, ZoomIn, Download, Grid, Layers } from 'lucide-react';
 import { MOCK_GALLERY } from '@/lib/mock-data';
 
-const CATEGORIES = ['All', 'Gala', 'Meetups', 'PCSS Buea', 'Community'];
+// Helper categories will be derived inside the component
 
-// Extend with more mock images so grid looks full
-const ALL_IMAGES = [
-  ...MOCK_GALLERY,
-  { id: '9',  category: 'Gala',      alt: 'Gala 2023 award night',         path: '/images/leadership/president.jpg' },
-  { id: '10', category: 'Meetups',   alt: 'New York chapter dinner',       path: '/images/leadership/secretary.jpg' },
-  { id: '11', category: 'Community', alt: 'Youth mentorship programme',    path: '/images/leadership/treasurer.jpg' },
-  { id: '12', category: 'PCSS Buea', alt: 'School library project 2024',   path: '/images/leadership/vp.jpg' },
-  { id: '13', category: 'Gala',      alt: 'Annual Gala 2024 reception',    path: '/images/leadership/events.jpg' },
-  { id: '14', category: 'Meetups',   alt: 'California alumni pool party',  path: '/images/leadership/comms.jpg' },
-  { id: '15', category: 'Community', alt: 'Scholarship ceremony 2025',     path: '/images/leadership/president.jpg' },
-  { id: '16', category: 'PCSS Buea', alt: 'New school block construction', path: '/images/leadership/secretary.jpg' },
-];
-
-export default function GalleryClient() {
+export default function GalleryClient({ initialImages = [] }: { initialImages?: any[] }) {
   const [activeCategory, setActiveCategory] = useState('All');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [layout, setLayout] = useState<'masonry' | 'grid'>('masonry');
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  
+  const realImages = initialImages.map(img => ({
+    id: img.id,
+    category: img.category || 'Other',
+    alt: img.alt_text || 'BUPEXSA Image',
+    path: `${supabaseUrl}/storage/v1/object/public/gallery/${img.storage_path}`
+  }));
+
+  const ALL_IMAGES = [...realImages, ...MOCK_GALLERY];
+  
+  const CATEGORIES = ['All', ...Array.from(new Set(ALL_IMAGES.map(i => i.category)))];
 
   const filtered = ALL_IMAGES.filter(img =>
     activeCategory === 'All' || img.category === activeCategory

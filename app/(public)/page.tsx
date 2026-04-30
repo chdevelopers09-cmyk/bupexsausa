@@ -31,6 +31,7 @@ export default function Home() {
       <StatsBarSection variant="white" />
 
       <CardGridSection
+        bgVariant="sky"
         heading="Our Mission & Values"
         cards={[
           {

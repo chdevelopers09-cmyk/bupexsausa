@@ -18,9 +18,9 @@ interface TestimonialSectionProps {
 
 const defaultTestimonials: Testimonial[] = [
   {
-    quote: "BUPEXSA USA has given me a community I never knew I needed. Staying connected with fellow PCSS graduates has opened doors both professionally and personally.",
-    author: "Dr. Emmanuel Fon",
-    role: "Class of 1992, cardiologist",
+    quote: "In my role as President of BUPEXSA USA, I view this position as a calling to serve. Our vision is to bridge the gap between established alumni and the next generation of students.",
+    author: "Dr. Celine Ejoh Njeck",
+    role: "Class of 1998, President of BUPEXSA USA",
   },
   {
     quote: "Being part of BUPEXSA USA is more than just networking; it's about paying it forward. Seeing our contributions directly impact students back home is incredibly rewarding.",
@@ -28,9 +28,9 @@ const defaultTestimonials: Testimonial[] = [
     role: "Class of 1998, attorney",
   },
   {
-    quote: "The Texas chapter events are always the highlight of my quarter. It's like being back on campus, but with the wisdom we've gained in the years since.",
-    author: "Patrick Nkeng",
-    role: "Class of 2001, financial analyst",
+    quote: "I am committed to fostering trust and collaboration within the BUPEXSA network. Our leadership style is grounded in integrity and consistency, ensuring we align with the association's long-term vision.",
+    author: "Frida Meyali",
+    role: "Batch of 1997, National Treasurer",
   }
 ];
 

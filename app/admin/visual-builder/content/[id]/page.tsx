@@ -15,6 +15,7 @@ import {
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
+import { saveSectionContent } from '../../actions';
 
 export default function ContentEditor() {
   const params = useParams();
@@ -44,15 +45,10 @@ export default function ContentEditor() {
 
   const handleSave = async () => {
     setSaving(true);
-    const { error } = await supabase
-      .from('page_layouts')
-      .update({ content })
-      .eq('id', params.id);
-    
+    const res = await saveSectionContent(params.id as string, content);
     setSaving(false);
-    if (!error) {
-      alert('Content saved successfully!');
-    }
+    if (res.error) alert(res.error);
+    else alert('Content saved as draft!');
   };
 
   const updateField = (key: string, value: string) => {

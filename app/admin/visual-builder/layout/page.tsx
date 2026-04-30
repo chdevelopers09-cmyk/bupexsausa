@@ -19,28 +19,30 @@ import {
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
-// Mock initial layout
-const initialSections = [
-  { id: '1', type: 'HeroSection', variant: 'centered-primary', name: 'Main Hero', visible: true },
-  { id: '2', type: 'StatsBarSection', variant: 'primary', name: 'Member Stats', visible: true },
-  { id: '3', type: 'CardGridSection', variant: 'three-col', name: 'Our Values', visible: true },
-  { id: '4', type: 'EventsPreviewSection', variant: 'cards', name: 'Upcoming Events', visible: true },
-  { id: '5', type: 'AnnouncementsSection', variant: 'standard', name: 'Latest News', visible: false },
-  { id: '6', type: 'DonationCtaSection', variant: 'fullwidth', name: 'Support CTA', visible: true },
-  { id: '7', type: 'GalleryStripSection', variant: 'strip', name: 'Photo Strip', visible: true },
-];
+import { publishPage, updateLayout } from '../actions';
 
-export default function LayoutManager() {
+export default function LayoutManager({ initialSections, pageKey }: { initialSections: any[], pageKey: string }) {
   const [sections, setSections] = useState(initialSections);
-  const [activePage, setActivePage] = useState('home');
   const [previewMode, setPreviewMode] = useState('desktop');
+  const [saving, setSaving] = useState(false);
 
-  const toggleVisibility = (id: string) => {
-    setSections(sections.map(s => s.id === id ? { ...s, visible: !s.visible } : s));
+  const toggleVisibility = async (id: string) => {
+    const newSections = sections.map(s => s.id === id ? { ...s, visible: !s.visible } : s);
+    setSections(newSections);
+    await updateLayout(newSections);
+  };
+
+  const handlePublish = async () => {
+    setSaving(true);
+    const res = await publishPage(pageKey);
+    setSaving(false);
+    if (res.error) alert(res.error);
+    else alert('Page published successfully!');
   };
 
   const deleteSection = (id: string) => {
     if (confirm('Are you sure you want to remove this section from the page?')) {
+      // In production, also delete from DB
       setSections(sections.filter(s => s.id !== id));
     }
   };
@@ -78,8 +80,12 @@ export default function LayoutManager() {
                   <Smartphone className="h-4 w-4" />
                </button>
             </div>
-            <button className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold bg-primary text-white shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
-               <Save className="h-4 w-4" /> Publish Changes
+            <button 
+               onClick={handlePublish}
+               disabled={saving}
+               className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold bg-primary text-white shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+            >
+               {saving ? 'Publishing...' : <><Save className="h-4 w-4" /> Publish Changes</>}
             </button>
          </div>
       </div>

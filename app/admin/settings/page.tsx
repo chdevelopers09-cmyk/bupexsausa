@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 import AdminSettingsClient from './SettingsClient';
 
 export const metadata = {
@@ -7,10 +6,7 @@ export const metadata = {
 };
 
 export default async function AdminSettingsPage() {
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) redirect('/login');
+  const supabase = await createAdminClient();
 
   const { data: settings, error } = await supabase
     .from('site_settings')

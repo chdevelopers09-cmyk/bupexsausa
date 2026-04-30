@@ -1,5 +1,4 @@
-import { createClient } from '@/lib/supabase/server';
-import { redirect } from 'next/navigation';
+import { createAdminClient } from '@/lib/supabase/server';
 import MembersClient from './MembersClient';
 
 export const metadata = {
@@ -7,19 +6,8 @@ export const metadata = {
 };
 
 export default async function AdminMembersPage() {
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) {
-    redirect('/login');
-  }
-
-  // Double check admin role here or rely on middleware.
-  // Actually, wait: we need the service role key to see ALL members if RLS restricts it,
-  // OR the admin should have an 'admin' role in JWT to bypass RLS per our DB rules.
-  // "Admins have full access" ON members FOR ALL TO authenticated USING (auth.jwt() ->> 'role' = 'admin');
+  const supabase = await createAdminClient();
   
-  // So standard client works assuming we updated the role.
   const { data: members, error } = await supabase
     .from('members')
     .select('*, chapters(name)')

@@ -12,8 +12,8 @@ export default function VisualBuilderList({ initialPages }: { initialPages: any[
     const [searchTerm, setSearchTerm] = useState('');
 
     const filtered = initialPages.filter(p => 
-        p.page_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        p.slug.toLowerCase().includes(searchTerm.toLowerCase())
+        p.page_key?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        p.slug?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -45,7 +45,7 @@ export default function VisualBuilderList({ initialPages }: { initialPages: any[
                             </div>
                         </div>
 
-                        <h3 className="text-xl font-black text-slate-900 group-hover:text-primary transition-colors">{page.page_name}</h3>
+                        <h3 className="text-xl font-black text-slate-900 group-hover:text-primary transition-colors">{page.page_key}</h3>
                         <p className="text-xs text-slate-400 font-mono mt-1">/{page.slug === 'home' ? '' : page.slug}</p>
 
                         <div className="mt-8 flex items-center gap-3">

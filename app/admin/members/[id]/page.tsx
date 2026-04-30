@@ -1,8 +1,9 @@
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, User, Mail, Calendar, MapPin, Building, ShieldCheck, Download, AlertTriangle, CreditCard, Activity } from 'lucide-react';
 import MemberEditorForm from './MemberEditorForm';
+import MemberApprovalActions from '../MemberApprovalActions';
 
 export const metadata = {
   title: 'Member Details | Admin Panel',
@@ -10,7 +11,7 @@ export const metadata = {
 
 export default async function AdminMemberDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = await createAdminClient();
 
   // Fetch member
   const { data: member } = await supabase
@@ -98,26 +99,8 @@ export default async function AdminMemberDetailPage({ params }: { params: Promis
 
         {/* Right Col: Timeline & Finances */}
         <div className="lg:col-span-1 space-y-8">
-          
           {/* Admin Actions */}
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-              <h3 className="font-bold text-slate-900 flex items-center gap-2 text-sm">
-                <ShieldCheck className="h-4 w-4 text-slate-400" /> Admin Actions
-              </h3>
-            </div>
-            <div className="p-6 space-y-3">
-              <button className="w-full text-left px-4 py-3 bg-white border border-slate-200 hover:border-primary hover:bg-purple-50 rounded-xl text-sm font-medium text-slate-700 transition-colors">
-                Regenerate Membership ID
-              </button>
-              <button className="w-full text-left px-4 py-3 bg-white border border-slate-200 hover:border-amber-400 hover:bg-amber-50 rounded-xl text-sm font-medium text-slate-700 transition-colors">
-                Send Password Reset Email
-              </button>
-              <button className="w-full flex items-center justify-between px-4 py-3 bg-rose-50 border border-rose-200 hover:bg-rose-100 rounded-xl text-sm font-bold text-rose-700 transition-colors">
-                <span className="flex items-center gap-2"><AlertTriangle className="h-4 w-4" /> Delete Account</span>
-              </button>
-            </div>
-          </div>
+          <MemberApprovalActions memberId={member.id} status={member.status} />
 
           {/* Payment History */}
           <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">

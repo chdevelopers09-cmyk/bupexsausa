@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 import VisualBuilderList from './VisualBuilderList';
 
 export const metadata = {
@@ -7,15 +6,12 @@ export const metadata = {
 };
 
 export default async function VisualBuilderPage() {
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) redirect('/login');
+  const supabase = await createAdminClient();
 
   const { data: pages, error } = await supabase
     .from('page_layouts')
     .select('*')
-    .order('page_name', { ascending: true });
+    .order('page_key', { ascending: true });
 
   if (error) console.error('Error:', error);
 

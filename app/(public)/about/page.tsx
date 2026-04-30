@@ -42,6 +42,7 @@ export default function AboutPage() {
       />
 
       <CardGridSection
+        bgVariant="sky"
         heading="Our Core Values"
         cards={[
           {
@@ -62,7 +63,7 @@ export default function AboutPage() {
         ]}
       />
 
-      <TeamGridSection variant="four-col" heading="National Board of Directors" />
+      <TeamGridSection variant="four-col" heading="Executive Branch of Alumni" />
     </>
   );
 }

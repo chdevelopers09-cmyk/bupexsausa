@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Search, Filter, Download, MoreVertical, ShieldCheck, CheckCircle2, XCircle, Clock, AlertTriangle } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { approveMember, rejectMember } from './actions';
 
 export default function MembersClient({ initialMembers }: { initialMembers: any[] }) {
   const [members, setMembers] = useState(initialMembers);
@@ -39,13 +40,22 @@ export default function MembersClient({ initialMembers }: { initialMembers: any[
   };
 
   const handleStatusChange = async (id: string, newStatus: string) => {
-    // In production, approving a member triggers the edge function `approve-member`
-    // which handles the membership_id logic. For now, we update via client.
-    const { error } = await supabase.from('members').update({ status: newStatus }).eq('id', id);
-    if (!error) {
-      setMembers(members.map(m => m.id === id ? { ...m, status: newStatus } : m));
+    if (newStatus === 'ACTIVE') {
+      const res = await approveMember(id);
+      if (res.success) {
+        setMembers(members.map(m => m.id === id ? { ...m, status: 'ACTIVE', membership_id: res.membershipId } : m));
+      } else alert(res.error);
+    } else if (newStatus === 'REJECTED') {
+      const res = await rejectMember(id);
+      if (res.success) {
+        setMembers(members.map(m => m.id === id ? { ...m, status: 'REJECTED' } : m));
+      } else alert(res.error);
     } else {
-      alert(error.message);
+       // Fallback for other statuses
+       const { error } = await supabase.from('members').update({ status: newStatus }).eq('id', id);
+       if (!error) {
+         setMembers(members.map(m => m.id === id ? { ...m, status: newStatus } : m));
+       }
     }
   };
 
