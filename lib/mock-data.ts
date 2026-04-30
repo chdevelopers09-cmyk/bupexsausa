@@ -290,6 +290,8 @@ export const SITE_CONFIG = {
   membershipFee: 150,
   annualFee: 100,
   registrationFee: 50,
+  zelleHandle: 'payments@bupexsausa.org',
+  cashappHandle: '$BUPEXSAUSA',
   socialLinks: {
     facebook: 'https://facebook.com/bupexsausa',
     instagram: 'https://instagram.com/bupexsausa',

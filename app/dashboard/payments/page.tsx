@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import {
   CreditCard, History, Download, CheckCircle2,
   ShieldCheck, AlertCircle, Users, Heart, ArrowRight,
@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import MemberCardModal from '@/components/dashboard/MemberCard';
 
-export default function MembershipPayments() {
+function MembershipPaymentsContent() {
   const [activeTab, setActiveTab] = useState('pay');
   const [profile, setProfile] = useState<any>(null);
   const [payments, setPayments] = useState<any[]>([]);
@@ -375,5 +375,13 @@ export default function MembershipPayments() {
         <MemberCardModal profile={profile} onClose={() => setShowCard(false)} />
       )}
     </div>
+  );
+}
+
+export default function MembershipPayments() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-[400px]"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div></div>}>
+      <MembershipPaymentsContent />
+    </Suspense>
   );
 }

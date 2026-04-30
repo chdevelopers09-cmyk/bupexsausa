@@ -21,8 +21,8 @@ import Link from 'next/link';
 
 import { publishPage, updateLayout } from '../actions';
 
-export default function LayoutManager({ initialSections, pageKey }: { initialSections: any[], pageKey: string }) {
-  const [sections, setSections] = useState(initialSections);
+export default function LayoutManager({ initialSections = [], pageKey = 'home' }: { initialSections?: any[], pageKey?: string }) {
+  const [sections, setSections] = useState(initialSections || []);
   const [previewMode, setPreviewMode] = useState('desktop');
   const [saving, setSaving] = useState(false);
 
