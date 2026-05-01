@@ -17,21 +17,29 @@ export default function GalleryClient({ initialImages = [] }: { initialImages?: 
     const isDirectVideo = ['mp4', 'mov', 'webm', 'ogg'].includes(ext || '');
     const isVideo = isLink || isDirectVideo;
     
-    let thumb = `${supabaseUrl}/storage/v1/object/public/gallery/${img.storage_path}`;
-    let path = thumb;
+    // Resolve Bucket and Path
+    let bucket = 'gallery';
+    let filePath = img.storage_path;
+    
+    if (!isLink && img.storage_path.includes('/')) {
+      const [pBucket, ...rest] = img.storage_path.split('/');
+      bucket = pBucket;
+      filePath = rest.join('/');
+    }
+
+    const fullUrl = isLink ? img.storage_path : `${supabaseUrl}/storage/v1/object/public/${bucket}/${filePath}`;
+    let thumb = fullUrl;
+    let path = fullUrl;
 
     if (isVideo) {
       if (isLink) {
         if (img.storage_path.includes('youtube.com') || img.storage_path.includes('youtu.be')) {
           const id = img.storage_path.includes('v=') ? img.storage_path.split('v=')[1]?.split('&')[0] : img.storage_path.split('/').pop();
           thumb = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
-          path = img.storage_path;
         } else {
           thumb = 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=800';
-          path = img.storage_path;
         }
       } else {
-        // Direct video file - use placeholder for thumb, real URL for path
         thumb = 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=800';
       }
     }

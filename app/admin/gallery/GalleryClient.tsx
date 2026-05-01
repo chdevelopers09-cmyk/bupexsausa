@@ -86,20 +86,36 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
   }
 
   const getImageUrl = (path: string) => {
+    if (!path) return ''
+    
+    // External Video Links
     if (path.startsWith('http')) {
       if (path.includes('youtube.com') || path.includes('youtu.be')) {
         const id = path.includes('v=') ? path.split('v=')[1]?.split('&')[0] : path.split('/').pop()
         return `https://img.youtube.com/vi/${id}/mqdefault.jpg`
       }
-      return 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=300'
+      return path 
     }
     
+    // Media Thumbnails for Direct Uploads
     const ext = path.split('.').pop()?.toLowerCase()
-    if (['mp4', 'mov', 'webm', 'ogg'].includes(ext || '')) {
+    const isVideo = ['mp4', 'mov', 'webm', 'ogg'].includes(ext || '')
+    
+    // Handle Bucket Prefix
+    let bucket = 'gallery'
+    let filePath = path
+    
+    if (path.includes('/')) {
+      const [pBucket, ...rest] = path.split('/')
+      bucket = pBucket
+      filePath = rest.join('/')
+    }
+
+    if (isVideo) {
       return 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=300'
     }
 
-    return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/gallery/${path}`
+    return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${bucket}/${filePath}`
   }
 
   return (

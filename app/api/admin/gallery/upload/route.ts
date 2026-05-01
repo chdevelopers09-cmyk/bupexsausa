@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`
 
     // 1. Ensure bucket allows videos (using null to allow all)
-    const bucketName = 'gallery'
+    const bucketName = 'gallery-media'
     const { data: buckets, error: listError } = await supabase.storage.listBuckets()
     if (listError) console.error('List Buckets Error:', listError)
 
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     const bucketOptions = {
       public: true,
       allowedMimeTypes: null,
-      fileSizeLimit: 104857600 // 100MB
+      fileSizeLimit: 209715200 // 200MB
     }
 
     if (!bucketExists) {
@@ -39,7 +39,6 @@ export async function POST(req: Request) {
       const { error: updateError } = await supabase.storage.updateBucket(bucketName, bucketOptions)
       if (updateError) {
         console.error('Update Bucket Error (Non-Fatal):', updateError)
-        // If update fails, we still try to upload
       }
     }
 
@@ -62,9 +61,9 @@ export async function POST(req: Request) {
       }, { status: 500 })
     }
 
-    // 3. Insert into database
+    // 3. Insert into database (include bucket prefix in storage_path)
     const { error: dbError } = await supabase.from('gallery_images').insert({
-      storage_path: uploadData.path,
+      storage_path: `${bucketName}/${uploadData.path}`,
       category,
       alt_text: altText,
     })
