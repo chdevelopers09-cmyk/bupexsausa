@@ -18,7 +18,7 @@ export default function EventEditor({ event }: { event?: any }) {
     end_datetime: event?.end_datetime ? new Date(event.end_datetime).toISOString().slice(0, 16) : '',
     location_name: event?.location_name || '',
     location_address: event?.location_address || '',
-    category: event?.category || 'Convention',
+    category: event?.category || 'Gala',
     thumbnail_path: event?.thumbnail_path || '',
     max_attendees: event?.max_attendees || '',
     is_published: event?.is_published ?? false,
@@ -149,10 +149,11 @@ export default function EventEditor({ event }: { event?: any }) {
                 onChange={handleChange}
                 className="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl px-6 py-4 text-slate-900 font-bold focus:border-primary/20 outline-none transition-all appearance-none"
               >
-                <option value="Convention">Convention</option>
+                <option value="Gala">Gala</option>
                 <option value="Meeting">Meeting</option>
                 <option value="Fundraiser">Fundraiser</option>
                 <option value="Social">Social</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <div className="space-y-2">
