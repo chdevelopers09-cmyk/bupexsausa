@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, ZoomIn, Download, Grid, Layers, Play } from 'lucide-react';
 import { MOCK_GALLERY } from '@/lib/mock-data';
