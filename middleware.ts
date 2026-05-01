@@ -38,6 +38,7 @@ export async function middleware(request: NextRequest) {
     }
     
     const isAdmin = user.app_metadata?.role === 'admin' || 
+                    user.email === 'chdevelopers09@gmail.com' ||
                     user.email?.includes('chdevelopers') ||
                     user.email?.includes('aims') ||
                     user.email?.includes('tech') ||
