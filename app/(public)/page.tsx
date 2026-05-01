@@ -1,4 +1,4 @@
-export const revalidate = 86400; // Cache for 24 hours
+export const revalidate = 3600; // Cache for 1 hour
 
 import { Metadata } from 'next';
 import HeroSection from '@/components/sections/HeroSection';

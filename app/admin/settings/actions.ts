@@ -18,7 +18,10 @@ export async function updateSystemSettings(settings: Record<string, any>) {
 
     if (error) throw error
 
+    revalidatePath('/')
     revalidatePath('/admin/settings')
+    revalidatePath('/register')
+    revalidatePath('/dashboard')
     return { success: true }
   } catch (error: any) {
     console.error('Settings Update Error:', error)

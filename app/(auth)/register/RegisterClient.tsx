@@ -13,7 +13,11 @@ import { useState, useTransition } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { signup, signInWithGoogle } from '../actions';
 
-export default function RegisterClient() {
+export default function RegisterClient({ settings = {} }: { settings?: any }) {
+  const membershipFee = parseFloat(settings.membership_fee || '100');
+  const registrationFee = 50; // Fixed registration fee
+  const totalDue = membershipFee + registrationFee;
+
   const gYears = GRADUATION_YEARS();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -304,18 +308,18 @@ export default function RegisterClient() {
                   <h2 className="text-[10px] font-black text-purple-400 uppercase tracking-[0.2em] mb-4">Registration Summary</h2>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600 font-bold text-sm">🎫 Membership Fee</span>
-                      <span className="text-dark font-black text-sm">$50.00</span>
+                      <span className="text-gray-600 font-bold text-sm">🎫 Membership Registration</span>
+                      <span className="text-dark font-black text-sm">${registrationFee.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600 font-bold text-sm">📅 Annual Fee</span>
-                      <span className="text-dark font-black text-sm">$100.00</span>
+                      <span className="text-gray-600 font-bold text-sm">📅 Annual Member Fee</span>
+                      <span className="text-dark font-black text-sm">${membershipFee.toFixed(2)}</span>
                     </div>
                     <div className="h-[1px] bg-purple-100 my-2" />
                     <div className="flex justify-between items-end">
                       <div>
                         <span className="text-gray-400 font-black text-[9px] uppercase tracking-widest block mb-1">Total Due Today</span>
-                        <span className="text-[#8B5CF6] font-black text-3xl tracking-tight leading-none">$150.00</span>
+                        <span className="text-[#8B5CF6] font-black text-3xl tracking-tight leading-none">${totalDue.toFixed(2)}</span>
                       </div>
                       <div className="bg-[#8B5CF6] text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest mb-1 shadow-lg shadow-purple-200">
                         Secure
@@ -433,7 +437,7 @@ export default function RegisterClient() {
                       <div>
                         <h3 className="font-black text-dark uppercase tracking-widest text-[10px] mb-1">Apple Pay</h3>
                         <p className="text-gray-400 text-[11px] font-bold">Merchant: <span className="text-dark">{SITE_CONFIG.payments.applePay.displayName}</span></p>
-                        <p className="text-gray-400 text-[11px] font-bold mt-1">Double-click side button or use Face ID / Touch ID to pay <span className="text-dark">$150.00</span></p>
+                        <p className="text-gray-400 text-[11px] font-bold mt-1">Double-click side button or use Face ID / Touch ID to pay <span className="text-dark">${totalDue.toFixed(2)}</span></p>
                       </div>
                     </div>
                   )}
@@ -445,11 +449,11 @@ export default function RegisterClient() {
                       </div>
                       <div>
                         <div className="inline-block bg-emerald-50 px-4 py-1.5 rounded-full text-emerald-700 font-black text-md mb-2">
-                          {SITE_CONFIG.payments.cashapp.cashtag}
+                          {settings.cashapp_handle || SITE_CONFIG.payments.cashapp.cashtag}
                         </div>
                         <p className="text-gray-500 text-[11px] font-bold mb-1">{SITE_CONFIG.payments.cashapp.displayName}</p>
                         <p className="text-gray-400 text-[11px] font-bold px-4 leading-relaxed">
-                          Send exactly <span className="text-dark">$150.00</span> to the Cashtag above.
+                          Send exactly <span className="text-dark">${totalDue.toFixed(2)}</span> to the Cashtag above.
                           Include your <span className="text-dark">Email Address</span> in the memo.
                         </p>
                       </div>
@@ -463,15 +467,11 @@ export default function RegisterClient() {
                       </div>
                       <div className="space-y-2">
                         <div className="bg-gray-50 p-3 rounded-xl border border-gray-100 select-all">
-                          <span className="text-dark font-black text-sm block">{SITE_CONFIG.payments.zelle.email}</span>
-                          <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Recipient Email</span>
-                        </div>
-                        <div className="bg-gray-50 p-3 rounded-xl border border-gray-100 select-all">
-                          <span className="text-dark font-black text-sm block">{SITE_CONFIG.payments.zelle.phone}</span>
-                          <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Or Zelle Phone</span>
+                          <span className="text-dark font-black text-sm block">{settings.zelle_handle || SITE_CONFIG.payments.zelle.email}</span>
+                          <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Recipient Handle / Info</span>
                         </div>
                         <p className="text-gray-400 text-[11px] font-bold px-4 leading-relaxed">
-                          Send <span className="text-dark">$150.00</span> to <span className="text-dark">{SITE_CONFIG.payments.zelle.recipientName}</span>.
+                          Send <span className="text-dark">${totalDue.toFixed(2)}</span> to the handle above.
                           <br />Memo: <span className="text-dark">Membership - {formData.full_name || 'Your Name'}</span>
                         </p>
                       </div>
