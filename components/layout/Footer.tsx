@@ -28,7 +28,7 @@ const memberLinks = [
 export default async function Footer() {
   const supabase = await createAdminClient();
   const { data: settingsData } = await supabase.from('site_settings').select('key, value');
-  const settings = settingsData?.reduce((acc, s) => ({ ...acc, [s.key]: s.value }), {}) || {};
+  const settings = (settingsData?.reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {}) || {}) as any;
   const annualFee = settings.membership_fee || 100;
 
   return (
