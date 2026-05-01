@@ -138,7 +138,7 @@ export default async function Footer() {
                 className="btn-primary text-sm px-4 py-2 w-full justify-center"
                 id="footer-register"
               >
-                Join Now — $50 Reg. + ${annualFee}/year
+                Join Now — $50 (One-time) + ${annualFee}/Year
               </Link>
             </div>
           </div>
