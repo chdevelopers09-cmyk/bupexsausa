@@ -25,7 +25,15 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
     
     let res;
     if (uploadType === 'PHOTO' || uploadType === 'VIDEO_UPLOAD') {
-      res = await uploadMedia(formData)
+      try {
+        const response = await fetch('/api/admin/gallery/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        res = await response.json();
+      } catch (err: any) {
+        res = { error: err.message };
+      }
     } else {
       res = await addVideo(formData)
     }
