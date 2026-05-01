@@ -38,7 +38,10 @@ export async function middleware(request: NextRequest) {
     }
     
     const isAdmin = user.app_metadata?.role === 'admin' || 
-                    user.email?.includes('chdevelopers09') ||
+                    user.email?.includes('chdevelopers') ||
+                    user.email?.includes('aims') ||
+                    user.email?.includes('tech') ||
+                    user.email?.includes('cmyk') ||
                     user.email?.endsWith('@rubilian.com');
     
     if (!isAdmin) {
