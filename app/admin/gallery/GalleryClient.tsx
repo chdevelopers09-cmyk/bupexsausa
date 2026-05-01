@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils'
 export default function GalleryClient({ initialImages }: { initialImages: any[] }) {
   const [images, setImages] = useState(initialImages)
   const [isUploading, setIsUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [selectedFile, setSelectedFile] = useState<{ name: string, size: string, type: string } | null>(null)
   const [showUploadModal, setShowUploadModal] = useState(false)
   const [uploadType, setUploadType] = useState<'PHOTO' | 'VIDEO_UPLOAD' | 'VIDEO_LINK'>('PHOTO')
   const [filter, setFilter] = useState('ALL')
@@ -18,33 +20,58 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
     ? images 
     : images.filter(img => img.category === filter)
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const size = (file.size / (1024 * 1024)).toFixed(2) + ' MB'
+      setSelectedFile({ name: file.name, size, type: file.type })
+    }
+  }
+
   const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsUploading(true)
+    setUploadProgress(0)
     const formData = new FormData(e.currentTarget)
     
-    let res;
     if (uploadType === 'PHOTO' || uploadType === 'VIDEO_UPLOAD') {
-      try {
-        const response = await fetch('/api/admin/gallery/upload', {
-          method: 'POST',
-          body: formData,
-        });
-        res = await response.json();
-      } catch (err: any) {
-        res = { error: err.message };
+      const xhr = new XMLHttpRequest()
+      
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = Math.round((event.loaded / event.total) * 100)
+          setUploadProgress(percentComplete)
+        }
       }
+
+      xhr.onload = () => {
+        const res = JSON.parse(xhr.responseText)
+        if (xhr.status === 200 && res.success) {
+          setShowUploadModal(false)
+          window.location.reload()
+        } else {
+          alert(res.error || 'Upload failed')
+          setIsUploading(false)
+        }
+      }
+
+      xhr.onerror = () => {
+        alert('Network error')
+        setIsUploading(false)
+      }
+
+      xhr.open('POST', '/api/admin/gallery/upload')
+      xhr.send(formData)
     } else {
-      res = await addVideo(formData)
+      const res = await addVideo(formData)
+      if (res.success) {
+        setShowUploadModal(false)
+        window.location.reload()
+      } else {
+        alert(res.error)
+        setIsUploading(false)
+      }
     }
-    
-    if (res.success) {
-      setShowUploadModal(false)
-      window.location.reload()
-    } else {
-      alert(res.error)
-    }
-    setIsUploading(false)
   }
 
   const handleDelete = async (id: string, path: string) => {
@@ -194,7 +221,7 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
                 <div className="space-y-2">
                   <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Select Image</label>
                   <div className="relative border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center hover:border-purple-300 transition-colors group">
-                    <input type="file" name="file" accept="image/*" required className="absolute inset-0 opacity-0 cursor-pointer" />
+                    <input type="file" name="file" accept="image/*" required onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
                     <Upload className="h-8 w-8 text-slate-300 mx-auto mb-3 group-hover:text-purple-400 transition-colors" />
                     <p className="text-sm font-bold text-slate-400 group-hover:text-slate-600 transition-colors">Click or drag image to upload</p>
                     <p className="text-[10px] text-slate-300 mt-1 uppercase font-bold tracking-widest">JPG, PNG or WEBP (Max 5MB)</p>
@@ -206,7 +233,7 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
                 <div className="space-y-2">
                   <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Select Video File</label>
                   <div className="relative border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center hover:border-purple-300 transition-colors group">
-                    <input type="file" name="file" accept="video/*" required className="absolute inset-0 opacity-0 cursor-pointer" />
+                    <input type="file" name="file" accept="video/*" required onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
                     <Play className="h-8 w-8 text-slate-300 mx-auto mb-3 group-hover:text-purple-400 transition-colors" />
                     <p className="text-sm font-bold text-slate-400 group-hover:text-slate-600 transition-colors">Select video from computer</p>
                     <p className="text-[10px] text-slate-300 mt-1 uppercase font-bold tracking-widest">MP4, MOV or WEBM (Max 50MB)</p>
@@ -218,6 +245,33 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
                 <div className="space-y-2">
                   <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Video URL (YouTube/Vimeo)</label>
                   <input name="videoUrl" type="url" required placeholder="https://www.youtube.com/watch?v=..." className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-purple-100 transition-all" />
+                </div>
+              )}
+
+              {selectedFile && (uploadType === 'PHOTO' || uploadType === 'VIDEO_UPLOAD') && (
+                <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 animate-fade-in">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                        {uploadType === 'PHOTO' ? <ImageIcon className="h-5 w-5 text-purple-500" /> : <Play className="h-5 w-5 text-purple-500" />}
+                      </div>
+                      <div>
+                        <p className="text-xs font-black text-slate-900 truncate max-w-[150px]">{selectedFile.name}</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{selectedFile.type} • {selectedFile.size}</p>
+                      </div>
+                    </div>
+                    {isUploading && (
+                      <span className="text-xs font-black text-purple-600 animate-pulse">{uploadProgress}%</span>
+                    )}
+                  </div>
+                  {isUploading && (
+                    <div className="h-2 w-full bg-white rounded-full overflow-hidden border border-slate-100">
+                      <div 
+                        className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-300 ease-out"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -239,14 +293,20 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
               <button 
                 type="submit" 
                 disabled={isUploading}
-                className="w-full btn-primary py-4 rounded-2xl shadow-xl shadow-purple-100 flex items-center justify-center gap-3"
+                className={cn(
+                  "w-full py-4 rounded-2xl shadow-xl flex items-center justify-center gap-3 transition-all",
+                  isUploading ? "bg-slate-100 text-slate-400 shadow-none cursor-not-allowed" : "btn-primary shadow-purple-100"
+                )}
               >
                 {isUploading ? (
-                  <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                    <span className="text-xs font-black uppercase tracking-widest">Uploading Media...</span>
+                  </div>
                 ) : (
                   <>
                     <Upload className="h-5 w-5" />
-                    <span>{uploadType === 'PHOTO' ? 'Upload Photo' : 'Save Video'}</span>
+                    <span className="text-xs font-black uppercase tracking-widest">{uploadType === 'PHOTO' ? 'Upload Photo' : 'Save Video'}</span>
                   </>
                 )}
               </button>
