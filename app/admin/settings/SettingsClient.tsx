@@ -6,7 +6,7 @@ import {
     CreditCard, CheckCircle2, AlertCircle, Trash2, 
     Plus, DollarSign, Info 
 } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { updateSystemSettings } from './actions';
 
 export default function AdminSettingsClient({ initialSettings }: { initialSettings: any[] }) {
     const [settings, setSettings] = useState<Record<string, any>>(
@@ -14,31 +14,21 @@ export default function AdminSettingsClient({ initialSettings }: { initialSettin
     );
     const [loading, setLoading] = useState(false);
     const [msg, setMsg] = useState({ type: '', text: '' });
-    const supabase = createClient();
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setMsg({ type: '', text: '' });
 
-        try {
-            // Update each changed setting
-            const updates = Object.entries(settings).map(([key, value]) => (
-                supabase.from('site_settings').upsert({ key, value })
-            ));
-
-            const results = await Promise.all(updates);
-            const errors = results.filter(r => r.error);
-
-            if (errors.length > 0) throw errors[0].error;
-
+        const res = await updateSystemSettings(settings);
+        
+        if (res.success) {
             setMsg({ type: 'success', text: 'All settings saved successfully.' });
             setTimeout(() => setMsg({ type: '', text: '' }), 3000);
-        } catch (err: any) {
-            setMsg({ type: 'error', text: err.message });
-        } finally {
-            setLoading(false);
+        } else {
+            setMsg({ type: 'error', text: res.error || 'Failed to save settings' });
         }
+        setLoading(false);
     };
 
     return (
@@ -181,7 +171,8 @@ export default function AdminSettingsClient({ initialSettings }: { initialSettin
                                             type="number" 
                                             value={settings.membership_fee || 100} 
                                             onChange={e => setSettings({...settings, membership_fee: parseFloat(e.target.value)})}
-                                            className="input-field pl-14 font-black text-lg" 
+                                            className="input-field font-black text-lg" 
+                                            style={{ paddingLeft: '4rem' }}
                                         />
                                     </div>
                                 </div>
@@ -228,7 +219,8 @@ export default function AdminSettingsClient({ initialSettings }: { initialSettin
                                         type="text" 
                                         value={settings.cashapp_handle || ''} 
                                         onChange={e => setSettings({...settings, cashapp_handle: e.target.value})}
-                                        className="input-field pl-14 font-mono font-bold text-primary bg-purple-50/30 border-purple-100" 
+                                        className="input-field font-mono font-bold text-primary bg-purple-50/30 border-purple-100" 
+                                        style={{ paddingLeft: '4rem' }}
                                         placeholder="your-cashtag"
                                     />
                                 </div>
