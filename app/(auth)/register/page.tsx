@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import RegisterClient from './RegisterClient';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Register - BUPEXSA USA',
   description: 'Join BUPEXSA USA today.',

@@ -9,7 +9,7 @@ export async function updateSystemSettings(settings: Record<string, any>) {
   try {
     const updates = Object.entries(settings).map(([key, value]) => ({
       key,
-      value
+      value: typeof value === 'object' ? value : value // JSONB handles primitives fine, but let's be explicit
     }))
 
     const { error } = await supabase
