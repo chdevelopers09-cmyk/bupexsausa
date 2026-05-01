@@ -19,38 +19,50 @@ export async function POST(req: Request) {
 
     const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`
 
-    // 1. Ensure bucket allows videos
-    const { data: buckets } = await supabase.storage.listBuckets()
-    const bucketExists = buckets?.some(b => b.name === 'gallery')
+    // 1. Ensure bucket allows videos (using null to allow all)
+    const bucketName = 'gallery'
+    const { data: buckets, error: listError } = await supabase.storage.listBuckets()
+    if (listError) console.error('List Buckets Error:', listError)
+
+    const bucketExists = buckets?.some(b => b.name === bucketName)
     
-    if (!bucketExists) {
-      await supabase.storage.createBucket('gallery', {
-        public: true,
-        allowedMimeTypes: null,
-        fileSizeLimit: 104857600 // 100MB
-      })
-    } else {
-      await supabase.storage.updateBucket('gallery', {
-        public: true,
-        allowedMimeTypes: null,
-        fileSizeLimit: 104857600 // 100MB
-      })
+    const bucketOptions = {
+      public: true,
+      allowedMimeTypes: null,
+      fileSizeLimit: 104857600 // 100MB
     }
 
-    // 2. Upload to Supabase Storage
+    if (!bucketExists) {
+      const { error: createError } = await supabase.storage.createBucket(bucketName, bucketOptions)
+      if (createError) console.error('Create Bucket Error:', createError)
+    } else {
+      const { error: updateError } = await supabase.storage.updateBucket(bucketName, bucketOptions)
+      if (updateError) {
+        console.error('Update Bucket Error (Non-Fatal):', updateError)
+        // If update fails, we still try to upload
+      }
+    }
+
+    // 2. Upload to Supabase Storage with explicit contentType override if needed
+    console.log(`BUPEXSA: Attempting upload of ${file.name} (${file.type}) to ${bucketName}`)
+    
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('gallery')
+      .from(bucketName)
       .upload(fileName, file, {
         cacheControl: '3600',
-        upsert: false
+        upsert: false,
+        contentType: file.type // Ensure we send the real type
       })
 
     if (uploadError) {
-      console.error('Storage Error:', uploadError)
-      return NextResponse.json({ error: uploadError.message }, { status: 500 })
+      console.error('Final Upload Error:', uploadError)
+      return NextResponse.json({ 
+        error: `Storage Error: ${uploadError.message}. Type: ${file.type}`,
+        details: uploadError
+      }, { status: 500 })
     }
 
-    // Insert into database
+    // 3. Insert into database
     const { error: dbError } = await supabase.from('gallery_images').insert({
       storage_path: uploadData.path,
       category,
@@ -67,7 +79,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true })
   } catch (error: any) {
-    console.error('Upload API Error:', error)
+    console.error('Upload API Critical Error:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
