@@ -308,12 +308,18 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                   <h2 className="text-[10px] font-black text-purple-400 uppercase tracking-[0.2em] mb-4">Registration Summary</h2>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600 font-bold text-sm">🎫 Membership Registration</span>
-                      <span className="text-dark font-black text-sm">${registrationFee.toFixed(2)}</span>
+                      <span className="text-gray-600 font-bold text-sm">🎫 Registration Fee</span>
+                      <div className="text-right">
+                        <span className="text-dark font-black text-sm">${registrationFee.toFixed(2)}</span>
+                        <span className="block text-[9px] text-gray-400 font-bold uppercase tracking-widest">One-time</span>
+                      </div>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600 font-bold text-sm">📅 Annual Member Fee</span>
-                      <span className="text-dark font-black text-sm">${membershipFee.toFixed(2)}</span>
+                      <div className="text-right">
+                        <span className="text-dark font-black text-sm">${membershipFee.toFixed(2)}</span>
+                        <span className="block text-[9px] text-primary font-bold uppercase tracking-widest">Every 12 Months</span>
+                      </div>
                     </div>
                     <div className="h-[1px] bg-purple-100 my-2" />
                     <div className="flex justify-between items-end">

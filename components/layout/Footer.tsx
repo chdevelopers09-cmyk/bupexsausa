@@ -135,10 +135,11 @@ export default async function Footer() {
               <p className="text-xs text-gray-500 mb-3">Ready to join the BUPEXSA family?</p>
               <Link
                 href="/register"
-                className="btn-primary text-sm px-4 py-2 w-full justify-center"
+                className="btn-primary text-sm px-4 py-2 w-full justify-center flex flex-col items-center leading-tight"
                 id="footer-register"
               >
-                Join Now — $50 (One-time) + ${annualFee}/Year
+                <span className="font-black">Join BUPEXSA USA</span>
+                <span className="text-[10px] opacity-80 font-bold">$50 One-time + ${annualFee}/year</span>
               </Link>
             </div>
           </div>
