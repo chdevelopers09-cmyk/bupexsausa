@@ -1,4 +1,4 @@
-export const revalidate = 3600; // Cache for 1 hour
+export const dynamic = 'force-dynamic';
 
 import { Metadata } from 'next';
 import HeroSection from '@/components/sections/HeroSection';

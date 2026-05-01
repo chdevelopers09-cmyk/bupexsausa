@@ -2,6 +2,9 @@ import HeroSection from '@/components/sections/HeroSection';
 import ContactFormSection from '@/components/sections/ContactFormSection';
 import ImageTextSection from '@/components/sections/ImageTextSection';
 
+export const dynamic = 'force-dynamic';
+
+
 export const metadata = {
   title: 'Contact Us',
   description: 'Get in touch with the BUPEXSA USA national board.',
