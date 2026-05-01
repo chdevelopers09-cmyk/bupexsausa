@@ -45,14 +45,37 @@ export async function uploadImage(formData: FormData) {
   return { success: true }
 }
 
+export async function addVideo(formData: FormData) {
+  const supabase = await createAdminClient()
+  const videoUrl = formData.get('videoUrl') as string
+  const category = formData.get('category') as string
+  const altText = formData.get('altText') as string
+
+  if (!videoUrl) return { error: 'No video URL provided' }
+
+  const { error: dbError } = await supabase.from('gallery_images').insert({
+    storage_path: videoUrl, // We store the URL in the same column
+    category,
+    alt_text: altText,
+  })
+
+  if (dbError) return { error: dbError.message }
+
+  revalidatePath('/admin/gallery')
+  revalidatePath('/gallery')
+  return { success: true }
+}
+
 export async function deleteImage(id: string, storagePath: string) {
   const supabase = await createAdminClient()
 
-  const { error: storageError } = await supabase.storage
-    .from('gallery')
-    .remove([storagePath])
-
-  if (storageError) return { error: storageError.message }
+  // Only try to remove from storage if it's not a video URL (doesn't start with http)
+  if (!storagePath.startsWith('http')) {
+    const { error: storageError } = await supabase.storage
+      .from('gallery')
+      .remove([storagePath])
+    if (storageError) console.error('Storage removal error:', storageError.message)
+  }
 
   const { error: dbError } = await supabase.from('gallery_images').delete().eq('id', id)
 
@@ -62,3 +85,4 @@ export async function deleteImage(id: string, storagePath: string) {
   revalidatePath('/gallery')
   return { success: true }
 }
+
