@@ -59,48 +59,49 @@ export default function AdminSettingsClient({ initialSettings }: { initialSettin
                         <h3 className="text-xl font-black text-slate-900 flex items-center gap-3 mb-8 border-b border-slate-50 pb-4">
                             <Palette className="h-6 w-6 text-primary" /> Brand & Identity
                         </h3>
-                        <div className="space-y-6">
+                        <div className="space-y-8">
                             <div>
                                 <label className="label-field !text-slate-500">Site Name</label>
                                 <input 
                                     type="text" 
                                     value={settings.site_name || ''} 
                                     onChange={e => setSettings({...settings, site_name: e.target.value})}
-                                    className="input-field" 
+                                    className="input-field font-black text-lg h-14" 
+                                    placeholder="e.g. BUPEXSA USA"
                                 />
                             </div>
-                            <div className="grid grid-cols-2 gap-6">
+                            <div className="grid grid-cols-2 gap-8">
                                 <div>
                                     <label className="label-field !text-slate-500">Primary Color</label>
-                                    <div className="flex gap-3">
+                                    <div className="flex gap-4">
                                         <input 
                                             type="color" 
                                             value={settings.color_primary || '#6B21A8'} 
                                             onChange={e => setSettings({...settings, color_primary: e.target.value})}
-                                            className="h-11 w-11 rounded-xl border border-slate-200 cursor-pointer overflow-hidden p-0" 
+                                            className="h-14 w-14 rounded-2xl border-2 border-slate-100 cursor-pointer overflow-hidden p-0 bg-white" 
                                         />
                                         <input 
                                             type="text" 
                                             value={settings.color_primary || '#6B21A8'} 
                                             onChange={e => setSettings({...settings, color_primary: e.target.value})}
-                                            className="input-field text-sm font-mono flex-1 uppercase" 
+                                            className="input-field text-sm font-mono flex-1 uppercase font-bold" 
                                         />
                                     </div>
                                 </div>
                                 <div>
                                     <label className="label-field !text-slate-500">Accent Color</label>
-                                    <div className="flex gap-3">
+                                    <div className="flex gap-4">
                                         <input 
                                             type="color" 
                                             value={settings.color_accent || '#0EA5E9'} 
                                             onChange={e => setSettings({...settings, color_accent: e.target.value})}
-                                            className="h-11 w-11 rounded-xl border border-slate-200 cursor-pointer overflow-hidden p-0" 
+                                            className="h-14 w-14 rounded-2xl border-2 border-slate-100 cursor-pointer overflow-hidden p-0 bg-white" 
                                         />
                                         <input 
                                             type="text" 
                                             value={settings.color_accent || '#0EA5E9'} 
                                             onChange={e => setSettings({...settings, color_accent: e.target.value})}
-                                            className="input-field text-sm font-mono flex-1 uppercase" 
+                                            className="input-field text-sm font-mono flex-1 uppercase font-bold" 
                                         />
                                     </div>
                                 </div>
@@ -111,7 +112,8 @@ export default function AdminSettingsClient({ initialSettings }: { initialSettin
                                     type="text" 
                                     value={settings.site_slogan || ''} 
                                     onChange={e => setSettings({...settings, site_slogan: e.target.value})}
-                                    className="input-field" 
+                                    className="input-field font-bold" 
+                                    placeholder="Enter site slogan..."
                                 />
                             </div>
                         </div>
@@ -168,27 +170,31 @@ export default function AdminSettingsClient({ initialSettings }: { initialSettin
                                     Updating the annual fee will apply to all new registrations and future renewals. Current active memberships will not be affected until they expire.
                                 </p>
                             </div>
-                            <div className="grid grid-cols-2 gap-6">
+                            <div className="grid grid-cols-2 gap-8">
                                 <div>
                                     <label className="label-field !text-slate-500">Annual Member Fee (USD)</label>
-                                    <div className="relative">
-                                        <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                                    <div className="relative group">
+                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 w-8 flex justify-center border-r border-slate-100 pr-2">
+                                            <DollarSign className="h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
+                                        </div>
                                         <input 
                                             type="number" 
                                             value={settings.membership_fee || 100} 
                                             onChange={e => setSettings({...settings, membership_fee: parseFloat(e.target.value)})}
-                                            className="input-field pl-10 font-bold" 
+                                            className="input-field pl-14 font-black text-lg" 
                                         />
                                     </div>
                                 </div>
                                 <div>
                                     <label className="label-field !text-slate-500">Grace Period (Days)</label>
-                                    <input 
-                                        type="number" 
-                                        value={settings.membership_grace_period || 30} 
-                                        onChange={e => setSettings({...settings, membership_grace_period: parseInt(e.target.value)})}
-                                        className="input-field" 
-                                    />
+                                    <div className="relative group">
+                                        <input 
+                                            type="number" 
+                                            value={settings.membership_grace_period || 30} 
+                                            onChange={e => setSettings({...settings, membership_grace_period: parseInt(e.target.value)})}
+                                            className="input-field font-bold" 
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -198,26 +204,32 @@ export default function AdminSettingsClient({ initialSettings }: { initialSettin
                         <h3 className="text-xl font-black text-slate-900 flex items-center gap-3 mb-8 border-b border-slate-50 pb-4">
                             <ShieldCheck className="h-6 w-6 text-primary" /> Payment Handles (Manual)
                         </h3>
-                        <p className="text-xs text-slate-400 mb-6 italic">These handles are displayed to users choosing Zelle or CashApp.</p>
-                        <div className="space-y-6">
+                        <p className="text-xs text-slate-400 mb-6 font-medium italic bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            These handles are displayed to users choosing Zelle or CashApp during registration.
+                        </p>
+                        <div className="space-y-8">
                             <div>
                                 <label className="label-field !text-slate-500">Zelle Recipient Info</label>
                                 <input 
                                     type="text" 
                                     value={settings.zelle_handle || ''} 
                                     onChange={e => setSettings({...settings, zelle_handle: e.target.value})}
-                                    className="input-field font-mono font-bold text-primary" 
+                                    className="input-field font-mono font-bold text-primary bg-purple-50/30 border-purple-100" 
+                                    placeholder="email@example.com or phone number"
                                 />
                             </div>
                             <div>
-                                <label className="label-field !text-slate-500">CashApp Handle ($)</label>
-                                <div className="relative">
-                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-slate-400">$</span>
+                                <label className="label-field !text-slate-500">CashApp Handle</label>
+                                <div className="relative group">
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 w-8 flex justify-center border-r border-slate-100 pr-2">
+                                        <span className="font-black text-slate-400 group-focus-within:text-primary transition-colors">$</span>
+                                    </div>
                                     <input 
                                         type="text" 
                                         value={settings.cashapp_handle || ''} 
                                         onChange={e => setSettings({...settings, cashapp_handle: e.target.value})}
-                                        className="input-field pl-8 font-mono font-bold text-primary" 
+                                        className="input-field pl-14 font-mono font-bold text-primary bg-purple-50/30 border-purple-100" 
+                                        placeholder="your-cashtag"
                                     />
                                 </div>
                             </div>
