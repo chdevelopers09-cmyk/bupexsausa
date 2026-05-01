@@ -19,12 +19,10 @@ export async function POST(req: Request) {
 
     const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`
 
-    // 1. Ensure bucket allows videos (using null to allow all)
+    // 1. Ensure bucket allows videos
     const bucketName = 'gallery-media'
-    const { data: buckets, error: listError } = await supabase.storage.listBuckets()
-    if (listError) console.error('List Buckets Error:', listError)
-
-    const bucketExists = buckets?.some(b => b.name === bucketName)
+    const { data: buckets } = await supabase.storage.listBuckets()
+    let bucketExists = buckets?.some(b => b.name === bucketName)
     
     const bucketOptions = {
       public: true,
@@ -33,13 +31,18 @@ export async function POST(req: Request) {
     }
 
     if (!bucketExists) {
+      console.log(`BUPEXSA: Creating fresh bucket ${bucketName}`)
       const { error: createError } = await supabase.storage.createBucket(bucketName, bucketOptions)
-      if (createError) console.error('Create Bucket Error:', createError)
-    } else {
-      const { error: updateError } = await supabase.storage.updateBucket(bucketName, bucketOptions)
-      if (updateError) {
-        console.error('Update Bucket Error (Non-Fatal):', updateError)
+      if (createError) {
+        console.error('Create Bucket Error:', createError)
+        // If we can't create it, we'll try to use the old one as fallback
+      } else {
+        // Wait a moment for Supabase to propagate the new bucket
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        bucketExists = true
       }
+    } else {
+      await supabase.storage.updateBucket(bucketName, bucketOptions)
     }
 
     // 2. Upload to Supabase Storage with explicit contentType override if needed
