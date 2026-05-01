@@ -10,14 +10,26 @@ export default function GalleryClient({ initialImages = [] }: { initialImages?: 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   
   const realMedia = initialImages.map(img => {
-    const isVideo = img.storage_path.startsWith('http');
-    let thumb = `${supabaseUrl}/storage/v1/object/public/gallery/${img.storage_path}`;
+    const isLink = img.storage_path.startsWith('http');
+    const ext = img.storage_path.split('.').pop()?.toLowerCase();
+    const isDirectVideo = ['mp4', 'mov', 'webm', 'ogg'].includes(ext || '');
+    const isVideo = isLink || isDirectVideo;
     
+    let thumb = `${supabaseUrl}/storage/v1/object/public/gallery/${img.storage_path}`;
+    let path = thumb;
+
     if (isVideo) {
-      if (img.storage_path.includes('youtube.com') || img.storage_path.includes('youtu.be')) {
-        const id = img.storage_path.includes('v=') ? img.storage_path.split('v=')[1]?.split('&')[0] : img.storage_path.split('/').pop();
-        thumb = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+      if (isLink) {
+        if (img.storage_path.includes('youtube.com') || img.storage_path.includes('youtu.be')) {
+          const id = img.storage_path.includes('v=') ? img.storage_path.split('v=')[1]?.split('&')[0] : img.storage_path.split('/').pop();
+          thumb = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+          path = img.storage_path;
+        } else {
+          thumb = 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=800';
+          path = img.storage_path;
+        }
       } else {
+        // Direct video file - use placeholder for thumb, real URL for path
         thumb = 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=800';
       }
     }
@@ -25,14 +37,15 @@ export default function GalleryClient({ initialImages = [] }: { initialImages?: 
     return {
       id: img.id,
       category: img.category || 'Other',
-      alt: img.alt_text || 'BUPEXSA Image',
-      path: isVideo ? img.storage_path : thumb,
+      alt: img.alt_text || 'BUPEXSA Media',
+      path: path,
       thumb: thumb,
-      type: isVideo ? 'video' : 'image'
+      type: isVideo ? 'video' : 'image',
+      isVideoLink: isLink
     };
   });
 
-  const ALL_MEDIA = [...realMedia, ...MOCK_GALLERY.map(m => ({ ...m, thumb: m.path, type: 'image' }))];
+  const ALL_MEDIA = [...realMedia, ...MOCK_GALLERY.map(m => ({ ...m, thumb: m.path, type: 'image', isVideoLink: false }))];
   
   const CATEGORIES = ['All', ...Array.from(new Set(ALL_MEDIA.map(i => i.category)))];
 
@@ -65,19 +78,31 @@ export default function GalleryClient({ initialImages = [] }: { initialImages?: 
 
   const renderLightboxContent = (item: any) => {
     if (item.type === 'video') {
-      let embedUrl = item.path;
-      if (item.path.includes('youtube.com') || item.path.includes('youtu.be')) {
-        const id = item.path.includes('v=') ? item.path.split('v=')[1]?.split('&')[0] : item.path.split('/').pop();
-        embedUrl = `https://www.youtube.com/embed/${id}?autoplay=1`;
+      if (item.isVideoLink) {
+        let embedUrl = item.path;
+        if (item.path.includes('youtube.com') || item.path.includes('youtu.be')) {
+          const id = item.path.includes('v=') ? item.path.split('v=')[1]?.split('&')[0] : item.path.split('/').pop();
+          embedUrl = `https://www.youtube.com/embed/${id}?autoplay=1`;
+        }
+        return (
+          <iframe 
+            src={embedUrl} 
+            className="w-full aspect-video rounded-2xl shadow-2xl" 
+            allow="autoplay; encrypted-media; fullscreen" 
+            allowFullScreen
+          />
+        );
+      } else {
+        // Direct video upload
+        return (
+          <video 
+            src={item.path} 
+            controls 
+            autoPlay 
+            className="w-full max-h-[80vh] rounded-2xl shadow-2xl bg-black"
+          />
+        );
       }
-      return (
-        <iframe 
-          src={embedUrl} 
-          className="w-full aspect-video rounded-2xl shadow-2xl" 
-          allow="autoplay; encrypted-media; fullscreen" 
-          allowFullScreen
-        />
-      );
     }
     return (
       <img

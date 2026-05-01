@@ -9,7 +9,7 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
   const [images, setImages] = useState(initialImages)
   const [isUploading, setIsUploading] = useState(false)
   const [showUploadModal, setShowUploadModal] = useState(false)
-  const [uploadType, setUploadType] = useState<'PHOTO' | 'VIDEO'>('PHOTO')
+  const [uploadType, setUploadType] = useState<'PHOTO' | 'VIDEO_UPLOAD' | 'VIDEO_LINK'>('PHOTO')
   const [filter, setFilter] = useState('ALL')
 
   const categories = ['ALL', 'Convention', 'Meeting', 'Social', 'Chapter', 'Other']
@@ -23,7 +23,12 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
     setIsUploading(true)
     const formData = new FormData(e.currentTarget)
     
-    const res = uploadType === 'PHOTO' ? await uploadImage(formData) : await addVideo(formData)
+    let res;
+    if (uploadType === 'PHOTO' || uploadType === 'VIDEO_UPLOAD') {
+      res = await uploadMedia(formData)
+    } else {
+      res = await addVideo(formData)
+    }
     
     if (res.success) {
       setShowUploadModal(false)
@@ -53,6 +58,12 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
       }
       return 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=300'
     }
+    
+    const ext = path.split('.').pop()?.toLowerCase()
+    if (['mp4', 'mov', 'webm', 'ogg'].includes(ext || '')) {
+      return 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=300'
+    }
+
     return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/gallery/${path}`
   }
 
@@ -93,32 +104,39 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
 
       {/* Media Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        {filtered.map(img => (
-          <div key={img.id} className="group relative aspect-square bg-slate-100 rounded-2xl overflow-hidden border border-slate-100 shadow-sm transition-all hover:shadow-md">
-            <img 
-              src={getImageUrl(img.storage_path)} 
-              alt={img.alt_text} 
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-            {img.storage_path.startsWith('http') && (
-              <div className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-md">
-                <Play className="h-4 w-4 fill-white" />
-              </div>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex flex-col justify-end">
-              <p className="text-white text-[10px] font-black uppercase tracking-widest mb-1 truncate">{img.category}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-white/70 text-[10px] font-medium truncate pr-2">{img.alt_text || 'No description'}</span>
-                <button 
-                  onClick={() => handleDelete(img.id, img.storage_path)}
-                  className="h-8 w-8 rounded-lg bg-rose-500/20 text-rose-500 hover:bg-rose-500 hover:text-white transition-colors flex items-center justify-center shrink-0"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+        {filtered.map(img => {
+          const isLink = img.storage_path.startsWith('http');
+          const ext = img.storage_path.split('.').pop()?.toLowerCase();
+          const isDirectVideo = ['mp4', 'mov', 'webm', 'ogg'].includes(ext || '');
+          const isVideo = isLink || isDirectVideo;
+
+          return (
+            <div key={img.id} className="group relative aspect-square bg-slate-100 rounded-2xl overflow-hidden border border-slate-100 shadow-sm transition-all hover:shadow-md">
+              <img 
+                src={getImageUrl(img.storage_path)} 
+                alt={img.alt_text} 
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              {isVideo && (
+                <div className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-md">
+                  <Play className="h-4 w-4 fill-white" />
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex flex-col justify-end">
+                <p className="text-white text-[10px] font-black uppercase tracking-widest mb-1 truncate">{img.category}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-white/70 text-[10px] font-medium truncate pr-2">{img.alt_text || 'No description'}</span>
+                  <button 
+                    onClick={() => handleDelete(img.id, img.storage_path)}
+                    className="h-8 w-8 rounded-lg bg-rose-500/20 text-rose-500 hover:bg-rose-500 hover:text-white transition-colors flex items-center justify-center shrink-0"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {filtered.length === 0 && (
           <div className="col-span-full py-20 flex flex-col items-center justify-center text-slate-400 border-2 border-dashed border-slate-200 rounded-3xl">
@@ -145,20 +163,26 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
             <div className="flex p-2 bg-slate-50 border-b border-slate-100">
                <button 
                  onClick={() => setUploadType('PHOTO')}
-                 className={cn("flex-1 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-all", uploadType === 'PHOTO' ? "bg-white shadow-sm text-purple-600" : "text-slate-400 hover:text-slate-600")}
+                 className={cn("flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all", uploadType === 'PHOTO' ? "bg-white shadow-sm text-purple-600" : "text-slate-400 hover:text-slate-600")}
                >
-                 Photo Upload
+                 Photo
                </button>
                <button 
-                 onClick={() => setUploadType('VIDEO')}
-                 className={cn("flex-1 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-all", uploadType === 'VIDEO' ? "bg-white shadow-sm text-purple-600" : "text-slate-400 hover:text-slate-600")}
+                 onClick={() => setUploadType('VIDEO_UPLOAD')}
+                 className={cn("flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all", uploadType === 'VIDEO_UPLOAD' ? "bg-white shadow-sm text-purple-600" : "text-slate-400 hover:text-slate-600")}
+               >
+                 Video Upload
+               </button>
+               <button 
+                 onClick={() => setUploadType('VIDEO_LINK')}
+                 className={cn("flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all", uploadType === 'VIDEO_LINK' ? "bg-white shadow-sm text-purple-600" : "text-slate-400 hover:text-slate-600")}
                >
                  Video Link
                </button>
             </div>
 
             <form onSubmit={handleUpload} className="p-8 space-y-6">
-              {uploadType === 'PHOTO' ? (
+              {uploadType === 'PHOTO' && (
                 <div className="space-y-2">
                   <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Select Image</label>
                   <div className="relative border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center hover:border-purple-300 transition-colors group">
@@ -168,7 +192,21 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
                     <p className="text-[10px] text-slate-300 mt-1 uppercase font-bold tracking-widest">JPG, PNG or WEBP (Max 5MB)</p>
                   </div>
                 </div>
-              ) : (
+              )}
+
+              {uploadType === 'VIDEO_UPLOAD' && (
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Select Video File</label>
+                  <div className="relative border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center hover:border-purple-300 transition-colors group">
+                    <input type="file" name="file" accept="video/*" required className="absolute inset-0 opacity-0 cursor-pointer" />
+                    <Play className="h-8 w-8 text-slate-300 mx-auto mb-3 group-hover:text-purple-400 transition-colors" />
+                    <p className="text-sm font-bold text-slate-400 group-hover:text-slate-600 transition-colors">Select video from computer</p>
+                    <p className="text-[10px] text-slate-300 mt-1 uppercase font-bold tracking-widest">MP4, MOV or WEBM (Max 50MB)</p>
+                  </div>
+                </div>
+              )}
+
+              {uploadType === 'VIDEO_LINK' && (
                 <div className="space-y-2">
                   <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Video URL (YouTube/Vimeo)</label>
                   <input name="videoUrl" type="url" required placeholder="https://www.youtube.com/watch?v=..." className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-4 text-sm font-bold outline-none focus:ring-2 focus:ring-purple-100 transition-all" />

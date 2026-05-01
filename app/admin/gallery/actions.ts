@@ -3,7 +3,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 
-export async function uploadImage(formData: FormData) {
+export async function uploadMedia(formData: FormData) {
   const supabase = await createAdminClient()
   const file = formData.get('file') as File
   const category = formData.get('category') as string
@@ -11,19 +11,19 @@ export async function uploadImage(formData: FormData) {
 
   if (!file) return { error: 'No file provided' }
 
+  const isVideo = file.type.startsWith('video/')
   const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`
 
-  // Ensure bucket exists
+  // Ensure bucket exists and allows videos
   const { data: buckets } = await supabase.storage.listBuckets()
   const bucketExists = buckets?.some(b => b.name === 'gallery')
   
   if (!bucketExists) {
-    const { error: bucketError } = await supabase.storage.createBucket('gallery', {
+    await supabase.storage.createBucket('gallery', {
       public: true,
-      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
-      fileSizeLimit: 5242880 // 5MB
+      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/quicktime', 'video/ogg'],
+      fileSizeLimit: 52428800 // 50MB for videos
     })
-    if (bucketError) return { error: `Bucket initialization failed: ${bucketError.message}` }
   }
 
   const { data: uploadData, error: uploadError } = await supabase.storage
@@ -44,6 +44,7 @@ export async function uploadImage(formData: FormData) {
   revalidatePath('/gallery')
   return { success: true }
 }
+
 
 export async function addVideo(formData: FormData) {
   const supabase = await createAdminClient()
