@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Globe, Camera, X, Play, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
 import { SITE_CONFIG } from '@/lib/mock-data';
+import { createAdminClient } from '@/lib/supabase/admin';
+
 
 const quickLinks = [
   { label: 'About Us', href: '/about' },
@@ -23,7 +25,12 @@ const memberLinks = [
   { label: 'FAQ', href: '/membership#faq' },
 ];
 
-export default function Footer() {
+export default async function Footer() {
+  const supabase = await createAdminClient();
+  const { data: settingsData } = await supabase.from('site_settings').select('key, value');
+  const settings = settingsData?.reduce((acc, s) => ({ ...acc, [s.key]: s.value }), {}) || {};
+  const annualFee = settings.membership_fee || 100;
+
   return (
     <footer className="bg-white text-dark border-t border-gray-100">
       {/* Top section */}
@@ -131,7 +138,7 @@ export default function Footer() {
                 className="btn-primary text-sm px-4 py-2 w-full justify-center"
                 id="footer-register"
               >
-                Join Now — ${SITE_CONFIG.membershipFee}/year
+                Join Now — $50 Reg. + ${annualFee}/year
               </Link>
             </div>
           </div>
