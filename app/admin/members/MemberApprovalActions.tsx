@@ -1,27 +1,35 @@
 'use client';
 
 import { useState } from 'react';
-import { approveMember, rejectMember } from './actions';
-import { ShieldCheck, AlertTriangle, Check, X } from 'lucide-react';
+import { 
+  approveMember, 
+  rejectMember, 
+  deleteMember, 
+  regenerateMembershipId, 
+  sendPasswordReset 
+} from './actions';
+import { ShieldCheck, AlertTriangle, Check, X, RefreshCw, Mail, Trash2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-export default function MemberApprovalActions({ memberId, status }: { memberId: string, status: string }) {
+export default function MemberApprovalActions({ memberId, status, email }: { memberId: string, status: string, email: string }) {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleApprove = async () => {
-    if (!confirm('Are you sure you want to approve this member and generate their ID?')) return;
+  const handleAction = async (action: () => Promise<any>, confirmMsg: string, successMsg: string) => {
+    if (!confirm(confirmMsg)) return;
     setLoading(true);
-    const res = await approveMember(memberId);
-    setLoading(false);
-    if (res.error) alert(res.error);
-    else alert('Member approved! ID: ' + res.membershipId);
-  };
-
-  const handleReject = async () => {
-    if (!confirm('Are you sure you want to reject this application?')) return;
-    setLoading(true);
-    const res = await rejectMember(memberId);
-    setLoading(false);
-    if (res.error) alert(res.error);
+    try {
+      const res = await action();
+      if (res.error) alert(res.error);
+      else {
+        alert(successMsg);
+        if (confirmMsg.includes('delete')) router.push('/admin/members');
+      }
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,14 +43,14 @@ export default function MemberApprovalActions({ memberId, status }: { memberId: 
         {status === 'PENDING' && (
           <>
             <button 
-              onClick={handleApprove}
+              onClick={() => handleAction(() => approveMember(memberId), 'Approve member and generate ID?', 'Member approved!')}
               disabled={loading}
               className="w-full py-4 bg-primary text-white rounded-xl text-sm font-black shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading ? 'Processing...' : <><Check size={18} /> Approve Member</>}
             </button>
             <button 
-              onClick={handleReject}
+              onClick={() => handleAction(() => rejectMember(memberId), 'Reject this application?', 'Application rejected.')}
               disabled={loading}
               className="w-full py-4 bg-rose-50 text-rose-700 border border-rose-100 rounded-xl text-sm font-bold hover:bg-rose-100 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
@@ -52,19 +60,36 @@ export default function MemberApprovalActions({ memberId, status }: { memberId: 
         )}
         
         {status === 'ACTIVE' && (
-          <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
-            <p className="text-xs font-bold text-emerald-800 text-center">Membership is Active</p>
+          <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl mb-2">
+            <p className="text-xs font-bold text-emerald-800 text-center flex items-center justify-center gap-2">
+              <ShieldCheck className="h-4 w-4" /> Membership is Active
+            </p>
           </div>
         )}
 
-        <button className="w-full text-left px-4 py-3 bg-white border border-slate-200 hover:border-primary hover:bg-purple-50 rounded-xl text-sm font-medium text-slate-700 transition-colors">
-          Regenerate Membership ID
+        <button 
+          onClick={() => handleAction(() => regenerateMembershipId(memberId), 'Regenerate membership ID?', 'ID regenerated successfully!')}
+          disabled={loading}
+          className="w-full text-left px-4 py-3 bg-white border border-slate-200 hover:border-primary hover:bg-purple-50 rounded-xl text-sm font-medium text-slate-700 transition-colors flex items-center gap-3"
+        >
+          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> Regenerate Membership ID
         </button>
-        <button className="w-full text-left px-4 py-3 bg-white border border-slate-200 hover:border-amber-400 hover:bg-amber-50 rounded-xl text-sm font-medium text-slate-700 transition-colors">
-          Send Password Reset Email
+        
+        <button 
+          onClick={() => handleAction(() => sendPasswordReset(email), 'Send password reset email to ' + email + '?', 'Reset email sent!')}
+          disabled={loading}
+          className="w-full text-left px-4 py-3 bg-white border border-slate-200 hover:border-amber-400 hover:bg-amber-50 rounded-xl text-sm font-medium text-slate-700 transition-colors flex items-center gap-3"
+        >
+          <Mail className="h-4 w-4" /> Send Password Reset Email
         </button>
-        <button className="w-full flex items-center justify-between px-4 py-3 bg-rose-50 border border-rose-200 hover:bg-rose-100 rounded-xl text-sm font-bold text-rose-700 transition-colors">
-          <span className="flex items-center gap-2"><AlertTriangle className="h-4 w-4" /> Delete Account</span>
+        
+        <button 
+          onClick={() => handleAction(() => deleteMember(memberId), 'PERMANENTLY delete this member account? This cannot be undone.', 'Member deleted.')}
+          disabled={loading}
+          className="w-full flex items-center justify-between px-4 py-3 bg-rose-50 border border-rose-200 hover:bg-rose-100 rounded-xl text-sm font-bold text-rose-700 transition-colors mt-4"
+        >
+          <span className="flex items-center gap-2"><Trash2 className="h-4 w-4" /> Delete Account</span>
+          <AlertTriangle className="h-4 w-4 opacity-50" />
         </button>
       </div>
     </div>

@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Save, CheckCircle2, AlertCircle } from 'lucide-react';
+import { updateMemberDetails } from '../actions';
+
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
@@ -29,7 +31,7 @@ export default function MemberEditorForm({ member }: { member: any }) {
     setMsg({ type: '', text: '' });
 
     try {
-      const { error } = await supabase.from('members').update({
+      const result = await updateMemberDetails(member.id, {
         full_name: formData.full_name,
         phone: formData.phone,
         graduation_year: parseInt(formData.graduation_year, 10),
@@ -38,9 +40,10 @@ export default function MemberEditorForm({ member }: { member: any }) {
         profession: formData.profession,
         status: formData.status,
         role: formData.role,
-      }).eq('id', member.id);
+      });
 
-      if (error) throw error;
+      if (result.error) throw new Error(result.error);
+      
       setMsg({ type: 'success', text: 'Member updated successfully.' });
       router.refresh();
       setTimeout(() => setMsg({ type: '', text: '' }), 3000);

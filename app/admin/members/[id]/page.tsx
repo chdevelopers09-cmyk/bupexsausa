@@ -100,7 +100,7 @@ export default async function AdminMemberDetailPage({ params }: { params: Promis
         {/* Right Col: Timeline & Finances */}
         <div className="lg:col-span-1 space-y-8">
           {/* Admin Actions */}
-          <MemberApprovalActions memberId={member.id} status={member.status} />
+          <MemberApprovalActions memberId={member.id} status={member.status} email={member.email} />
 
           {/* Payment History */}
           <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
