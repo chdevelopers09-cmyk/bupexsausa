@@ -45,10 +45,6 @@ export default function ClientAdminLayout({ children, isSuperAdmin }: ClientAdmi
     { label: 'System Settings', href: '/admin/settings', icon: Settings },
   ];
 
-  if (isSuperAdmin) {
-    adminLinks.push({ label: 'User Management', href: '/admin/users', icon: UserPlus });
-  }
-
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex font-sans">
       {/* Admin Sidebar */}
@@ -92,6 +88,25 @@ export default function ClientAdminLayout({ children, isSuperAdmin }: ClientAdmi
               </Link>
             );
           })}
+
+          {/* Super Admin Section - Explicitly Highlighted */}
+          {isSuperAdmin && (
+            <div className="pt-6 mt-6 border-t border-slate-800 space-y-1">
+              <p className={cn("px-4 mb-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]", !isSidebarOpen && "hidden")}>Super Admin</p>
+              <Link
+                href="/admin/users"
+                className={cn(
+                  "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all group",
+                  pathname.startsWith('/admin/users')
+                    ? "bg-emerald-600 text-white shadow-lg shadow-emerald-900/20"
+                    : "hover:bg-slate-800 hover:text-white"
+                )}
+              >
+                <UserPlus className={cn("h-5 w-5 shrink-0 transition-colors", pathname.startsWith('/admin/users') ? "text-white" : "text-slate-500 group-hover:text-emerald-400")} />
+                {isSidebarOpen && <span className="animate-fade-in text-emerald-400 font-bold">User Management</span>}
+              </Link>
+            </div>
+          )}
         </nav>
 
         <div className="p-4 border-t border-slate-800">
