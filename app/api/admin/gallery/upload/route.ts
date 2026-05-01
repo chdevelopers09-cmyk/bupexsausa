@@ -19,7 +19,25 @@ export async function POST(req: Request) {
 
     const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`
 
-    // Upload to Supabase Storage
+    // 1. Ensure bucket allows videos
+    const { data: buckets } = await supabase.storage.listBuckets()
+    const bucketExists = buckets?.some(b => b.name === 'gallery')
+    
+    if (!bucketExists) {
+      await supabase.storage.createBucket('gallery', {
+        public: true,
+        allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/quicktime', 'video/ogg'],
+        fileSizeLimit: 104857600 // 100MB
+      })
+    } else {
+      await supabase.storage.updateBucket('gallery', {
+        public: true,
+        allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/quicktime', 'video/ogg'],
+        fileSizeLimit: 104857600 // 100MB
+      })
+    }
+
+    // 2. Upload to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('gallery')
       .upload(fileName, file, {
