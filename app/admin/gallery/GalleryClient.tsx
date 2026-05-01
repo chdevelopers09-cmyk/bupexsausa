@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Image as ImageIcon, Plus, Trash2, Filter, Upload, X, Play } from 'lucide-react'
-import { uploadImage, deleteImage, addVideo } from './actions'
+import { uploadMedia, deleteImage, addVideo } from './actions'
 import { cn } from '@/lib/utils'
 
 export default function GalleryClient({ initialImages }: { initialImages: any[] }) {
