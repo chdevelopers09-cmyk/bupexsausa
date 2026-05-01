@@ -26,13 +26,13 @@ export async function POST(req: Request) {
     if (!bucketExists) {
       await supabase.storage.createBucket('gallery', {
         public: true,
-        allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/quicktime', 'video/ogg'],
+        allowedMimeTypes: null,
         fileSizeLimit: 104857600 // 100MB
       })
     } else {
       await supabase.storage.updateBucket('gallery', {
         public: true,
-        allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/quicktime', 'video/ogg'],
+        allowedMimeTypes: null,
         fileSizeLimit: 104857600 // 100MB
       })
     }

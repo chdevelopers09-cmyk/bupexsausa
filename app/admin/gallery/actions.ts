@@ -21,14 +21,14 @@ export async function uploadMedia(formData: FormData) {
   if (!bucketExists) {
     await supabase.storage.createBucket('gallery', {
       public: true,
-      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/quicktime', 'video/ogg'],
-      fileSizeLimit: 104857600 // 100MB for videos
+      allowedMimeTypes: null,
+      fileSizeLimit: 104857600 // 100MB
     })
   } else {
-    // Force update the existing bucket to support videos
+    // Force update the existing bucket to allow all types
     await supabase.storage.updateBucket('gallery', {
       public: true,
-      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/quicktime', 'video/ogg'],
+      allowedMimeTypes: null,
       fileSizeLimit: 104857600 // 100MB
     })
   }
