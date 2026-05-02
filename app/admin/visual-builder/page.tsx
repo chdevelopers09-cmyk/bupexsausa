@@ -1,6 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import VisualBuilderList from './VisualBuilderList';
-import { Plus } from 'lucide-react';
+import NewPageButton from './NewPageButton';
 
 export const metadata = {
   title: 'Visual Builder | Admin Panel',
@@ -36,9 +36,7 @@ export default async function VisualBuilderPage() {
           <h1 className="text-3xl font-black text-slate-900 leading-tight">Visual Page Builder</h1>
           <p className="text-slate-500 mt-1">Select a page to modify its sections, hero content, and layout dynamically.</p>
         </div>
-        <button className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-2xl text-sm font-black shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
-          <Plus className="h-4 w-4" /> Initialize New Page
-        </button>
+        <NewPageButton />
       </div>
 
       <VisualBuilderList initialPages={uniquePages} />

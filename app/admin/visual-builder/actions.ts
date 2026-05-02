@@ -50,8 +50,37 @@ export async function saveSectionContent(id: string, content: any) {
     })
     .eq('id', id);
 
-  if (error) return { error: error.message };
-
   revalidatePath(`/admin/visual-builder/content/${id}`);
   return { success: true };
+}
+
+export async function createPage(pageKey: string, slug: string) {
+  const supabase = await createAdminClient();
+  
+  // Create an initial Hero section for the new page
+  const { data, error } = await supabase
+    .from('page_layouts')
+    .insert([{
+      page_key: pageKey,
+      slug: slug,
+      component: 'HeroSection',
+      variant: 'centered-primary',
+      order_index: 0,
+      visible: true,
+      is_draft: true,
+      content: {
+        badge: 'New Page',
+        heading: `Welcome to ${pageKey}`,
+        subheading: 'This is your newly created page. Start customizing it in the visual builder!',
+        cta1Label: 'Get Started',
+        cta1Url: '#'
+      }
+    }])
+    .select()
+    .single();
+
+  if (error) return { error: error.message };
+
+  revalidatePath('/admin/visual-builder');
+  return { success: true, id: data.id };
 }
