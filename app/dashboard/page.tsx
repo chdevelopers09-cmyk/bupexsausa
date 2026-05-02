@@ -11,7 +11,8 @@ import {
   LayoutDashboard,
   MapPin,
   ChevronRight,
-  DollarSign
+  DollarSign,
+  Bell
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/server';
