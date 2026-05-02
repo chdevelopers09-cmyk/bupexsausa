@@ -19,12 +19,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const isSuperAdmin = user.email === 'chdevelopers09@gmail.com' || 
                        user.email?.endsWith('@rubilian.com') || 
-                       profile?.role === 'SUPERADMIN';
+                       profile?.role === 'SUPERADMIN' ||
+                       (user.app_metadata as any)?.role === 'superadmin';
   
-  const isAdmin = isSuperAdmin || profile?.role === 'ADMIN';
+  const isAdmin = isSuperAdmin || 
+                  profile?.role === 'ADMIN' || 
+                  (user.app_metadata as any)?.role === 'admin';
 
   if (!isAdmin) {
-    console.log(`Non-admin access attempt to /admin by ${user.email}. Redirecting to dashboard.`);
+    console.log(`Non-admin access attempt to /admin by ${user.email}. Role: ${profile?.role}. Metadata Role: ${(user.app_metadata as any)?.role}`);
     redirect('/dashboard');
   }
 
