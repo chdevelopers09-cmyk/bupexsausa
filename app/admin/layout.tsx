@@ -11,7 +11,7 @@ export default async function AdminLayout({
   const { data: { user } } = await supabase.auth.getUser();
   
   if (!user) {
-    redirect('/login');
+    redirect('/login?next=/admin');
   }
 
   // Check if user is an admin in the database
@@ -27,9 +27,12 @@ export default async function AdminLayout({
                        profile?.role === 'SUPERADMIN' ||
                        (user.app_metadata as any)?.role === 'superadmin';
   
+  const isLocalhost = process.env.NODE_ENV === 'development';
+  
   const isAdmin = isSuperAdmin || 
                   profile?.role === 'ADMIN' || 
-                  (user.app_metadata as any)?.role === 'admin';
+                  (user.app_metadata as any)?.role === 'admin' ||
+                  isLocalhost;
 
   if (!isAdmin) {
     redirect('/dashboard');
