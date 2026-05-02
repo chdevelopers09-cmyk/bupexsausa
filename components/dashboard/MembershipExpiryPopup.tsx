@@ -8,10 +8,11 @@ import { usePathname } from 'next/navigation';
 interface MembershipExpiryPopupProps {
   memberName?: string;
   expiryDate?: string; // ISO date string
+  membershipFee?: number;
   onDismiss?: () => void;
 }
 
-export default function MembershipExpiryPopup({ memberName, expiryDate, onDismiss }: MembershipExpiryPopupProps) {
+export default function MembershipExpiryPopup({ memberName, expiryDate, membershipFee = 100, onDismiss }: MembershipExpiryPopupProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
   const pathname = usePathname();
@@ -150,7 +151,7 @@ export default function MembershipExpiryPopup({ memberName, expiryDate, onDismis
               <div className="bg-orange-50 rounded-2xl p-4 border border-orange-100">
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-gray-600 font-bold text-sm">Annual Fee Renewal</span>
-                  <span className="text-dark font-black text-lg">$100.00</span>
+                  <span className="text-dark font-black text-lg">${membershipFee.toFixed(2)}</span>
                 </div>
                 <div className="h-px bg-orange-100" />
                 <p className="text-[10px] font-black text-orange-500 uppercase tracking-widest mt-2">
@@ -166,7 +167,7 @@ export default function MembershipExpiryPopup({ memberName, expiryDate, onDismis
                   className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#8B5CF6] to-purple-600 text-white font-black text-sm shadow-xl shadow-purple-200 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                 >
                   <CreditCard className="h-4 w-4" />
-                  Renew Membership — $100.00
+                  Renew Membership — ${membershipFee.toFixed(2)}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <button

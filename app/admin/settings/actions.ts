@@ -7,10 +7,12 @@ export async function updateSystemSettings(settings: Record<string, any>) {
   const supabase = await createAdminClient()
 
   try {
-    const updates = Object.entries(settings).map(([key, value]) => ({
-      key,
-      value: typeof value === 'object' ? value : value // JSONB handles primitives fine, but let's be explicit
-    }))
+    const updates = Object.entries(settings)
+      .filter(([_, value]) => value !== null && value !== undefined) // Prevent null constraint violations
+      .map(([key, value]) => ({
+        key,
+        value: typeof value === 'object' ? value : value
+      }))
 
     const { error } = await supabase
       .from('site_settings')

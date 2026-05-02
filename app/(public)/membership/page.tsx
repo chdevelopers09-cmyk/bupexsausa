@@ -10,7 +10,14 @@ export const metadata = {
   description: 'Join BUPEXSA USA and become part of our alumni legacy.',
 };
 
-export default function MembershipPage() {
+import { createAdminClient } from '@/lib/supabase/admin';
+
+export default async function MembershipPage() {
+  const supabase = await createAdminClient();
+  const { data: settingsData } = await supabase.from('site_settings').select('key, value');
+  const settings = settingsData?.reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {}) || {};
+  const annualFee = settings.membership_fee || 100;
+
   return (
     <>
       <HeroSection
@@ -69,7 +76,7 @@ export default function MembershipPage() {
           },
           {
             question: "What are the membership dues?",
-            answer: "National annual dues are currently $100 per member, used to fund operational costs and school projects."
+            answer: `National annual dues are currently $${annualFee} per member, used to fund operational costs and school projects.`
           },
           {
             question: "How long does registration take?",

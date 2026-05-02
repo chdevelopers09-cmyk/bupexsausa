@@ -40,6 +40,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const supabase = createClient();
 
+  const [settings, setSettings] = useState<Record<string, any>>({});
+
   useEffect(() => {
     async function getProfile() {
       try {
@@ -56,6 +58,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             .eq('id', user.id)
             .single();
           setProfile(data);
+
+          // Fetch settings
+          const { data: settingsData } = await supabase.from('site_settings').select('*');
+          const settingsObj = settingsData?.reduce((acc, s) => ({ ...acc, [s.key]: s.value }), {}) || {};
+          setSettings(settingsObj);
         }
       } catch (err) {
         console.error('Error fetching layout profile:', err);
@@ -226,6 +233,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <MembershipExpiryPopup
             memberName={profile?.full_name}
             expiryDate={profile?.membership_expiry_date}
+            membershipFee={parseFloat(settings.membership_fee || '100')}
           />
           {children}
         </main>

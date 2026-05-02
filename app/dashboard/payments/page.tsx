@@ -27,6 +27,7 @@ function MembershipPaymentsContent() {
   const [selectedPlan, setSelectedPlan] = useState<'annual'|'donation'>('annual');
   const [copied, setCopied] = useState<string | null>(null);
   const [highlight, setHighlight] = useState(false);
+  const [settings, setSettings] = useState<Record<string, any>>({});
   const supabase = createClient();
   const searchParams = useSearchParams();
 
@@ -74,6 +75,11 @@ function MembershipPaymentsContent() {
             .eq('id', user.id)
             .single();
           setProfile(profileData);
+
+          // Fetch settings
+          const { data: settingsData } = await supabase.from('site_settings').select('*');
+          const settingsObj = settingsData?.reduce((acc, s) => ({ ...acc, [s.key]: s.value }), {}) || {};
+          setSettings(settingsObj);
 
           // Fetch payments
           const { data: paymentData } = await supabase
@@ -182,7 +188,7 @@ function MembershipPaymentsContent() {
                                  </div>
                                  <h3 className="font-black text-dark text-sm mb-0.5">Annual Dues</h3>
                                  <div className="flex items-end gap-1">
-                                    <span className="text-xl font-black text-dark">$100</span>
+                                    <span className="text-xl font-black text-dark">${settings.membership_fee || '100'}</span>
                                     <span className="text-[9px] text-gray-400 font-bold mb-0.5">/ yr</span>
                                  </div>
                               </div>
