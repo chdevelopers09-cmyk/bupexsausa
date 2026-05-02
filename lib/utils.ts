@@ -92,6 +92,21 @@ export const PAYMENT_STATUS_COLORS: Record<string, string> = {
   PENDING: 'badge-pending',
   PENDING_VERIFICATION: 'badge-pending',
   COMPLETED: 'badge-active',
-  FAILED: 'badge-rejected',
   REFUNDED: 'badge-suspended',
+};
+
+export const getImageUrl = (path: string) => {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!supabaseUrl) return path;
+
+  const parts = path.split('/');
+  if (parts.length < 2) return path;
+
+  const bucket = parts[0];
+  const filePath = parts.slice(1).join('/');
+  
+  return `${supabaseUrl}/storage/v1/object/public/${bucket}/${filePath}`;
 };

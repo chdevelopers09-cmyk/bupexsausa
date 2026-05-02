@@ -3,13 +3,17 @@ import { notFound } from 'next/navigation';
 import { MapPin, Users, ArrowLeft, Mail, Calendar, ExternalLink } from 'lucide-react';
 import { MOCK_CHAPTERS, MOCK_LEADERSHIP, MOCK_EVENTS } from '@/lib/mock-data';
 
+import { createAdminClient } from '@/lib/supabase/admin';
+import { getImageUrl } from '@/lib/utils';
+
 interface ChapterDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: ChapterDetailPageProps) {
   const { slug } = await params;
-  const chapter = MOCK_CHAPTERS.find(c => c.slug === slug);
+  const supabase = await createAdminClient();
+  const { data: chapter } = await supabase.from('chapters').select('name, description').eq('slug', slug).single();
   if (!chapter) return {};
   return {
     title: `${chapter.name} | BUPEXSA USA`,
@@ -19,7 +23,14 @@ export async function generateMetadata({ params }: ChapterDetailPageProps) {
 
 export default async function ChapterDetailPage({ params }: ChapterDetailPageProps) {
   const { slug } = await params;
-  const chapter = MOCK_CHAPTERS.find(c => c.slug === slug);
+  const supabase = await createAdminClient();
+  
+  const { data: chapter } = await supabase
+    .from('chapters')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+
   if (!chapter) notFound();
 
   // Filter events for this chapter (by location approximation using state)
@@ -38,11 +49,22 @@ export default async function ChapterDetailPage({ params }: ChapterDetailPagePro
     <div className="min-h-screen bg-white">
       {/* Hero */}
       <div className="relative h-[50vh] min-h-[380px] overflow-hidden bg-dark">
-        <img
-          src={chapter.banner_image_path || '/images/leadership/president.jpg'}
-          alt={chapter.name}
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
-        />
+        {chapter.banner_image_path?.toLowerCase().match(/\.(mp4|webm|ogg)$/) || chapter.banner_image_path?.includes('video') ? (
+          <video
+            src={getImageUrl(chapter.banner_image_path)}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover opacity-40"
+          />
+        ) : (
+          <img
+            src={getImageUrl(chapter.banner_image_path) || '/images/leadership/president.jpg'}
+            alt={chapter.name}
+            className="absolute inset-0 w-full h-full object-cover opacity-40"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-primary/30" />
 
         <div className="absolute top-24 left-0 right-0 container-wide">

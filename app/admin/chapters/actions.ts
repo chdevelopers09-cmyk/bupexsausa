@@ -44,4 +44,28 @@ export async function deleteChapter(id: string) {
   revalidatePath('/admin/chapters');
   return { success: true };
 }
+export async function uploadChapterMedia(formData: FormData) {
+  const supabase = await createAdminClient();
+  const file = formData.get('file') as File;
+  if (!file) return { error: 'No file provided' };
 
+  const fileName = `chapters/${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+  const bucketName = 'gallery'; // Reusing established bucket
+
+  // Upload with professional bypass
+  const { data, error } = await supabase.storage
+    .from(bucketName)
+    .upload(fileName, file, {
+      cacheControl: '3600',
+      upsert: false,
+      contentType: 'application/x-binary'
+    });
+
+  if (error) return { error: error.message };
+
+  // Return the public path
+  return { 
+    success: true, 
+    path: `${bucketName}/${data.path}` 
+  };
+}

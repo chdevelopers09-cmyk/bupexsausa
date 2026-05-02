@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { getImageUrl } from '@/lib/utils';
 
 export default function AdminChaptersClient({ initialChapters }: { initialChapters: any[] }) {
     const [chapters, setChapters] = useState(initialChapters);
@@ -37,7 +38,7 @@ export default function AdminChaptersClient({ initialChapters }: { initialChapte
                     <div key={chapter.id} className="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden flex flex-col group hover:border-primary/20 transition-all">
                         <div className="h-40 relative overflow-hidden bg-slate-100">
                              <img 
-                                src={chapter.banner_image_path || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400'} 
+                                src={getImageUrl(chapter.banner_image_path) || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400'} 
                                 alt={chapter.name} 
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80"
                             />

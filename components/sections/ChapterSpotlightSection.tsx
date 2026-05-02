@@ -1,18 +1,23 @@
 import Link from 'next/link';
 import { MapPin, Users, ArrowRight, Compass } from 'lucide-react';
-import { MOCK_CHAPTERS } from '@/lib/mock-data';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { getImageUrl } from '@/lib/utils';
 
 interface ChapterSpotlightSectionProps {
   heading?: string;
   ctaLabel?: string;
 }
 
-export default function ChapterSpotlightSection({
+export default async function ChapterSpotlightSection({
   heading = 'Explore Our Local Chapters',
   ctaLabel = 'View All Chapters',
 }: ChapterSpotlightSectionProps) {
-  // Show all chapters
-  const chapters = MOCK_CHAPTERS;
+  const supabase = await createAdminClient();
+  const { data: chapters } = await supabase
+    .from('chapters')
+    .select('*')
+    .eq('is_active', true)
+    .order('name', { ascending: true });
 
   return (
     <section className="section-padding bg-white relative overflow-hidden">
@@ -35,7 +40,7 @@ export default function ChapterSpotlightSection({
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {chapters.map((chapter) => (
+          {chapters && chapters.length > 0 ? chapters.map((chapter) => (
             <Link
               key={chapter.id}
               href={`/chapters/${chapter.slug}`}
@@ -44,7 +49,7 @@ export default function ChapterSpotlightSection({
               <div className="h-56 relative overflow-hidden">
                 <div className="absolute inset-0 bg-dark/20 group-hover:bg-dark/0 transition-colors z-10" />
                 <img
-                  src={chapter.banner_image_path}
+                  src={getImageUrl(chapter.banner_image_path) || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400'}
                   alt={chapter.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
@@ -69,7 +74,11 @@ export default function ChapterSpotlightSection({
                 </div>
               </div>
             </Link>
-          ))}
+          )) : (
+            <div className="md:col-span-2 text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-100">
+               <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">No active chapters found at this time.</p>
+            </div>
+          )}
         </div>
 
         <div className="mt-12 text-center md:hidden">
