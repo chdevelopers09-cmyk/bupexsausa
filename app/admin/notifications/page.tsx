@@ -8,14 +8,25 @@ export const metadata = {
 export default async function NotificationsPage() {
   const supabase = await createClient()
   
-  // We'll fetch the most recent unique notifications (broadly)
-  // In a real system, we might have a `broadcasts` table. 
-  // For now, we'll list recent rows from the `notifications` table.
-  const { data: recent } = await supabase
+  // Fetch recent notifications and group them by title/time to show unique broadcasts
+  const { data: notifications } = await supabase
     .from('notifications')
     .select('*')
     .order('created_at', { ascending: false })
-    .limit(50)
+    .limit(200)
 
-  return <NotificationsClient recentNotifications={recent || []} />
+  // Group by title + minute (approximate broadcast grouping)
+  const uniqueBroadcasts: any[] = []
+  const seen = new Set()
+
+  notifications?.forEach(n => {
+    const timeKey = new Date(n.created_at).toISOString().slice(0, 16) // Group by minute
+    const key = `${n.title}-${timeKey}`
+    if (!seen.has(key)) {
+      seen.add(key)
+      uniqueBroadcasts.push(n)
+    }
+  })
+
+  return <NotificationsClient recentNotifications={uniqueBroadcasts} />
 }

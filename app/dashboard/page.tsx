@@ -30,6 +30,14 @@ export default async function DashboardOverview() {
     .eq('id', user.id)
     .single();
 
+  // Fetch real notifications
+  const { data: notifications } = await supabase
+    .from('notifications')
+    .select('*')
+    .eq('member_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(3);
+
   // Fetch RSVPs
   const { data: rsvps } = await supabase
     .from('rsvps')
@@ -225,15 +233,40 @@ export default async function DashboardOverview() {
                </Link>
             </div>
 
-            <div className="bg-orange-50 border border-orange-100 p-6 rounded-2xl flex gap-4">
-               <AlertCircle className="h-6 w-6 text-orange-600 shrink-0 mt-1" />
-               <div>
-                  <h4 className="font-bold text-orange-800 text-sm">Notice: Annual General Meeting</h4>
-                  <p className="text-xs text-orange-700/80 mt-1 leading-relaxed">
-                     The 2026 AGM will be held virtually on September 5th. All active members are encouraged to attend.
-                  </p>
-                  <Link href="/events/agm-2026" className="text-xs font-bold text-orange-800 underline mt-3 inline-block">Learn More</Link>
-               </div>
+            {/* Dynamic Alerts / Notifications */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold text-dark">Alumni Alerts</h2>
+              {notifications && notifications.length > 0 ? notifications.map(notif => (
+                <div key={notif.id} className={cn(
+                  "p-6 rounded-3xl border flex gap-4 transition-all hover:shadow-lg",
+                  notif.type === 'URGENT' ? "bg-rose-50 border-rose-100" : "bg-blue-50 border-blue-100"
+                )}>
+                  <AlertCircle className={cn(
+                    "h-6 w-6 shrink-0 mt-1",
+                    notif.type === 'URGENT' ? "text-rose-600" : "text-blue-600"
+                  )} />
+                  <div>
+                    <h4 className={cn(
+                      "font-black text-sm",
+                      notif.type === 'URGENT' ? "text-rose-900" : "text-blue-900"
+                    )}>{notif.title}</h4>
+                    <p className={cn(
+                      "text-xs mt-1 leading-relaxed line-clamp-3",
+                      notif.type === 'URGENT' ? "text-rose-700/80" : "text-blue-700/80"
+                    )}>
+                      {notif.body}
+                    </p>
+                    <p className="text-[10px] font-black uppercase tracking-widest mt-3 opacity-40">
+                      {new Date(notif.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              )) : (
+                <div className="bg-slate-50 border border-slate-100 p-8 rounded-3xl text-center">
+                   <Bell className="h-8 w-8 text-slate-200 mx-auto mb-3" />
+                   <p className="text-xs text-slate-400 font-bold tracking-tight">No active alerts for you.</p>
+                </div>
+              )}
             </div>
          </div>
       </div>

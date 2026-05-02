@@ -187,8 +187,8 @@ export default function NotificationsClient({ recentNotifications }: { recentNot
                   </td>
                   <td className="px-8 py-5">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-widest">
-                      <Users className="h-3 w-3" />
-                      Individual Log
+                      <History className="h-3 w-3" />
+                      Broadcast Entry
                     </span>
                   </td>
                   <td className="px-8 py-5 text-sm text-slate-500 font-medium">
