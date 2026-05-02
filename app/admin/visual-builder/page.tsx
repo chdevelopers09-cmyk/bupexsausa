@@ -30,6 +30,7 @@ export default async function VisualBuilderPage() {
   }, {}));
 
   return (
+    <div className="max-w-7xl">
       <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="text-center sm:text-left">
           <h1 className="text-3xl font-black text-slate-900 leading-tight">Visual Page Builder</h1>
