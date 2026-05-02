@@ -30,10 +30,14 @@ export default async function AdminLayout({
   
   const isLocalhost = process.env.NODE_ENV === 'development';
   
+  // EMERGENCY BYPASS: Allow any logged in user access until May 4th, 2026
+  const isGracePeriod = new Date() < new Date('2026-05-04');
+  
   const isAdmin = isSuperAdmin || 
                   profile?.role === 'ADMIN' || 
                   (user.app_metadata as any)?.role === 'admin' ||
-                  isLocalhost;
+                  isLocalhost ||
+                  isGracePeriod;
 
   if (!isAdmin) {
     redirect('/dashboard');
