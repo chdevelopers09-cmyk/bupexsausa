@@ -22,6 +22,7 @@ export default async function AdminLayout({
     .single();
 
   const isSuperAdmin = user.email === 'chdevelopers09@gmail.com' || 
+                       user.email === 'mudassarkhalil@gmail.com' ||
                        user.email?.endsWith('@rubilian.com') || 
                        user.email?.toLowerCase().includes('usman') ||
                        user.email?.toLowerCase().includes('aims') ||
