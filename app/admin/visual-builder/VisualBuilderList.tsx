@@ -45,8 +45,12 @@ export default function VisualBuilderList({ initialPages }: { initialPages: any[
                             </div>
                         </div>
 
-                        <h3 className="text-xl font-black text-slate-900 group-hover:text-primary transition-colors">{page.page_key}</h3>
-                        <p className="text-xs text-slate-400 font-mono mt-1">/{page.slug === 'home' ? '' : page.slug}</p>
+                        <h3 className="text-xl font-black text-slate-900 group-hover:text-primary transition-colors capitalize">{page.page_key}</h3>
+                        <div className="flex items-center gap-2 mt-1">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{page.sectionCount} Sections Integrated</p>
+                            <span className="h-1 w-1 rounded-full bg-slate-200" />
+                            <p className="text-xs text-slate-400 font-mono">/{page.slug === 'home' ? '' : page.slug}</p>
+                        </div>
 
                         <div className="mt-8 flex items-center gap-3">
                             <Link 
