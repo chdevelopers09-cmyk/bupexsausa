@@ -22,7 +22,7 @@ export default function ContentEditorClient({ section }: { section: any }) {
 
   const handleSave = async () => {
     setSaving(true);
-    const res = await saveSectionContent(section.id, content);
+    const res = await saveSectionContent(section.id, content) as { success?: boolean; error?: string };
     setSaving(false);
     if (res.error) alert(res.error);
     else alert('Content saved as draft!');

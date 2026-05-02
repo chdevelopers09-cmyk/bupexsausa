@@ -50,6 +50,8 @@ export async function saveSectionContent(id: string, content: any) {
     })
     .eq('id', id);
 
+  if (error) return { error: error.message };
+
   revalidatePath(`/admin/visual-builder/content/${id}`);
   return { success: true };
 }

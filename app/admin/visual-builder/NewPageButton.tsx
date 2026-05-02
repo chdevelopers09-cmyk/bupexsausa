@@ -18,7 +18,7 @@ export default function NewPageButton() {
 
     setLoading(true);
     const slug = slugify(pageName);
-    const res = await createPage(pageName, slug);
+    const res = await createPage(pageName, slug) as { success?: boolean; error?: string; id?: string };
     
     if (res.error) {
       alert(res.error);
