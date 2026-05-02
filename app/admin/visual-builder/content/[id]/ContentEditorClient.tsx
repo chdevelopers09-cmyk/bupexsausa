@@ -51,7 +51,7 @@ export default function ContentEditorClient({ section }: { section: any }) {
 
         <div className="flex items-center gap-3">
            <button 
-             onClick={() => window.open(section.slug === 'home' ? '/' : `/${section.slug}`, '_blank')}
+             onClick={() => window.open((section.slug === 'home' ? '/' : `/${section.slug}`) + '?preview=true', '_blank')}
              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 transition-colors"
            >
               <Eye className="h-4 w-4" /> Preview Page
