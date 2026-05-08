@@ -129,7 +129,7 @@ export default function DonationFormClient() {
                       placeholder="Custom amount"
                       value={customAmount}
                       onChange={e => { setCustomAmount(e.target.value); setAmount(''); }}
-                      className={`input-field pl-8 ${customAmount ? 'border-primary' : ''}`}
+                      className={`input-field !pl-12 ${customAmount ? 'border-primary' : ''}`}
                     />
                   </div>
                   {finalAmount > 0 && (

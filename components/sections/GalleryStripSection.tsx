@@ -38,11 +38,17 @@ export default function GalleryStripSection({
               className="flex-shrink-0 w-64 md:w-80 lg:w-full aspect-square relative rounded-xl overflow-hidden shadow-lg snap-center group"
             >
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity z-10" />
-              <img
-                src={image.path}
-                alt={image.alt}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              />
+              {image.path ? (
+                <img
+                  src={image.path}
+                  alt={image.alt}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                  <Camera className="h-8 w-8 text-gray-300" />
+                </div>
+              )}
               <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                 <p className="text-white text-xs font-bold uppercase tracking-wider">{image.category}</p>
                 <p className="text-white/80 text-xs truncate mt-1">{image.alt}</p>

@@ -21,21 +21,22 @@ export async function POST(req: Request) {
 
     // 1. Force bucket settings to be wide open
     const bucketName = 'gallery'
+    // Attempt to ensure bucket is unrestricted
     await supabase.storage.updateBucket(bucketName, {
       public: true,
-      allowedMimeTypes: null, // Allow everything
-      fileSizeLimit: 524288000 // 500MB
-    })
+      allowedMimeTypes: ['image/*', 'video/*', 'application/octet-stream'], 
+      fileSizeLimit: 524288000
+    }).catch(() => {})
     
-    // 2. Upload to Supabase Storage with "Binary" type to bypass all sniffing
-    console.log(`BUPEXSA: Professional upload of ${file.name} to ${bucketName}`)
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
     
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from(bucketName)
-      .upload(fileName, file, {
+      .upload(fileName, buffer, {
         cacheControl: '3600',
         upsert: false,
-        contentType: 'application/x-binary' // Professional bypass for strict sniffing
+        contentType: file.type || 'application/octet-stream'
       })
 
     if (uploadError) {

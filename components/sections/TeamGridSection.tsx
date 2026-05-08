@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { MOCK_LEADERSHIP } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
-import { Mail, Briefcase } from 'lucide-react';
+import { Mail, Briefcase, Users } from 'lucide-react';
 
 interface TeamGridSectionProps {
   variant?: 'three-col' | 'four-col';
@@ -47,7 +47,13 @@ function TeamMemberCard({ member }: { member: typeof MOCK_LEADERSHIP[0] }) {
       <div className="relative mb-8">
         <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
         <div className="h-56 w-56 rounded-full overflow-hidden border-8 border-white shadow-2xl relative z-10 bg-gray-100">
-          <img src={member.photo_path} alt={member.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+          {member.photo_path ? (
+            <img src={member.photo_path} alt={member.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <Users className="h-16 w-16 text-gray-300" />
+            </div>
+          )}
         </div>
         <div className="absolute bottom-2 right-2 h-12 w-12 bg-accent rounded-full border-4 border-white shadow-lg flex items-center justify-center z-20 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
           <CheckCircle2 className="h-6 w-6 text-primary" />

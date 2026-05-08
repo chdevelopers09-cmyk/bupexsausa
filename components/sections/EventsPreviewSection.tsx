@@ -125,19 +125,21 @@ export default function EventsPreviewSection({
               </div>
 
               {/* Thumbnail */}
-              <div className="h-64 relative overflow-hidden">
-                <img 
-                  src={event.thumbnail_path} 
-                  alt={event.title} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
-                <div className="absolute bottom-6 right-6">
-                   <span className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-accent text-white shadow-lg">
-                     {event.category}
-                   </span>
+              {event.thumbnail_path && (
+                <div className="h-64 relative overflow-hidden">
+                  <img 
+                    src={event.thumbnail_path} 
+                    alt={event.title} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
+                  <div className="absolute bottom-6 right-6">
+                    <span className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-accent text-white shadow-lg">
+                      {event.category}
+                    </span>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="p-8 flex-1 flex flex-col">
                 <h3 className="text-2xl font-black text-dark group-hover:text-primary transition-colors mb-4 leading-tight flex-1">

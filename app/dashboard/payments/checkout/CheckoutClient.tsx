@@ -126,7 +126,7 @@ export default function CheckoutClient({ fee, memberId }: { fee: number, memberI
                     <div className="flex items-center justify-between py-2 border-b border-amber-100">
                         <span className="text-xs font-bold text-amber-900/50 uppercase">Handle/Details</span>
                         <span className="font-black text-primary font-mono select-all">
-                            {method === 'zelle' ? 'zelle@bupexsausa.org' : '$bupexsausa'}
+                            {method === 'zelle' ? 'bupexsausa25@gmail.com' : '$bupexsausa'}
                         </span>
                     </div>
                     <div className="flex items-center justify-between py-2">

@@ -47,12 +47,16 @@ export default async function ChapterSpotlightSection({
               className="group flex flex-col bg-gray-50 rounded-2xl overflow-hidden hover:bg-white hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-transparent hover:border-purple-100"
             >
               <div className="h-56 relative overflow-hidden">
-                <div className="absolute inset-0 bg-dark/20 group-hover:bg-dark/0 transition-colors z-10" />
-                <img
-                  src={getImageUrl(chapter.banner_image_path) || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400'}
-                  alt={chapter.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
+                {chapter.banner_image_path && (
+                  <>
+                    <div className="absolute inset-0 bg-dark/20 group-hover:bg-dark/0 transition-colors z-10" />
+                    <img
+                      src={getImageUrl(chapter.banner_image_path) || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400'}
+                      alt={chapter.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                  </>
+                )}
                 <div className="absolute bottom-4 left-4 z-20">
                   <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-primary font-bold text-xs">
                     <MapPin className="h-3 w-3" />

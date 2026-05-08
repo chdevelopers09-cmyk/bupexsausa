@@ -30,7 +30,7 @@ export default function PrivacyPage() {
             <p>We use third-party tools like Stripe and PayPal for payment processing. These services have their own privacy policies governing your payment data.</p>
             
             <h2 className="text-2xl font-black text-dark mt-10 mb-4">5. Your Rights</h2>
-            <p>You have the right to access, correct, or request deletion of your personal information. Please contact us at privacy@bupexsausa.org for any privacy-related requests.</p>
+            <p>You have the right to access, correct, or request deletion of your personal information. Please contact us at bupexsausa25@gmail.com for any privacy-related requests.</p>
           </div>
         </div>
       </div>

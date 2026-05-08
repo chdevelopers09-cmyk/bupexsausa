@@ -43,7 +43,7 @@ export default async function MembershipPage() {
             <li>Voting rights in national and regional elections.</li>
           </ul>
         `}
-        image="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=1000"
+        image="/images/membership/group.jpg"
       />
 
       <CardGridSection

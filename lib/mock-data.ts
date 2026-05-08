@@ -22,7 +22,7 @@ export const MOCK_EVENTS = [
     location_name: 'Grand Ballroom, Marriott Marquis',
     location_address: '265 Peachtree Center Ave NE, Atlanta, GA 30303',
     category: 'Gala',
-    thumbnail_path: '/images/events/gala.jpg',
+    thumbnail_path: '',
     max_attendees: 300,
     is_published: true,
     rsvp_count: 187,
@@ -37,7 +37,7 @@ export const MOCK_EVENTS = [
     location_name: 'Allen\'s Landing Park',
     location_address: '100 Commerce St, Houston, TX 77002',
     category: 'Social',
-    thumbnail_path: '/images/events/meetup.jpg',
+    thumbnail_path: '',
     max_attendees: 80,
     is_published: true,
     rsvp_count: 34,
@@ -52,7 +52,7 @@ export const MOCK_EVENTS = [
     location_name: 'The Biltmore Hotel',
     location_address: '506 S Grand Ave, Los Angeles, CA 90071',
     category: 'Fundraiser',
-    thumbnail_path: '/images/events/fundraiser.jpg',
+    thumbnail_path: '',
     max_attendees: 150,
     is_published: true,
     rsvp_count: 61,
@@ -67,7 +67,7 @@ export const MOCK_EVENTS = [
     location_name: 'Virtual (Zoom)',
     location_address: 'Online',
     category: 'Meeting',
-    thumbnail_path: '/images/events/agm.jpg',
+    thumbnail_path: '',
     max_attendees: null,
     is_published: true,
     rsvp_count: 112,
@@ -83,7 +83,7 @@ export const MOCK_CHAPTERS = [
     description: 'Serving BUPEXSA USA alumni across the great state of Texas, including Houston, Dallas, Austin, and San Antonio.',
     is_active: true,
     member_count: 84,
-    banner_image_path: '/images/chapters/texas.jpg',
+    banner_image_path: '',
   },
   {
     id: '2',
@@ -93,7 +93,7 @@ export const MOCK_CHAPTERS = [
     description: 'Serving alumni in the greater DMV area — Washington DC, Maryland, and Northern Virginia. One of our most engaged communities.',
     is_active: true,
     member_count: 48,
-    banner_image_path: '/images/chapters/maryland.jpg',
+    banner_image_path: '',
   },
 ];
 
@@ -161,7 +161,7 @@ export const MOCK_LEADERSHIP = [
       'Established the Digital Member Directory',
       'Coordinated the first National Alumni Convention in DC'
     ],
-    photo_path: '/images/leadership/secretary.jpg',
+    photo_path: '',
     order: 2,
   },
   {
@@ -181,7 +181,7 @@ export const MOCK_LEADERSHIP = [
       'Fiscal management and transparency lead',
       'Community health advocacy'
     ],
-    photo_path: '/images/leadership/frida-meyali-actual.jpg',
+    photo_path: '',
     order: 3,
   },
   {
@@ -202,7 +202,7 @@ export const MOCK_LEADERSHIP = [
       'Founder and CEO of CARZBNB',
       'Vice President of BUPEXSA Alumni Association'
     ],
-    photo_path: '/images/leadership/narcisse-wilfried-actual.jpg',
+    photo_path: '',
     order: 4,
   },
   {
@@ -223,7 +223,7 @@ export const MOCK_LEADERSHIP = [
       'Agile Scrum Lead and Project Management expert',
       'Professional Master of Ceremonies (MC)'
     ],
-    photo_path: '/images/leadership/cordelia-ngonde-actual.jpg',
+    photo_path: '',
     order: 5,
   },
   {
@@ -243,7 +243,7 @@ export const MOCK_LEADERSHIP = [
       'Professional Data Security Analyst',
       'Mentor in Cybersecurity'
     ],
-    photo_path: '/images/leadership/simon-ayompe-actual.jpg',
+    photo_path: '',
     order: 6,
   },
   {
@@ -263,20 +263,20 @@ export const MOCK_LEADERSHIP = [
       'Senior Agile Program Manager',
       'Business Systems Analyst'
     ],
-    photo_path: '/images/leadership/ebot-leonel-actual.jpg',
+    photo_path: '',
     order: 7,
   },
 ];
 
 export const MOCK_GALLERY = [
-  { id: '1', category: 'Gala', alt: 'Annual Gala 2025 dinner event', path: '/images/gallery/gala1.jpg' },
-  { id: '2', category: 'Gala', alt: 'Awards ceremony at Gala', path: '/images/gallery/gala2.jpg' },
-  { id: '3', category: 'Meetups', alt: 'Texas chapter spring meetup', path: '/images/gallery/meetup1.jpg' },
-  { id: '4', category: 'Meetups', alt: 'California alumni gathering', path: '/images/gallery/meetup2.jpg' },
-  { id: '5', category: 'PCSS Buea', alt: 'PCSS Buea main campus', path: '/images/gallery/pcss1.jpg' },
-  { id: '6', category: 'PCSS Buea', alt: 'Historic school building', path: '/images/gallery/pcss2.jpg' },
-  { id: '7', category: 'Community', alt: 'Scholarship award ceremony', path: '/images/gallery/community1.jpg' },
-  { id: '8', category: 'Community', alt: 'Community outreach event', path: '/images/gallery/community2.jpg' },
+  { id: '1', category: 'Gala', alt: 'Annual Gala Venue', path: '' },
+  { id: '2', category: 'Gala', alt: 'Awards ceremony', path: '' },
+  { id: '3', category: 'Meetups', alt: 'Texas chapter meetup', path: '' },
+  { id: '4', category: 'Meetups', alt: 'California alumni gathering', path: '' },
+  { id: '5', category: 'PCSS Buea', alt: 'PCSS Buea campus', path: '' },
+  { id: '6', category: 'PCSS Buea', alt: 'School building', path: '' },
+  { id: '7', category: 'Community', alt: 'Scholarship award', path: '' },
+  { id: '8', category: 'Community', alt: 'Community event', path: '' },
 ];
 
 export const SITE_CONFIG = {
@@ -284,13 +284,13 @@ export const SITE_CONFIG = {
   tagline: 'Connecting PCSS Buea Alumni Across America',
   description: 'BUPEXSA USA is the official alumni association of Presbyterian College Secondary School Buea, uniting graduates residing in the United States.',
   url: process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://bupexsausa.org'),
-  email: 'info@bupexsausa.org',
+  email: 'bupexsausa25@gmail.com',
   phone: '+1 (404) 555-0123',
   address: 'P.O. Box 12345, Atlanta, GA 30301',
   membershipFee: 150,
   annualFee: 100,
   registrationFee: 50,
-  zelleHandle: 'payments@bupexsausa.org',
+  zelleHandle: 'bupexsausa25@gmail.com',
   cashappHandle: '$BUPEXSAUSA',
   socialLinks: {
     facebook: 'https://facebook.com/bupexsausa',
@@ -306,7 +306,7 @@ export const SITE_CONFIG = {
       publishableKey: 'pk_test_51BupexsaUSA000000000000000',
     },
     paypal: {
-      email: 'treasurer@bupexsausa.org',
+      email: 'bupexsausa25@gmail.com',
       clientId: 'AaBbCcDdEeFf-BUPEXSAUSA-MOCK-PAYPAL',
       checkoutUrl: 'https://www.paypal.com/paypalme/bupexsausa/100',
     },
@@ -315,7 +315,7 @@ export const SITE_CONFIG = {
       displayName: 'BUPEXSA USA Treasury',
     },
     zelle: {
-      email: 'payments@bupexsausa.org',
+      email: 'bupexsausa25@gmail.com',
       phone: '+1 (404) 555-0123',
       recipientName: 'BUPEXSA USA',
     },

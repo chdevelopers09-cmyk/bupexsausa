@@ -175,12 +175,21 @@ export default function GalleryClient({ initialImages = [] }: { initialImages?: 
                   className="break-inside-avoid group relative cursor-pointer rounded-3xl overflow-hidden shadow-card hover:shadow-2xl transition-all duration-500"
                   onClick={() => openLightbox(index)}
                 >
-                  <img
-                    src={item.thumb}
-                    alt={item.alt}
-                    className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
-                    style={{ aspectRatio: index % 3 === 0 ? '4/5' : index % 3 === 1 ? '16/10' : '1/1' }}
-                  />
+                  {item.thumb ? (
+                    <img
+                      src={item.thumb}
+                      alt={item.alt}
+                      className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
+                      style={{ aspectRatio: index % 3 === 0 ? '4/5' : index % 3 === 1 ? '16/10' : '1/1' }}
+                    />
+                  ) : (
+                    <div 
+                      className="w-full bg-gray-100 flex items-center justify-center group-hover:scale-105 transition-transform duration-700"
+                      style={{ aspectRatio: index % 3 === 0 ? '4/5' : index % 3 === 1 ? '16/10' : '1/1' }}
+                    >
+                      <Layers className="h-12 w-12 text-gray-300" />
+                    </div>
+                  )}
                   {item.type === 'video' && (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="h-16 w-16 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 group-hover:scale-110 transition-transform">
@@ -213,7 +222,13 @@ export default function GalleryClient({ initialImages = [] }: { initialImages?: 
                   className="group relative aspect-square cursor-pointer rounded-2xl overflow-hidden shadow-card hover:shadow-2xl transition-all duration-500"
                   onClick={() => openLightbox(index)}
                 >
-                  <img src={item.thumb} alt={item.alt} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  {item.thumb ? (
+                    <img src={item.thumb} alt={item.alt} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  ) : (
+                    <div className="w-full h-full bg-gray-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-700">
+                      <Grid className="h-12 w-12 text-gray-300" />
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     {item.type === 'video' ? <Play className="h-10 w-10 text-white fill-white" /> : <ZoomIn className="h-8 w-8 text-white" />}
                   </div>
