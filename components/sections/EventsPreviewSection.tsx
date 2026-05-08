@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Calendar, MapPin, Users, ArrowRight, Clock } from 'lucide-react';
-import { formatDate, formatDateTime } from '@/lib/utils';
+import { cn, formatDate, formatDateTime } from '@/lib/utils';
 import { MOCK_EVENTS } from '@/lib/mock-data';
 
 interface EventsPreviewProps {
@@ -141,7 +141,7 @@ export default function EventsPreviewSection({
                 </div>
               )}
 
-              <div className="p-8 flex-1 flex flex-col">
+              <div className={cn("p-8 flex-1 flex flex-col", !event.thumbnail_path && "pt-24")}>
                 <h3 className="text-2xl font-black text-dark group-hover:text-primary transition-colors mb-4 leading-tight flex-1">
                   {event.title}
                 </h3>
