@@ -47,6 +47,7 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
   });
 
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'stripe' | 'paypal' | 'cashapp' | 'zelle' | 'applepay'>('card');
+  const [proofFile, setProofFile] = useState<File | null>(null);
   
   const [paymentData, setPaymentData] = useState({
     cardNumber: '',
@@ -111,6 +112,12 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
       Object.entries(formData).forEach(([key, value]) => {
         submitData.append(key, value);
       });
+      
+      // Add payment info
+      submitData.append('payment_method', paymentMethod);
+      if (proofFile) {
+        submitData.append('payment_proof', proofFile);
+      }
       
       const result = await signup(submitData);
       
@@ -475,14 +482,22 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                         <DollarSign className="h-8 w-8 text-blue-600" />
                       </div>
                       <div>
-                        <h3 className="font-black text-dark uppercase tracking-widest text-[10px] mb-1">PayPal Express</h3>
-                        <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 mb-3 select-all">
-                          <span className="text-blue-700 font-black text-sm block">{SITE_CONFIG.payments.paypal.email}</span>
+                        <h3 className="font-black text-dark uppercase tracking-widest text-[10px] mb-1">PayPal Payment</h3>
+                        <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 mb-4 select-all">
+                          <span className="text-blue-700 font-black text-sm block">bupexsausa25@gmail.com</span>
                           <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest">PayPal Email</span>
                         </div>
-                        <a href={SITE_CONFIG.payments.paypal.checkoutUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl font-black text-xs hover:bg-blue-700 transition-colors">
-                          <ExternalLink className="h-3.5 w-3.5" /> Pay via PayPal
-                        </a>
+                        
+                        <div className="space-y-2 text-left bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Upload Payment Receipt</p>
+                           <input 
+                             type="file" 
+                             accept="image/*" 
+                             onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                             className="w-full text-[11px] file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all cursor-pointer" 
+                           />
+                           <p className="text-[9px] text-gray-400 italic">Please pay directly on PayPal and upload the confirmation screenshot.</p>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -510,10 +525,19 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                           {settings.cashapp_handle || SITE_CONFIG.payments.cashapp.cashtag}
                         </div>
                         <p className="text-gray-500 text-[11px] font-bold mb-1">{SITE_CONFIG.payments.cashapp.displayName}</p>
-                        <p className="text-gray-400 text-[11px] font-bold px-4 leading-relaxed">
+                        <p className="text-gray-400 text-[11px] font-bold px-4 leading-relaxed mb-4">
                           Send exactly <span className="text-dark">${totalDue.toFixed(2)}</span> to the Cashtag above.
                           Include your <span className="text-dark">Email Address</span> in the memo.
                         </p>
+                        <div className="space-y-2 text-left bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Upload CashApp Receipt</p>
+                           <input 
+                             type="file" 
+                             accept="image/*" 
+                             onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                             className="w-full text-[11px] file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 transition-all cursor-pointer" 
+                           />
+                        </div>
                       </div>
                     </div>
                   )}
@@ -528,10 +552,19 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                           <span className="text-dark font-black text-sm block">{settings.zelle_handle || SITE_CONFIG.payments.zelle.email}</span>
                           <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Recipient Handle / Info</span>
                         </div>
-                        <p className="text-gray-400 text-[11px] font-bold px-4 leading-relaxed">
+                        <p className="text-gray-400 text-[11px] font-bold px-4 leading-relaxed mb-4">
                           Send <span className="text-dark">${totalDue.toFixed(2)}</span> to the handle above.
                           <br />Memo: <span className="text-dark">Membership - {formData.full_name || 'Your Name'}</span>
                         </p>
+                        <div className="space-y-2 text-left bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Upload Zelle Receipt</p>
+                           <input 
+                             type="file" 
+                             accept="image/*" 
+                             onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                             className="w-full text-[11px] file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:bg-purple-600 file:text-white hover:file:bg-purple-700 transition-all cursor-pointer" 
+                           />
+                        </div>
                       </div>
                     </div>
                   )}
