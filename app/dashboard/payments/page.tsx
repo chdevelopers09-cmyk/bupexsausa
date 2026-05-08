@@ -26,6 +26,8 @@ function MembershipPaymentsContent() {
   const [donationAmt, setDonationAmt] = useState('');
   const [selectedPlan, setSelectedPlan] = useState<'annual'|'donation'>('annual');
   const [copied, setCopied] = useState<string | null>(null);
+  const [proofFile, setProofFile] = useState<File | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [highlight, setHighlight] = useState(false);
   const [settings, setSettings] = useState<Record<string, any>>({});
   const supabase = createClient();
@@ -45,6 +47,58 @@ function MembershipPaymentsContent() {
       const el = document.getElementById('payment-section');
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
+  };
+
+  const handleManualSubmission = async () => {
+    if (!proofFile) {
+      alert('Please select a receipt screenshot first.');
+      return;
+    }
+    
+    setSubmitting(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const user = session?.user;
+      if (!user) throw new Error('Not authenticated. Please log in again.');
+
+      const fileExt = proofFile.name.split('.').pop();
+      const filePath = `${user.id}/proof-${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+          .from('payment-proofs')
+          .upload(filePath, proofFile);
+
+      if (uploadError) throw uploadError;
+
+      const amount = selectedPlan === 'annual' ? Number(settings.membership_fee || 100) : Number(donationAmt);
+
+      const { error: paymentError } = await supabase.from('payments').insert({
+          member_id: user.id,
+          type: selectedPlan === 'annual' ? 'MEMBERSHIP' : 'DONATION',
+          amount,
+          method: payMethod.toUpperCase(),
+          status: 'PENDING_VERIFICATION',
+          proof_storage_path: filePath,
+      });
+
+      if (paymentError) throw paymentError;
+
+      alert('Payment submitted! Our team will verify the receipt and update your status within 24-48 hours.');
+      setProofFile(null);
+      
+      // Refresh list
+      const { data: updatedPayments } = await supabase
+        .from('payments')
+        .select('*')
+        .eq('member_id', user.id)
+        .order('created_at', { ascending: false });
+      setPayments(updatedPayments || []);
+      setActiveTab('history');
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -260,9 +314,36 @@ function MembershipPaymentsContent() {
                            )}
 
                            {payMethod==='paypal' && (
-                             <div className="bg-blue-50/50 rounded-xl p-4 text-center border border-blue-100 space-y-2 animate-in fade-in duration-200">
-                               <p className="text-[10px] font-black uppercase tracking-widest text-blue-600">PayPal Express</p>
-                               <a href={SITE_CONFIG.payments.paypal.checkoutUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-widest hover:bg-blue-700 transition-colors">Pay via PayPal</a>
+                             <div className="bg-blue-50/50 rounded-xl p-4 text-center border border-blue-100 space-y-3 animate-in fade-in duration-200">
+                               <div className="flex items-center justify-between bg-white rounded-lg p-2 border border-blue-100">
+                                 <div className="flex flex-col items-start">
+                                   <span className="text-[8px] font-black uppercase text-blue-400 leading-none mb-1">PayPal Email</span>
+                                   <span className="text-[10px] font-bold text-dark truncate">bupexsausa25@gmail.com</span>
+                                 </div>
+                                 <button onClick={() => handleCopy('bupexsausa25@gmail.com', 'p-email')}>
+                                   {copied === 'p-email' ? <Check className="h-3 w-3 text-green-500"/> : <Copy className="h-3 w-3 text-blue-400"/>}
+                                 </button>
+                               </div>
+                               
+                               <div className="space-y-1.5 text-left">
+                                 <p className="text-[8px] font-black uppercase tracking-widest text-gray-400">Upload Payment Receipt</p>
+                                 <div className="relative">
+                                   <input 
+                                     type="file" 
+                                     accept="image/*" 
+                                     onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                                     className="w-full text-[10px] file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[9px] file:font-black file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all cursor-pointer" 
+                                   />
+                                 </div>
+                               </div>
+
+                               <button 
+                                 disabled={submitting}
+                                 className="w-full py-2 rounded-lg bg-blue-600 text-white font-black text-[9px] uppercase tracking-widest shadow-sm hover:bg-blue-700 transition-colors disabled:opacity-50" 
+                                 onClick={handleManualSubmission}
+                               >
+                                 {submitting ? 'Submitting...' : 'Confirm PayPal Payment'}
+                               </button>
                              </div>
                            )}
 
@@ -278,17 +359,47 @@ function MembershipPaymentsContent() {
                                    <button onClick={() => handleCopy(SITE_CONFIG.payments.zelle.phone, 'z-phone')}><Copy className="h-3 w-3 text-purple-400"/></button>
                                  </div>
                                </div>
-                               <button className="w-full py-2 rounded-lg bg-purple-600 text-white font-black text-[9px] uppercase tracking-widest shadow-sm" onClick={() => alert('Pending.')}>Confirm Zelle</button>
+                               <div className="space-y-1.5 text-left">
+                                 <p className="text-[8px] font-black uppercase tracking-widest text-gray-400">Upload Zelle Receipt</p>
+                                 <input 
+                                   type="file" 
+                                   accept="image/*" 
+                                   onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                                   className="w-full text-[10px] file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-[9px] file:font-black file:bg-purple-600 file:text-white transition-all cursor-pointer" 
+                                 />
+                               </div>
+                               <button 
+                                 disabled={submitting}
+                                 className="w-full py-2 rounded-lg bg-purple-600 text-white font-black text-[9px] uppercase tracking-widest shadow-sm disabled:opacity-50" 
+                                 onClick={handleManualSubmission}
+                               >
+                                 {submitting ? 'Submitting...' : 'Confirm Zelle'}
+                               </button>
                              </div>
                            )}
 
                            {payMethod==='cashapp' && (
-                             <div className="bg-emerald-50/50 rounded-xl p-4 text-center border border-emerald-100 space-y-2 animate-in fade-in duration-200">
+                             <div className="bg-emerald-50/50 rounded-xl p-4 text-center border border-emerald-100 space-y-3 animate-in fade-in duration-200">
                                <div className="inline-flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border border-emerald-200">
                                  <span className="text-emerald-700 font-black text-sm">{SITE_CONFIG.payments.cashapp.cashtag}</span>
                                  <button onClick={() => handleCopy(SITE_CONFIG.payments.cashapp.cashtag, 'cash')}><Copy className="h-3 w-3 text-emerald-400"/></button>
                                </div>
-                               <button className="w-full py-2 rounded-lg bg-emerald-600 text-white font-black text-[9px] uppercase tracking-widest shadow-sm" onClick={() => alert('Pending.')}>Confirm Cash App</button>
+                               <div className="space-y-1.5 text-left">
+                                 <p className="text-[8px] font-black uppercase tracking-widest text-gray-400">Upload CashApp Receipt</p>
+                                 <input 
+                                   type="file" 
+                                   accept="image/*" 
+                                   onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                                   className="w-full text-[10px] file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-[9px] file:font-black file:bg-emerald-600 file:text-white transition-all cursor-pointer" 
+                                 />
+                               </div>
+                               <button 
+                                 disabled={submitting}
+                                 className="w-full py-2 rounded-lg bg-emerald-600 text-white font-black text-[9px] uppercase tracking-widest shadow-sm disabled:opacity-50" 
+                                 onClick={handleManualSubmission}
+                               >
+                                 {submitting ? 'Submitting...' : 'Confirm Cash App'}
+                               </button>
                              </div>
                            )}
 

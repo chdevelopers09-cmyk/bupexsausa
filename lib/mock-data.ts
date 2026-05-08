@@ -269,14 +269,14 @@ export const MOCK_LEADERSHIP = [
 ];
 
 export const MOCK_GALLERY = [
-  { id: '1', category: 'Gala', alt: 'Annual Gala Venue', path: '' },
-  { id: '2', category: 'Gala', alt: 'Awards ceremony', path: '' },
-  { id: '3', category: 'Meetups', alt: 'Texas chapter meetup', path: '' },
-  { id: '4', category: 'Meetups', alt: 'California alumni gathering', path: '' },
-  { id: '5', category: 'PCSS Buea', alt: 'PCSS Buea campus', path: '' },
-  { id: '6', category: 'PCSS Buea', alt: 'School building', path: '' },
-  { id: '7', category: 'Community', alt: 'Scholarship award', path: '' },
-  { id: '8', category: 'Community', alt: 'Community event', path: '' },
+  { id: '1', category: 'Convention', alt: 'BUPEXSA Alumni Convention', path: '/images/gallery/life2.jpg' },
+  { id: '2', category: 'Social', alt: 'Alumni Dinner Social', path: '/images/gallery/life1.jpg' },
+  { id: '3', category: 'Chapter', alt: 'Chapter Meeting Engagement', path: '/images/gallery/life3.jpg' },
+  { id: '4', category: 'Community', alt: 'BUPEXSA Member Support', path: '/images/gallery/life4.jpg' },
+  { id: '5', category: 'Apparel', alt: 'BUPEXSA USA Chapter Shirts', path: '/images/gallery/life5.jpg' },
+  { id: '6', category: 'Apparel', alt: 'Official Chapter Gear', path: '/images/gallery/life6.jpg' },
+  { id: '7', category: 'Convention', alt: 'Group Photo with Guest', path: '/images/membership/group.jpg' },
+  { id: '8', category: 'Social', alt: 'Community gathering', path: '' },
 ];
 
 export const SITE_CONFIG = {

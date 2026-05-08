@@ -69,7 +69,7 @@ export default function Home() {
         colorScheme="white"
       />
 
-      <GalleryStripSection />
+      <GalleryStripSection count={8} />
     </>
   );
 }

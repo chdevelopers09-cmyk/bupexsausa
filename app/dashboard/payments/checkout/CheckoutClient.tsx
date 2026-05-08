@@ -108,7 +108,7 @@ export default function CheckoutClient({ fee, memberId }: { fee: number, memberI
         </div>
 
         {/* Dynamic Content based on method */}
-        {(method === 'zelle' || method === 'cashapp') && (
+        {(method === 'zelle' || method === 'cashapp' || method === 'paypal') && (
             <div className="bg-amber-50 rounded-[2rem] border border-amber-200 p-8 space-y-6 animate-fade-in">
                 <div className="flex items-start gap-3">
                     <Info className="h-5 w-5 text-amber-600 mt-0.5" />
@@ -126,7 +126,7 @@ export default function CheckoutClient({ fee, memberId }: { fee: number, memberI
                     <div className="flex items-center justify-between py-2 border-b border-amber-100">
                         <span className="text-xs font-bold text-amber-900/50 uppercase">Handle/Details</span>
                         <span className="font-black text-primary font-mono select-all">
-                            {method === 'zelle' ? 'bupexsausa25@gmail.com' : '$bupexsausa'}
+                            {method === 'zelle' || method === 'paypal' ? 'bupexsausa25@gmail.com' : '$bupexsausa'}
                         </span>
                     </div>
                     <div className="flex items-center justify-between py-2">
@@ -135,8 +135,21 @@ export default function CheckoutClient({ fee, memberId }: { fee: number, memberI
                     </div>
                 </div>
 
+                {method === 'paypal' && (
+                  <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-center justify-between">
+                    <p className="text-xs text-blue-800 font-bold">Pay directly on PayPal first:</p>
+                    <a 
+                      href={`https://www.paypal.com/paypalme/bupexsausa/${fee}`} 
+                      target="_blank" 
+                      className="bg-[#0070ba] text-white px-4 py-2 rounded-lg text-xs font-black hover:scale-105 transition-all shadow-sm"
+                    >
+                      Open PayPal
+                    </a>
+                  </div>
+                )}
+
                 <div className="space-y-4">
-                    <label className="label-field !text-amber-900">Upload Payment Proof (Screenshot)</label>
+                    <label className="label-field !text-amber-900">Upload Payment Proof (Screenshot of Receipt)</label>
                     <input 
                         type="file" 
                         accept="image/*" 
@@ -171,20 +184,6 @@ export default function CheckoutClient({ fee, memberId }: { fee: number, memberI
             </div>
         )}
 
-        {method === 'paypal' && (
-             <div className="bg-white rounded-[2rem] border border-gray-100 p-8 space-y-6 text-center shadow-xl">
-                <div className="h-20 w-20 rounded-full bg-blue-50 flex items-center justify-center mx-auto text-blue-800">
-                   <DollarSign size={40} />
-                </div>
-                <div>
-                   <h3 className="text-xl font-black text-dark">Pay with PayPal</h3>
-                   <p className="text-gray-500 mt-1 text-sm">Fast, easy, and secure with your PayPal account.</p>
-                </div>
-                <button disabled className="bg-[#0070ba] text-white w-full flex items-center justify-center py-4 rounded-xl font-black opacity-60 cursor-not-allowed">
-                   PayPal Checkout
-                </button>
-           </div>
-        )}
       </div>
 
       <aside className="space-y-6">
