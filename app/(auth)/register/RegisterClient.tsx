@@ -246,10 +246,10 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                       </div>
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[11px] font-black text-gray-500 ml-1">Graduation Year <span className="text-gray-300 font-medium">(optional)</span></label>
+                      <label className="text-[11px] font-black text-gray-500 ml-1">Graduation Year <span className="text-red-500">*</span></label>
                       <div className="relative">
                         <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-blue-200 z-10" />
-                        <select name="graduation_year" value={formData.graduation_year} onChange={handleInputChange} className="w-full pl-9 pr-8 py-2 rounded-lg bg-gray-50/50 border border-gray-100 text-dark focus:bg-white focus:border-[#8B5CF6] outline-none appearance-none cursor-pointer font-bold text-[13px]">
+                        <select name="graduation_year" value={formData.graduation_year} onChange={handleInputChange} className="w-full pl-9 pr-8 py-2 rounded-lg bg-gray-50/50 border border-gray-100 text-dark focus:bg-white focus:border-[#8B5CF6] outline-none appearance-none cursor-pointer font-bold text-[13px]" required>
                           <option value="">Select</option>
                           {gYears.map(year => <option key={year} value={year}>{year}</option>)}
                         </select>
@@ -284,9 +284,61 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                   </div>
                 </div>
 
+                {/* Professional Details (Optional) */}
+                <div className="space-y-3">
+                  <h2 className="text-[9px] font-black text-gray-300 uppercase tracking-widest ml-1">PROFESSIONAL DETAILS</h2>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-black text-gray-500 ml-1">Profession <span className="text-gray-300 font-medium">(optional)</span></label>
+                      <div className="relative">
+                        <Briefcase className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-blue-300 z-10" />
+                        <input name="profession" type="text" value={formData.profession} onChange={handleInputChange} className="w-full pl-9 pr-3 py-2 rounded-lg bg-gray-50/50 border border-gray-100 text-dark focus:bg-white focus:border-[#8B5CF6] outline-none transition-all placeholder:text-gray-300 font-bold text-[13px]" placeholder="e.g. Engineer" />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-black text-gray-500 ml-1">How did you hear? <span className="text-gray-300 font-medium">(optional)</span></label>
+                      <div className="relative">
+                        <Info className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-300 z-10" />
+                        <select name="how_did_you_hear" value={formData.how_did_you_hear} onChange={handleInputChange} className="w-full pl-9 pr-8 py-2 rounded-lg bg-gray-50/50 border border-gray-100 text-dark focus:bg-white focus:border-[#8B5CF6] outline-none appearance-none cursor-pointer font-bold text-[13px]">
+                          <option value="">Select</option>
+                          <option value="Social Media">Social Media</option>
+                          <option value="Friend/Family">Friend/Family</option>
+                          <option value="Email">Email</option>
+                          <option value="Other">Other</option>
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-3 w-3 text-gray-400 pointer-events-none" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
 
                 <div className="pt-3 space-y-3">
-                  <button type="button" onClick={() => { if (passwordErrors.length > 0 && formData.password) { return; } setStep(2); }} className={`w-full py-3.5 rounded-2xl text-white font-black text-sm transition-all group shadow-md ${formData.password && passwordErrors.length > 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#8B5CF6] hover:shadow-md shadow-purple-100'}`} disabled={formData.password.length > 0 && passwordErrors.length > 0}>
+                  <button 
+                    type="button" 
+                    onClick={() => { 
+                      const requiredFields = ['full_name', 'username', 'email', 'password', 'confirm_password', 'batch', 'graduation_year', 'us_state', 'phone'];
+                      const missing = requiredFields.filter(f => !formData[f as keyof typeof formData]);
+                      
+                      if (missing.length > 0) {
+                        alert(`Please fill all required fields marked with *`);
+                        return;
+                      }
+                      
+                      if (passwordErrors.length > 0 && formData.password) { 
+                        return; 
+                      } 
+                      
+                      if (formData.password !== formData.confirm_password) {
+                        alert("Passwords do not match!");
+                        return;
+                      }
+                      
+                      setStep(2); 
+                    }} 
+                    className={`w-full py-3.5 rounded-2xl text-white font-black text-sm transition-all group shadow-md ${formData.password && passwordErrors.length > 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#8B5CF6] hover:shadow-md shadow-purple-100'}`} 
+                    disabled={formData.password.length > 0 && passwordErrors.length > 0}
+                  >
                     Continue to Membership Fee <ArrowRight className="inline-block ml-1 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
                   </button>
                   <button type="button" onClick={() => signInWithGoogle()} className="w-full py-2.5 rounded-2xl border border-gray-100 bg-white flex items-center justify-center gap-2 font-bold text-gray-600 hover:bg-gray-50 transition-all text-[11px]">

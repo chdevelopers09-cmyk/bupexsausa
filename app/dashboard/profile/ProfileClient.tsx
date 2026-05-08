@@ -172,12 +172,13 @@ export default function ProfileClient({ initialSession, initialProfile }: { init
             </div>
 
             <div>
-              <label className="label-field">Phone Number</label>
+              <label className="label-field">Phone Number <span className="text-red-500">*</span></label>
               <input 
                 type="tel" 
                 value={profile.phone || ''} 
                 onChange={e => setProfile({...profile, phone: e.target.value})} 
                 className="input-field" 
+                required
               />
             </div>
             
@@ -201,7 +202,7 @@ export default function ProfileClient({ initialSession, initialProfile }: { init
             
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="label-field">Graduation Year</label>
+                <label className="label-field">Graduation Year <span className="text-red-500">*</span></label>
                 <input 
                   type="number" 
                   value={profile.graduation_year || ''} 
@@ -211,13 +212,14 @@ export default function ProfileClient({ initialSession, initialProfile }: { init
                 />
               </div>
               <div>
-                <label className="label-field">Batch/Class Name</label>
+                <label className="label-field">Batch/Class Name <span className="text-red-500">*</span></label>
                 <input 
                   type="text" 
                   value={profile.batch || ''} 
                   onChange={e => setProfile({...profile, batch: e.target.value})} 
                   className="input-field" 
                   placeholder="e.g. 2010" 
+                  required
                 />
               </div>
             </div>
