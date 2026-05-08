@@ -21,12 +21,15 @@ export async function POST(req: Request) {
 
     // 1. Force bucket settings to be wide open
     const bucketName = 'gallery'
-    // Attempt to ensure bucket is unrestricted
-    await supabase.storage.updateBucket(bucketName, {
+    const { error: updateError } = await supabase.storage.updateBucket(bucketName, {
       public: true,
-      allowedMimeTypes: ['image/*', 'video/*', 'application/octet-stream'], 
+      allowedMimeTypes: null, 
       fileSizeLimit: 524288000
-    }).catch(() => {})
+    })
+    
+    if (updateError) {
+      console.error('Bucket Update Failed:', updateError)
+    }
     
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)

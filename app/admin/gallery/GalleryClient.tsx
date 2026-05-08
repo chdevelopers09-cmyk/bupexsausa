@@ -60,12 +60,18 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
           }
 
           xhr.onload = () => {
-            const res = JSON.parse(xhr.responseText)
+            let res: any = {}
+            try {
+              res = JSON.parse(xhr.responseText)
+            } catch (e) {
+              res = { error: `Server returned status ${xhr.status}` }
+            }
+            
             if (xhr.status === 200 && res.success) {
               resolve(res)
             } else {
-              console.error('Upload failed response:', res)
-              alert(res.error || 'Upload failed')
+              console.error('Upload failed details:', { status: xhr.status, response: res })
+              alert(res.error || `Upload failed (Status ${xhr.status})`)
               reject(res.error || 'Upload failed')
             }
           }
