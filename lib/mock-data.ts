@@ -343,7 +343,7 @@ export const MOCK_LEADERSHIP = [
     name: 'EMERITUS Pancratius Mukeh',
     title: '2nd BUPEXSA USA President',
     chapter: 'National',
-    batch: '1990',
+    batch: '1995',
     bio: 'Honoring our former BUPEXSA USA Presidents (Our Advisers). Emeritus Pancratius Mukeh served as the second President of BUPEXSA USA.',
     longBio: 'Emeritus Pancratius Mukeh served as the second President of BUPEXSA USA, during which he focused on strengthening state chapters and formalizing the organization’s structure. His leadership was marked by a commitment to expanding the association’s reach and impact across the United States.\n\nToday, he continues to serve as an adviser, offering his deep experience and wisdom to the current executive bench.',
     education: [
@@ -361,9 +361,7 @@ export const MOCK_LEADERSHIP = [
 ];
 
 export const MOCK_GALLERY = [
-  { id: 'v1', category: 'Social', alt: 'BUPEXSA Life Video 1', path: '/videos/life-at-bupexausa-video-1.mp4' },
-  { id: 'v2', category: 'Social', alt: 'BUPEXSA Life Video 2', path: '/videos/life-at-bupexausa-video-2.mp4' },
-  { id: 'v3', category: 'Social', alt: 'BUPEXSA Life Video 3', path: '/videos/life-at-bupexausa-video-3.mp4' },
+
 
   { id: '2b', category: 'Social', alt: 'BUPEXSA USA Gathering', path: '/images/gallery/bupexsa-gathering.jpg' },
   { id: '1', category: 'Convention', alt: 'BUPEXSA Alumni Convention', path: '/images/gallery/life2.jpg' },

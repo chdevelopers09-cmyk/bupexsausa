@@ -7,7 +7,7 @@ import { MOCK_GALLERY } from '@/lib/mock-data';
 export default function GalleryClient({ initialImages = [] }: { initialImages?: any[] }) {
   const [activeCategory, setActiveCategory] = useState('All');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const [layout, setLayout] = useState<'masonry' | 'grid'>('masonry');
+  const [layout, setLayout] = useState<'masonry' | 'grid'>('grid');
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   
