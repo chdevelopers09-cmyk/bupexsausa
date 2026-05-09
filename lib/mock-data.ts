@@ -29,7 +29,7 @@ export const MOCK_EVENTS = [
   },
   {
     id: '2',
-    title: 'Texas Chapter Spring Meetup',
+    title: 'SOME BUPEXSA USA ALUMNI',
     slug: 'texas-spring-meetup-2026',
     description: 'A casual networking meetup for Texas chapter alumni. Come and reconnect with old classmates!',
     start_datetime: '2026-05-10T14:00:00Z',
@@ -37,14 +37,14 @@ export const MOCK_EVENTS = [
     location_name: 'Allen\'s Landing Park',
     location_address: '100 Commerce St, Houston, TX 77002',
     category: 'Social',
-    thumbnail_path: '/images/gallery/life1.jpg',
+    thumbnail_path: '/images/events/alumni.jpg',
     max_attendees: 80,
     is_published: true,
     rsvp_count: 34,
   },
   {
     id: '3',
-    title: 'BUPEXSA Fundraiser Dinner — California',
+    title: 'SOME BUPEXSA USA ALUMNAE',
     slug: 'california-fundraiser-2026',
     description: 'Join us for an evening of good food, great company, and impactful fundraising for PCSS Buea.',
     start_datetime: '2026-07-20T17:30:00Z',
@@ -52,7 +52,7 @@ export const MOCK_EVENTS = [
     location_name: 'The Biltmore Hotel',
     location_address: '506 S Grand Ave, Los Angeles, CA 90071',
     category: 'Fundraiser',
-    thumbnail_path: '/images/gallery/life4.jpg',
+    thumbnail_path: '/images/events/alumnae.png',
     max_attendees: 150,
     is_published: true,
     rsvp_count: 61,
@@ -100,23 +100,23 @@ export const MOCK_CHAPTERS = [
 export const MOCK_ANNOUNCEMENTS = [
   {
     id: '1',
-    title: 'Registration Open: Annual Gala 2026',
-    body: 'Tickets are now available for our highly anticipated Annual Gala in Atlanta. Secure your seat before they sell out!',
-    publish_date: '2026-04-01',
+    title: 'BUPEXSA USA REGISTRATION',
+    body: 'All BUPEXSANS residing in the USA are encouraged to formerly register. Endeavor to pay your yearly dues before the end of March every year.',
+    publish_date: '2026-05-01',
     is_published: true,
   },
   {
     id: '2',
-    title: 'Scholarship Applications Due May 31',
-    body: 'BUPEXSA USA is awarding $5,000 in scholarships to deserving students at PCSS Buea. Applications close May 31st.',
-    publish_date: '2026-04-10',
+    title: 'BUPEXSA USA YEARLY CONVENTION',
+    body: 'BUPEXSA USA will be having its yearly conventions in October, during the Columbus Day weekend. All BUPEXSANS are encouraged to secure that weekend for our yearly meet up because it will be our moment to network with more classmates, school mates, and BUPEXSANS in all works of life.',
+    publish_date: '2026-05-02',
     is_published: true,
   },
   {
     id: '3',
-    title: 'New Chapter Launched: Pacific Northwest',
-    body: 'We are excited to announce the formation of our Pacific Northwest Chapter covering Washington, Oregon, and Idaho.',
-    publish_date: '2026-04-15',
+    title: 'BUPEXSA USA AS A NON-PROFIT ORGANIZATION',
+    body: 'BUPEXSA USA is a formerly registered with the Internal Revenue Service (IRS) as a 501 (C ) 3 non-profit organization. This organization can receive and give donations – material and financial, and report them yearly,',
+    publish_date: '2026-05-03',
     is_published: true,
   },
 ];
@@ -140,49 +140,8 @@ export const MOCK_LEADERSHIP = [
       'Board Chair of CETALF (U.S.-based non-profit)',
       'President of BUPEXSA USA'
     ],
-    photo_path: '/images/leadership/celine-njeck-actual.jpg',
+    photo_path: '/images/leadership/celine-njeck-new.jpg',
     order: 1,
-  },
-  {
-    id: '2',
-    slug: 'grace-mbah-taylor',
-    name: 'Mrs. Grace Mbah-Taylor',
-    title: 'National Secretary General',
-    chapter: 'National',
-    bio: 'Grace is an attorney based in New York City. Class of 1998. She serves as the organizational backbone of BUPEXSA USA.',
-    longBio: 'Mrs. Grace Mbah-Taylor is a senior corporate attorney specializing in international trade and compliance. Graduating from PCSS Buea in 1998, Grace has been a pivotal figure in the formalization of BUPEXSA USA as a registered non-profit organization. As Secretary General, she has implemented digital governance tools that have revolutionized how the board operates, ensuring transparency and efficient communication across all chapters. She is a firm believer in the power of the alumni network to create economic opportunities for young graduates.',
-    education: [
-      'JD from Columbia Law School',
-      'BA in Political Science from Howard University',
-      'PCSS Buea - Class of 1998'
-    ],
-    achievements: [
-      'Authored the BUPEXSA USA National Constitution',
-      'Established the Digital Member Directory',
-      'Coordinated the first National Alumni Convention in DC'
-    ],
-    photo_path: '',
-    order: 2,
-  },
-  {
-    id: '3',
-    slug: 'frida-meyali',
-    name: 'Frida Meyali',
-    title: 'National Treasurer',
-    chapter: 'National',
-    bio: 'Frida Meyali serves as the Treasurer for BUPEXSA USA, where she oversees financial stewardship, ensures transparency, and supports the organization’s strategic goals through effective fiscal management.',
-    longBio: 'Frida Meyali serves as the Treasurer for BUPEXSA USA, where she oversees financial stewardship, ensures transparency, and supports the organization’s strategic goals through effective fiscal management. Based in Houston Texas, she plays a key role in budgeting, financial planning, and maintaining accountability, helping to sustain impactful programs that strengthen alumni engagement and community development.\n\nA proud alumna of the Batch of 1997, Frida is committed to fostering trust, collaboration, and responsible resource management within the BUPEXSA network. Her leadership style is grounded in integrity, organization, and consistency, ensuring that financial operations align with the association’s mission and long-term vision.\n\nProfessionally, Frida is a Registered Nurse (RN) with extensive experience in public health, patient-centered care, health promotion, and disease prevention. She has a strong background in community health and caring for diverse populations, with a focus on improving health outcomes through education, prevention, and evidence-based practice. Her clinical expertise, combined with her organizational and leadership skills, allows her to effectively bridge healthcare delivery and administrative excellence.\n\nFrida continues to advance her professional and academic development, with a growing interest in integrating nursing, public health, and data-driven strategies to improve population health outcomes. She remains dedicated to contributing to a vibrant, connected alumni community while promoting initiatives that support health awareness, professional growth, and collective impact.',
-    education: [
-      'Registered Nurse (RN)',
-      'PCSS Buea - Batch of 1997'
-    ],
-    achievements: [
-      'Treasurer of BUPEXSA USA',
-      'Fiscal management and transparency lead',
-      'Community health advocacy'
-    ],
-    photo_path: '',
-    order: 3,
   },
   {
     id: '4',
@@ -202,49 +161,29 @@ export const MOCK_LEADERSHIP = [
       'Founder and CEO of CARZBNB',
       'Vice President of BUPEXSA Alumni Association'
     ],
-    photo_path: '',
-    order: 4,
+    photo_path: '/images/leadership/narcisse-wilfried-actual.jpg',
+    order: 2,
   },
   {
-    id: '5',
-    slug: 'cordelia-ngonde',
-    name: 'Cordelia Ngonde',
-    title: 'Social Coordinator',
+    id: '2',
+    slug: 'grace-mbah-taylor',
+    name: 'Mrs. Grace Mbah-Taylor',
+    title: 'National Secretary General',
     chapter: 'National',
-    bio: 'Cordelia Ngonde serves as the Social Coordinator for BUPEXSA USA, where she is dedicated to fostering engagement, strengthening alumni connections, and curating impactful social experiences.',
-    longBio: 'Cordelia Ngonde serves as the Social Coordinator for BUPEXSA USA, where she is dedicated to fostering engagement, strengthening alumni connections, and curating impactful social experiences that unite members across the diaspora. Based in Maryland, she brings a vibrant blend of creativity, structure, and leadership to her role.\n\nA proud alumna of the Class of 1999, Cordelia’s journey in social leadership has been both consistent and impactful. She served as Social Prefect from Form 4 through high school at PCSS Buea, continued as Social Coordinator in her department at the University of Buea, and has remained actively engaged in organizing and leading social initiatives within her communities to date. Her ability to bring people together is a defining strength that has shaped her leadership style.\n\nCordelia is currently pursuing a Doctorate in Healthcare Administration, reflecting her commitment to advancing leadership and driving meaningful impact within complex systems. Professionally, she is an Agile Scrum Lead with expertise in project management, team coordination, stakeholder engagement, and strategic execution. In addition, Cordelia is a dynamic Master of Ceremonies (MC), known for her ability to energize audiences, create memorable experiences, and seamlessly manage events. Her combined strengths in communication, organization, and engagement make her an invaluable asset to BUPEXSA USA.',
+    bio: 'Grace is an attorney based in New York City. Class of 1998. She serves as the organizational backbone of BUPEXSA USA.',
+    longBio: 'Mrs. Grace Mbah-Taylor is a senior corporate attorney specializing in international trade and compliance. Graduating from PCSS Buea in 1998, Grace has been a pivotal figure in the formalization of BUPEXSA USA as a registered non-profit organization. As Secretary General, she has implemented digital governance tools that have revolutionized how the board operates, ensuring transparency and efficient communication across all chapters. She is a firm believer in the power of the alumni network to create economic opportunities for young graduates.',
     education: [
-      'Doctorate in Healthcare Administration (Candidate)',
-      'University of Buea',
-      'PCSS Buea - Class of 1999'
+      'JD from Columbia Law School',
+      'BA in Political Science from Howard University',
+      'PCSS Buea - Class of 1998'
     ],
     achievements: [
-      'Social Coordinator of BUPEXSA USA',
-      'Agile Scrum Lead and Project Management expert',
-      'Professional Master of Ceremonies (MC)'
+      'Authored the BUPEXSA USA National Constitution',
+      'Established the Digital Member Directory',
+      'Coordinated the first National Alumni Convention in DC'
     ],
-    photo_path: '',
-    order: 5,
-  },
-  {
-    id: '6',
-    slug: 'simon-ayompe',
-    name: 'Wanambowa Simon Ayompe',
-    title: 'Chief Whip',
-    chapter: 'National',
-    bio: 'Wanambowa Simon Ayompe, of the BUPEXSA Class of ’96, serves as Chief Whip for BUPEXSA USA, ensuring structure and order within the organization.',
-    longBio: 'Wanambowa Simon Ayompe, of the BUPEXSA Class of ’96, is based in Charlotte, North Carolina, where he serves as Chief Whip for BUPEXSA USA. In this role, he plays a vital part in maintaining structure, order, and effective coordination within the organization, ensuring that meetings are productive and aligned with the association’s goals. Known for his disciplined and dependable leadership style, Simon supports seamless communication between the Executive Committee and members while reinforcing accountability and organizational standards.\n\nProfessionally, Simon is a Data Security Analyst with a strong focus on safeguarding systems and ensuring data integrity across modern digital environments. His expertise in cybersecurity enables him to navigate complex technological landscapes, protect sensitive information, and contribute to the reliability and security of organizational systems. His analytical mindset and attention to detail make him highly effective in both his professional career and leadership role.\n\nBeyond his professional and leadership responsibilities, Simon is deeply committed to mentorship and capacity building. He actively supports and guides aspiring data security analysts, helping them develop the skills and confidence needed to succeed in the cybersecurity field. His passion for empowering others, combined with his dedication to excellence, makes him a valuable asset to BUPEXSA USA and a respected figure within both his professional and alumni communities.',
-    education: [
-      'Cybersecurity & Data Security Analysis',
-      'PCSS Buea - Batch \'96'
-    ],
-    achievements: [
-      'Chief Whip of BUPEXSA USA',
-      'Professional Data Security Analyst',
-      'Mentor in Cybersecurity'
-    ],
-    photo_path: '',
-    order: 6,
+    photo_path: '/images/leadership/secretary.jpg',
+    order: 3,
   },
   {
     id: '7',
@@ -263,9 +202,70 @@ export const MOCK_LEADERSHIP = [
       'Senior Agile Program Manager',
       'Business Systems Analyst'
     ],
-    photo_path: '',
+    photo_path: '/images/leadership/ebot-leonel-actual.jpg',
+    order: 4,
+  },
+  {
+    id: '3',
+    slug: 'frida-meyali',
+    name: 'Frida Meyali',
+    title: 'National Treasurer',
+    chapter: 'National',
+    bio: 'Frida Meyali serves as the Treasurer for BUPEXSA USA, where she oversees financial stewardship, ensures transparency, and supports the organization’s strategic goals through effective fiscal management.',
+    longBio: 'Frida Meyali serves as the Treasurer for BUPEXSA USA, where she oversees financial stewardship, ensures transparency, and supports the organization’s strategic goals through effective fiscal management. Based in Houston Texas, she plays a key role in budgeting, financial planning, and maintaining accountability, helping to sustain impactful programs that strengthen alumni engagement and community development.\n\nA proud alumna of the Batch of 1997, Frida is committed to fostering trust, collaboration, and responsible resource management within the BUPEXSA network. Her leadership style is grounded in integrity, organization, and consistency, ensuring that financial operations align with the association’s mission and long-term vision.\n\nProfessionally, Frida is a Registered Nurse (RN) with extensive experience in public health, patient-centered care, health promotion, and disease prevention. She has a strong background in community health and caring for diverse populations, with a focus on improving health outcomes through education, prevention, and evidence-based practice. Her clinical expertise, combined with her organizational and leadership skills, allows her to effectively bridge healthcare delivery and administrative excellence.\n\nFrida continues to advance her professional and academic development, with a growing interest in integrating nursing, public health, and data-driven strategies to improve population health outcomes. She remains dedicated to contributing to a vibrant, connected alumni community while promoting initiatives that support health awareness, professional growth, and collective impact.',
+    education: [
+      'Registered Nurse (RN)',
+      'PCSS Buea - Batch of 1997'
+    ],
+    achievements: [
+      'Treasurer of BUPEXSA USA',
+      'Fiscal management and transparency lead',
+      'Community health advocacy'
+    ],
+    photo_path: '/images/leadership/frida-meyali-actual.jpg',
+    order: 6,
+  },
+  {
+    id: '6',
+    slug: 'simon-ayompe',
+    name: 'Wanambowa Simon Ayompe',
+    title: 'Chief Whip',
+    chapter: 'National',
+    bio: 'Wanambowa Simon Ayompe, of the BUPEXSA Class of ’96, serves as Chief Whip for BUPEXSA USA, ensuring structure and order within the organization.',
+    longBio: 'Wanambowa Simon Ayompe, of the BUPEXSA Class of ’96, is based in Charlotte, North Carolina, where he serves as Chief Whip for BUPEXSA USA. In this role, he plays a vital part in maintaining structure, order, and effective coordination within the organization, ensuring that meetings are productive and aligned with the association’s goals. Known for his disciplined and dependable leadership style, Simon supports seamless communication between the Executive Committee and members while reinforcing accountability and organizational standards.\n\nProfessionally, Simon is a Data Security Analyst with a strong focus on safeguarding systems and ensuring data integrity across modern digital environments. His expertise in cybersecurity enables him to navigate complex technological landscapes, protect sensitive information, and contribute to the reliability and security of organizational systems. His analytical mindset and attention to detail make him highly effective in both his professional career and leadership role.\n\nBeyond his professional and leadership responsibilities, Simon is deeply committed to mentorship and capacity building. He actively supports and guides aspiring data security analysts, helping them develop the skills and confidence needed to succeed in the cybersecurity field. His passion for empowering others, combined with his dedication to excellence, makes him a valuable asset to BUPEXSA USA and a respected figure within both his professional and alumni communities.',
+    education: [
+      'Cybersecurity & Data Security Analysis',
+      'PCSS Buea - Batch \'96'
+    ],
+    achievements: [
+      'Chief Whip of BUPEXSA USA',
+      'Professional Data Security Analyst',
+      'Mentor in Cybersecurity'
+    ],
+    photo_path: '/images/leadership/simon-ayompe-actual.jpg',
     order: 7,
   },
+  {
+    id: '5',
+    slug: 'cordelia-ngonde',
+    name: 'Cordelia Ngonde',
+    title: 'Public Relations Officer',
+    chapter: 'National',
+    bio: 'Cordelia Ngonde serves as the Public Relations Officer for BUPEXSA USA, where she is dedicated to fostering engagement, strengthening alumni connections, and curating impactful social experiences.',
+    longBio: 'Cordelia Ngonde serves as the Public Relations Officer for BUPEXSA USA, where she is dedicated to fostering engagement, strengthening alumni connections, and curating impactful social experiences that unite members across the diaspora. Based in Maryland, she brings a vibrant blend of creativity, structure, and leadership to her role.\n\nA proud alumna of the Class of 1999, Cordelia’s journey in social leadership has been both consistent and impactful. She served as Social Prefect from Form 4 through high school at PCSS Buea, continued as Social Coordinator in her department at the University of Buea, and has remained actively engaged in organizing and leading social initiatives within her communities to date. Her ability to bring people together is a defining strength that has shaped her leadership style.\n\nCordelia is currently pursuing a Doctorate in Healthcare Administration, reflecting her commitment to advancing leadership and driving meaningful impact within complex systems. Professionally, she is an Agile Scrum Lead with expertise in project management, team coordination, stakeholder engagement, and strategic execution. In addition, Cordelia is a dynamic Master of Ceremonies (MC), known for her ability to energize audiences, create memorable experiences, and seamlessly manage events. Her combined strengths in communication, organization, and engagement make her an invaluable asset to BUPEXSA USA.',
+    education: [
+      'Doctorate in Healthcare Administration (Candidate)',
+      'University of Buea',
+      'PCSS Buea - Class of 1999'
+    ],
+    achievements: [
+      'Public Relations Officer of BUPEXSA USA',
+      'Agile Scrum Lead and Project Management expert',
+      'Professional Master of Ceremonies (MC)'
+    ],
+    photo_path: '/images/leadership/cordelia-ngonde-actual.jpg',
+    order: 8,
+  }
 ];
 
 export const MOCK_GALLERY = [

@@ -8,7 +8,18 @@ import { SITE_CONFIG } from '@/lib/mock-data';
 
 const navItems = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
+  { 
+    label: 'About', 
+    href: '/about',
+    children: [
+      { label: 'Integrity', href: '/about#integrity' },
+      { label: 'Fellowship', href: '/about#fellowship' },
+      { label: 'Philanthropic Activities', href: '/about#philanthropy' },
+      { label: 'Foster Community', href: '/about#community' },
+      { label: 'Support Education', href: '/about#education' },
+      { label: 'Chapter Growth', href: '/about#chapter-growth' },
+    ],
+  },
   { label: 'Membership', href: '/membership' },
   {
     label: 'Chapters',

@@ -19,15 +19,7 @@ export default function AboutPage() {
         badge="About BUPEXSA USA"
       />
 
-      <TextBlockSection
-        variant="centered"
-        heading="Founded on Excellence"
-        subheading="A History of Giving Back"
-        body={`
-          <p>Founded in 1985, Presbyterian College Secondary School (PCSS) Buea has been a beacon of academic excellence in Cameroon. As graduates moved to the United States to pursue their dreams, the need for a unified platform to maintain those school-day bonds became clear.</p>
-          <p>BUPEXSA USA was established to bring together these graduates, ensuring that no matter how many miles we are from PCSS Buea, we remain connected to our roots and committed to the school that shaped us.</p>
-        `}
-      />
+
 
       {/* Vision & Mission — side-by-side in one section */}
       <section className="section-padding bg-gray-50">
@@ -42,7 +34,7 @@ export default function AboutPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                 </svg>
               </div>
-              <h2 className="text-2xl md:text-3xl font-black text-dark mb-2">Our Vision</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-dark mb-2">VISION STATEMENT — BUPEXSA USA</h2>
               <p className="text-primary font-medium mb-4 text-sm uppercase tracking-wide">What We Aspire To Be</p>
               <div className="w-12 h-1 bg-primary rounded-full mb-6" />
               <p className="text-gray-500 text-lg leading-relaxed">
@@ -57,7 +49,7 @@ export default function AboutPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
                 </svg>
               </div>
-              <h2 className="text-2xl md:text-3xl font-black text-dark mb-2">Our Mission</h2>
+              <h2 className="text-2xl md:text-3xl font-black text-dark mb-2">MISSION STATEMENT — BUPEXSA USA</h2>
               <p className="text-primary font-medium mb-4 text-sm uppercase tracking-wide">What We Set Out To Do</p>
               <div className="w-12 h-1 bg-primary rounded-full mb-6" />
               <p className="text-gray-500 text-lg leading-relaxed">
@@ -70,11 +62,14 @@ export default function AboutPage() {
       </section>
 
       <ImageTextSection
-        variant="image-left"
-        bodyTitle="Empowering the Next Generation"
+        variant="image-right"
+        heading="BUPEXSA USA — FOUNDING NARRATIVE"
+        bodyTitle="Founded on Excellence"
         body={`
-          <p>Our primary mission is to support our alma mater, PCSS Buea, through various initiatives. Each year, we provide scholarships to high-achieving students, fund critical infrastructure improvements, and facilitate mentorship programs between alumni and current students.</p>
-          <p>We believe that by strengthening the foundation of PCSS Buea, we are ensuring a brighter future for the students who follow in our footsteps.</p>
+          <p>Established in 1993, Presbyterian Comprehensive Secondary School (PCSS) Buea has long stood as a beacon of academic excellence, moral grounding, and disciplined leadership formation in Cameroon. For decades, the school has shaped students who carry its values into universities, careers, and communities across the world.</p>
+          <p>As many graduates journeyed to the United States to pursue higher education and professional opportunities, a shared desire emerged, the desire to remain connected to the institution that molded them and to the lifelong friendships forged on its campus. Out of this desire, Buea Presbyterian ExStudents Association USA (BUPEXSA USA) was born.</p>
+          <p>BUPEXSA USA exists to ensure that no matter how far we travel or how many years pass, we remain united by our roots, our Presbyterian identity, and our commitment to the excellence PCSS Buea instilled in us.</p>
+          <p className="mt-6 text-sm text-gray-400 font-medium italic">*Mailing Address: 5821 Poole Dr, The Colony, Texas 75056.</p>
         `}
         image="/images/about/empowering-generation.jpg"
         ctaLabel="See Our Projects"

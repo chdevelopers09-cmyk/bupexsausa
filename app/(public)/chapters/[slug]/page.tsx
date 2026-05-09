@@ -126,6 +126,29 @@ export default async function ChapterDetailPage({ params }: ChapterDetailPagePro
               </div>
             </div>
 
+            {/* Chapter Videos - Texas */}
+            {chapter.slug === 'texas' && (
+              <div>
+                <h2 className="text-2xl font-black text-dark mb-8 pb-4 border-b border-gray-100">Life at Texas Chapter</h2>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {[1, 2, 3, 4].map((num) => (
+                    <div key={num} className="bg-white rounded-3xl p-3 shadow-xl shadow-primary/5 border border-gray-100 group hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
+                      <div className="aspect-video rounded-2xl overflow-hidden bg-black relative">
+                        <video 
+                          controls 
+                          preload="metadata"
+                          className="w-full h-full object-cover"
+                        >
+                          <source src={`/videos/Chapter-TEXAS-video-${num}.mp4`} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Local Events */}
             {chapterEvents.length > 0 && (
               <div>
@@ -151,6 +174,29 @@ export default async function ChapterDetailPage({ params }: ChapterDetailPagePro
                         </div>
                       </div>
                     </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Chapter Videos */}
+            {chapter.slug === 'maryland-dc' && (
+              <div>
+                <h2 className="text-2xl font-black text-dark mb-8 pb-4 border-b border-gray-100">Life at DMV Chapter</h2>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {[1, 2, 3, 4].map((num) => (
+                    <div key={num} className="bg-white rounded-3xl p-3 shadow-xl shadow-primary/5 border border-gray-100 group hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
+                      <div className="aspect-video rounded-2xl overflow-hidden bg-black relative">
+                        <video 
+                          controls 
+                          preload="metadata"
+                          className="w-full h-full object-cover"
+                        >
+                          <source src={`/videos/DMV-chapter-video-${num}.mp4`} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>

@@ -21,9 +21,9 @@ const defaultPrimaryStats: Stat[] = [
 
 const defaultWhiteStats: Stat[] = [
   { label: 'Member Growth YTD', value: '+28%', icon: 'trending' },
-  { label: 'Events This Year', value: '18', icon: 'calendar' },
-  { label: 'Donations This Year', value: '$12.4K', icon: 'heart' },
-  { label: 'States Represented', value: '22', icon: 'map' },
+  { label: 'Events This Year', value: '2', icon: 'calendar' },
+  { label: 'Donations This Year', value: '$0', icon: 'heart' },
+  { label: 'States Represented', value: '32', icon: 'map' },
 ];
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {

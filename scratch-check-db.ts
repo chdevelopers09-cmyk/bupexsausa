@@ -4,16 +4,16 @@ import { createAdminClient } from './lib/supabase/admin';
 async function checkDatabase() {
   const supabase = await createAdminClient();
   const { data, error } = await supabase
-    .from('page_layouts')
-    .select('id, page_key, component')
+    .from('chapters')
+    .select('slug, name')
     .limit(20);
 
   if (error) {
     console.error('DB Error:', error);
   } else {
-    console.log('--- Page Layouts Snapshot ---');
+    console.log('--- Chapters ---');
     data.forEach(row => {
-      console.log(`ID: ${row.id} | Key: ${row.page_key} | Component: ${row.component}`);
+      console.log(`Slug: ${row.slug} | Name: ${row.name}`);
     });
   }
 }

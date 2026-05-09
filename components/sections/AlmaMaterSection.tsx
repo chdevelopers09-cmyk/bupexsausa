@@ -44,7 +44,12 @@ export default function AlmaMaterSection({
               <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
                 <Music className="h-8 w-8 text-accent mb-4" />
                 <h4 className="font-bold mb-2">School Anthem</h4>
-                <p className="text-sm text-white/50">Listen to or read the lyrics of our powerful school anthem.</p>
+                <p className="text-sm text-white/50 mb-4">Listen to the powerful melody of our school anthem.</p>
+                <audio 
+                  controls 
+                  className="w-full h-8 accent-accent opacity-60 hover:opacity-100 transition-opacity"
+                  src="/videos/CURRENT-ANTHEM.mp4"
+                />
               </div>
               <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
                 <History className="h-8 w-8 text-primary mb-4" />
