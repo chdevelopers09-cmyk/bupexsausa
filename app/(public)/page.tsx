@@ -64,8 +64,8 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-black relative shadow-inner flex-grow">
-                  <video 
-                    controls 
+                  <video
+                    controls
                     preload="metadata"
                     className="w-full h-full object-cover"
                   >
@@ -90,8 +90,8 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-black relative shadow-inner flex-grow filter grayscale-[20%] group-hover:grayscale-0 transition-all duration-700">
-                  <video 
-                    controls 
+                  <video
+                    controls
                     preload="metadata"
                     className="w-full h-full object-cover"
                   >
@@ -215,7 +215,7 @@ export default function Home() {
         </div>
       </section>
 
-      <GalleryStripSection count={8} />
+      <GalleryStripSection count={18} />
     </>
   );
 }

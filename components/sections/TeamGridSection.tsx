@@ -48,7 +48,7 @@ function TeamMemberCard({ member }: { member: typeof MOCK_LEADERSHIP[0] }) {
         <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
         <div className="h-56 w-56 rounded-full overflow-hidden border-8 border-white shadow-2xl relative z-10 bg-gray-100">
           {member.photo_path ? (
-            <img src={member.photo_path} alt={member.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+            <img src={member.photo_path} alt={member.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out" />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Users className="h-16 w-16 text-gray-300" />
@@ -62,7 +62,7 @@ function TeamMemberCard({ member }: { member: typeof MOCK_LEADERSHIP[0] }) {
       
       <div className="mb-2">
         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60 bg-primary/5 px-4 py-1.5 rounded-full">
-          Batch {member.slug === 'ebot-leonel' ? '1996' : member.slug === 'simon-ayompe' ? "'96" : member.slug === 'cordelia-ngonde' ? '1999' : member.slug === 'narcisse-wilfried' ? '1994' : member.slug === 'frida-meyali' ? '1997' : '1988'}
+          Batch {member.batch || '1998'}
         </span>
       </div>
       
@@ -73,15 +73,17 @@ function TeamMemberCard({ member }: { member: typeof MOCK_LEADERSHIP[0] }) {
         {member.bio}
       </div>
       
-      <div className="mt-auto w-full space-y-4">
-        <Link 
-          href={`/about/leadership/${member.slug}`}
-          className="inline-flex items-center gap-2 bg-gray-50 text-dark font-black text-xs uppercase tracking-widest px-6 py-3 rounded-xl group-hover:bg-primary group-hover:text-white transition-all duration-300 w-full justify-center"
-        >
-          View Full Profile
-          <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-        </Link>
-      </div>
+      {!member.hideProfile && (
+        <div className="mt-auto w-full space-y-4">
+          <Link 
+            href={`/about/leadership/${member.slug}`}
+            className="inline-flex items-center gap-2 bg-gray-50 text-dark font-black text-xs uppercase tracking-widest px-6 py-3 rounded-xl group-hover:bg-primary group-hover:text-white transition-all duration-300 w-full justify-center"
+          >
+            View Full Profile
+            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

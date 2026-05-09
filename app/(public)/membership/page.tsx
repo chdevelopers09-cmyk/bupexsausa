@@ -29,11 +29,11 @@ export default async function MembershipPage() {
         cta1Url="/register"
       />
 
-      <StatsBarSection variant="primary" />
+
 
       <ImageTextSection
         variant="image-right"
-        bodyTitle="Why Join BUPEXSA USA?"
+        bodyTitle="WHY JOIN BUPEXSA USA"
         body={`
           <p>Being a member of BUPEXSA USA is about more than just a title. It's about being part of a brotherhood and sisterhood that started at PCSS Buea and continues to thrive across the Atlantic.</p>
           <ul class="list-disc pl-5 mt-4 space-y-2">
@@ -43,7 +43,7 @@ export default async function MembershipPage() {
             <li>Voting rights in national and regional elections.</li>
           </ul>
         `}
-        image="/images/membership/group.jpg"
+        image="/images/membership/why-join.jpg"
       />
 
       <CardGridSection
@@ -51,18 +51,18 @@ export default async function MembershipPage() {
         cards={[
           {
             icon: 'globe',
-            title: 'Global Outreach',
-            body: 'Connect with fellow alumni across all 50 states.'
+            title: 'Networking',
+            body: 'Members gain access to a vibrant community of PCSS Buea alumni across the USA, creating opportunities for friendship, collaboration, and professional support.'
           },
           {
             icon: 'award',
             title: 'Prestige',
-            body: 'Be part of an organization recognized for its philanthropic excellence.'
+            body: 'Membership allows individuals to actively contribute to scholarships, infrastructure projects, and take pride in leading mentorship programs that uplift current students and strengthen the school’s future.'
           },
           {
             icon: 'calendar',
             title: 'Exclusive Events',
-            body: 'Invitations to our highly anticipated biennial national conventions.'
+            body: 'Members enjoy priority participation in reunions, leadership opportunities, service initiatives, and alumnidriven projects that celebrate our shared heritage and expand our collective impact.'
           }
         ]}
       />

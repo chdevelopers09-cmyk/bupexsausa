@@ -116,14 +116,6 @@ export default function EventsPreviewSection({
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
           {events.map((event) => (
             <Link key={event.id} href={`/events/${event.slug}`} className="group relative bg-white rounded-[2.5rem] overflow-hidden shadow-card hover:shadow-2xl transition-all duration-500 flex flex-col h-full border border-gray-100" id={`event-card-${event.id}`}>
-              {/* Date Badge Overlay */}
-              <div className="absolute top-6 left-6 z-20">
-                <div className="bg-white/90 backdrop-blur-md rounded-2xl overflow-hidden shadow-lg border border-white/50 text-center w-14">
-                  <div className="bg-primary py-1 text-[10px] font-black text-white uppercase">{new Date(event.start_datetime).toLocaleDateString('en-US', { month: 'short' })}</div>
-                  <div className="py-2 text-xl font-black text-dark">{new Date(event.start_datetime).getDate()}</div>
-                </div>
-              </div>
-
               {/* Thumbnail */}
               {event.thumbnail_path && (
                 <div className="h-64 relative overflow-hidden">
@@ -141,7 +133,22 @@ export default function EventsPreviewSection({
                 </div>
               )}
 
-              <div className={cn("p-8 flex-1 flex flex-col", !event.thumbnail_path && "pt-24")}>
+              <div className={cn("p-8 pt-12 flex-1 flex flex-col relative", !event.thumbnail_path && "pt-24")}>
+                {/* Date Badge - Now bridges the image and content */}
+                <div className={cn(
+                  "absolute left-8 z-20",
+                  event.thumbnail_path ? "-top-10" : "top-8"
+                )}>
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100 text-center w-16">
+                    <div className="bg-primary py-1.5 text-[10px] font-black text-white uppercase tracking-wider">
+                      {new Date(event.start_datetime).toLocaleDateString('en-US', { month: 'short' })}
+                    </div>
+                    <div className="py-2.5 text-2xl font-black text-dark leading-none">
+                      {new Date(event.start_datetime).getDate()}
+                    </div>
+                  </div>
+                </div>
+
                 <h3 className="text-2xl font-black text-dark group-hover:text-primary transition-colors mb-4 leading-tight flex-1">
                   {event.title}
                 </h3>

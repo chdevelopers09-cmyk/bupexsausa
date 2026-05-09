@@ -1,5 +1,6 @@
+'use client';
 import Link from 'next/link';
-import { ArrowRight, Camera } from 'lucide-react';
+import { ArrowRight, Camera, Play } from 'lucide-react';
 import { MOCK_GALLERY } from '@/lib/mock-data';
 
 interface GalleryStripSectionProps {
@@ -39,11 +40,31 @@ export default function GalleryStripSection({
             >
               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity z-10" />
               {image.path ? (
-                <img
-                  src={image.path}
-                  alt={image.alt}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
+                image.path.endsWith('.mp4') ? (
+                  <div className="relative h-full w-full">
+                    <video
+                      src={image.path}
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      onMouseEnter={(e) => e.currentTarget.play()}
+                      onMouseLeave={(e) => e.currentTarget.pause()}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 bg-black"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity">
+                      <div className="h-12 w-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40">
+                        <Play className="h-6 w-6 text-white fill-white" />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <img
+                    src={image.path}
+                    alt={image.alt}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                )
               ) : (
                 <div className="w-full h-full bg-gray-100 flex items-center justify-center">
                   <Camera className="h-8 w-8 text-gray-300" />

@@ -20,7 +20,6 @@ const defaultPrimaryStats: Stat[] = [
 ];
 
 const defaultWhiteStats: Stat[] = [
-  { label: 'Member Growth YTD', value: '+28%', icon: 'trending' },
   { label: 'Events This Year', value: '2', icon: 'calendar' },
   { label: 'Donations This Year', value: '$0', icon: 'heart' },
   { label: 'States Represented', value: '32', icon: 'map' },
@@ -44,7 +43,7 @@ export default function StatsBarSection({ variant = 'primary', stats }: StatsBar
     return (
       <section className="section-padding bg-white">
         <div className="container-wide">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
             {displayStats.map((stat, i) => {
               const Icon = stat.icon ? ICONS[stat.icon] : null;
               return (

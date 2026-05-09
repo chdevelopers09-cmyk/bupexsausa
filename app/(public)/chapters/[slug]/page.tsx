@@ -5,6 +5,7 @@ import { MOCK_CHAPTERS, MOCK_LEADERSHIP, MOCK_EVENTS } from '@/lib/mock-data';
 
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getImageUrl } from '@/lib/utils';
+import ChapterGalleryClient from '@/components/sections/ChapterGalleryClient';
 
 interface ChapterDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -96,56 +97,114 @@ export default async function ChapterDetailPage({ params }: ChapterDetailPagePro
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-16">
 
-            {/* About */}
+            {/* About / History */}
             <div>
-              <h2 className="text-2xl font-black text-dark mb-6 pb-4 border-b border-gray-100">About This Chapter</h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                {chapter.description}
-              </p>
-              <p className="text-gray-600 leading-relaxed mt-4">
-                The {chapter.name} is one of BUPEXSA USA's most active regional communities. Members gather regularly for networking mixers, cultural celebrations, and to coordinate local fundraising efforts for PCSS Buea. The chapter is governed by an elected executive committee and operates under the national constitution of BUPEXSA USA.
-              </p>
-            </div>
-
-            {/* EXCO */}
-            <div>
-              <h2 className="text-2xl font-black text-dark mb-8 pb-4 border-b border-gray-100">Chapter Leadership (EXCO)</h2>
-              <div className="grid sm:grid-cols-3 gap-8">
-                {excoMembers.map((member, i) => (
-                  <div key={i} className="text-center group">
-                    <div className="relative mb-4 mx-auto w-28 h-28">
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-full blur-lg opacity-0 group-hover:opacity-30 transition-opacity" />
-                      <div className="relative h-28 w-28 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                        <img src={member.photo} alt={member.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                      </div>
-                    </div>
-                    <h3 className="font-black text-dark group-hover:text-primary transition-colors">{member.name}</h3>
-                    <p className="text-primary text-sm font-semibold mt-1">{member.title}</p>
+              {chapter.slug === 'texas' ? (
+                <div className="space-y-8">
+                  <h2 className="text-2xl font-black text-dark mb-6 pb-4 border-b border-gray-100 uppercase tracking-tight">BUPEXSA Texas: A Brief Historical Account</h2>
+                  <div className="space-y-6 text-gray-600 leading-relaxed text-lg font-medium">
+                    <p>BUPEXSA Texas was established as a direct response to the challenges faced in building the broader BUPEXSA USA structure in 2022.</p>
+                    <p>At the time, the Vice President of BUPEXSA USA, Mr. Chilion Tabe, proposed to the President, Mr. Pancratius Mukeh, that the best way to strengthen BUPEXSA USA was to encourage BUPEXSANS across various cities to gather and form state chapters. Acting on this strategy, the Vice President volunteered to pilot the Dallas chapter while the President reached out to BUPEXSANS in other states and cities. This initiative led to the birth of BUPEXSA Dallas.</p>
+                    <p>BUPEXSA Dallas has never had an executive body nor a constitution. However, BUPEXSANS in Dallas consistently gathered informally. Two social gatherings were held at the Vice President’s home. The group also made it a point to celebrate important moments in members’ lives. They gathered at Vanessa’s home to celebrate the birthday of her triplets, at Njita Silas’s home to celebrate the birth of his daughter, and again at the Vice President’s home to celebrate the birth of his son.</p>
+                    <p>Given the proximity between Dallas and Houston and the relatively weak level of engagement in Houston at the time the Dallas group decided to extend its reach by visiting and supporting the Houston BUPEXSANS. This collaboration led to the formation of what is now known as BUPEXSA Texas (BUPEXSA TX).</p>
+                    <p>Since its formation, BUPEXSA TX has demonstrated remarkable unity and solidarity, despite the absence of a formal executive structure or constitution. The most recent gathering organized by BUPEXSA TX was held in Houston and served as the BUPEXSA USA General Assembly in 2024.</p>
+                    <p>With the continued growth and strengthening of BUPEXSA USA, there is every indication that BUPEXSA TX will expand in membership and evolve into a more structured and formalized chapter. I take great pride in spending time with my BUPEXSA TX family and look forward to our future gatherings.</p>
                   </div>
-                ))}
-              </div>
+                  
+                  <div className="mt-12 flex flex-col sm:flex-row items-center gap-8 p-10 bg-gray-50 rounded-[2.5rem] border border-gray-100">
+                    <div className="h-40 w-40 rounded-3xl overflow-hidden border-4 border-white shadow-xl flex-shrink-0 bg-white">
+                      <img 
+                        src="/images/chapters/texas/chilion-tabe.png" 
+                        alt="Chilion Tabe" 
+                        className="w-full h-full object-cover object-top" 
+                      />
+                    </div>
+                    <div>
+                      <p className="text-gray-400 font-black text-[10px] uppercase tracking-widest mb-1">Author</p>
+                      <h4 className="text-dark font-black text-xl mb-1">Chilion Tabe</h4>
+                      <p className="text-primary font-bold">PCSS Alumnus</p>
+                      <p className="text-gray-400 text-sm italic">Dallas, Texas, USA</p>
+                    </div>
+                  </div>
+                </div>
+              ) : chapter.slug === 'maryland-dc' ? (
+                <div className="space-y-8">
+                  <h2 className="text-2xl font-black text-dark mb-6 pb-4 border-b border-gray-100 uppercase tracking-tight">BUPEXSA DMVS: HOW BUPEXSA DMV CAME INTO EXISTENCE</h2>
+                  <div className="space-y-6 text-gray-600 leading-relaxed text-lg font-medium">
+                    <p>BUPEXSA DMV emerged from a series of reconnections that began in 2012, when a small number of PCSS Buea Town alumni residing across the Washington D.C., Maryland, and Virginia (DMV) metropolitan corridor unexpectedly crossed paths and rediscovered their shared academic heritage. What initially unfolded as informal exchanges during community gatherings. This early momentum was driven by a renewed determination to identify fellow BUPEXSANS, strengthen interpersonal bonds, and reestablish a collective identity anchored in the distinguished legacy of PCSS Buea Town.</p>
+                    <p>The effort to identify and reconnect with fellow alumni unfolded naturally. Each new contact served a dual purpose: strengthening the emerging BUPEXSA DMV network and integrating members into the broader BUPEXSA USA community. This early phase laid the groundwork for a more intentional and cohesive alumni presence in the DMV area.</p>
+                    <p>In 2014, BUPEXSA DMV hosted a modest but impactful mini‑convention aimed at revitalizing engagement and reaffirming our shared identity. The gathering demonstrated the potential for a strong, unified chapter. However, despite the enthusiasm generated, the momentum proved difficult to sustain, and subsequent attempts to convene the group did not achieve long‑term continuity.</p>
+                    <p>On April 20, 2025, I had the privilege of hosting the first formal BUPEXSA DMV meeting in several years, in Waldorf, Maryland. This gathering marked a significant turning point. It rekindled cherished memories of our alma mater, renewed our sense of belonging, and reaffirmed the value of community among BUPEXSANS in the region. Members exchanged personal stories, reconnected with old friends, and expressed a shared commitment to supporting one another’s professional endeavors, creative pursuits, and personal milestones.</p>
+                    <p>As we look ahead, our aspiration is to cultivate a vibrant and enduring BUPEXSA presence in the DMV, one that enriches the lives of its members, contributes meaningfully to the communities we call home, and upholds the distinguished legacy of PCSS Buea Town. With renewed energy and a clear sense of purpose, BUPEXSA DMV stands poised to grow, evolve, and make a lasting impact.</p>
+                  </div>
+                  
+                  <div className="mt-12 flex flex-col sm:flex-row items-center gap-8 p-10 bg-gray-50 rounded-[2.5rem] border border-gray-100">
+                    <div className="h-40 w-40 rounded-3xl overflow-hidden border-4 border-white shadow-xl flex-shrink-0 bg-white">
+                      <img 
+                        src="/images/chapters/dmv/mirabel-frambo.jpg" 
+                        alt="Dr. Mrs. Mirabel Tanyi Frambo" 
+                        className="w-full h-full object-cover object-top" 
+                      />
+                    </div>
+                    <div>
+                      <p className="text-gray-400 font-black text-[10px] uppercase tracking-widest mb-1">Narrator</p>
+                      <h4 className="text-dark font-black text-xl mb-1">Dr. Mrs. Mirabel Tanyi Frambo</h4>
+                      <p className="text-primary font-bold">PCSS BUEA Alumna</p>
+                      <p className="text-gray-400 text-sm italic">Maryland, USA</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <h2 className="text-2xl font-black text-dark mb-6 pb-4 border-b border-gray-100 uppercase tracking-tight">About This Chapter</h2>
+                  <p className="text-lg text-gray-600 leading-relaxed font-medium">
+                    {chapter.description}
+                  </p>
+                  <p className="text-gray-600 leading-relaxed mt-4 font-medium">
+                    The {chapter.name} is one of BUPEXSA USA's most active regional communities. Members gather regularly for networking mixers, cultural celebrations, and to coordinate local fundraising efforts for PCSS Buea. The chapter is governed by an elected executive committee and operates under the national constitution of BUPEXSA USA.
+                  </p>
+                </>
+              )}
             </div>
 
             {/* Chapter Videos - Texas */}
             {chapter.slug === 'texas' && (
-              <div>
-                <h2 className="text-2xl font-black text-dark mb-8 pb-4 border-b border-gray-100">Life at Texas Chapter</h2>
-                <div className="grid sm:grid-cols-2 gap-6">
-                  {[1, 2, 3, 4].map((num) => (
-                    <div key={num} className="bg-white rounded-3xl p-3 shadow-xl shadow-primary/5 border border-gray-100 group hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
-                      <div className="aspect-video rounded-2xl overflow-hidden bg-black relative">
-                        <video 
-                          controls 
-                          preload="metadata"
-                          className="w-full h-full object-cover"
-                        >
-                          <source src={`/videos/Chapter-TEXAS-video-${num}.mp4`} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
+              <div className="space-y-16">
+                <div>
+                  <h2 className="text-2xl font-black text-dark mb-8 pb-4 border-b border-gray-100 uppercase tracking-tight">Life at Texas Chapter</h2>
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    {[1, 2, 3, 4].map((num) => (
+                      <div key={num} className="bg-white rounded-3xl p-3 shadow-xl shadow-primary/5 border border-gray-100 group hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
+                        <div className="aspect-video rounded-2xl overflow-hidden bg-black relative">
+                          <video 
+                            controls 
+                            preload="metadata"
+                            className="w-full h-full object-cover"
+                          >
+                            <source src={`/videos/Chapter-TEXAS-video-${num}.mp4`} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
+
+                {/* SHARED MEMORIES */}
+                <ChapterGalleryClient 
+                  title="SHARED MEMORIES OF BUPEXSA TEXAS"
+                  images={[
+                    '/images/chapters/texas/memory-1.jpg',
+                    '/images/chapters/texas/memory-2.jpg',
+                    '/images/chapters/texas/memory-3.jpg',
+                    '/images/chapters/texas/memory-4.jpg',
+                    '/images/chapters/texas/memory-5.jpg',
+                    '/images/chapters/texas/memory-6.jpg',
+                    '/images/chapters/texas/memory-7.jpg',
+                    '/images/chapters/texas/memory-8.jpg',
+                    '/images/chapters/texas/memory-9.jpg',
+                  ]}
+                />
               </div>
             )}
 
@@ -179,26 +238,48 @@ export default async function ChapterDetailPage({ params }: ChapterDetailPagePro
               </div>
             )}
 
-            {/* Chapter Videos */}
+            {/* Chapter Videos - DMV */}
             {chapter.slug === 'maryland-dc' && (
-              <div>
-                <h2 className="text-2xl font-black text-dark mb-8 pb-4 border-b border-gray-100">Life at DMV Chapter</h2>
-                <div className="grid sm:grid-cols-2 gap-6">
-                  {[1, 2, 3, 4].map((num) => (
-                    <div key={num} className="bg-white rounded-3xl p-3 shadow-xl shadow-primary/5 border border-gray-100 group hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
-                      <div className="aspect-video rounded-2xl overflow-hidden bg-black relative">
-                        <video 
-                          controls 
-                          preload="metadata"
-                          className="w-full h-full object-cover"
-                        >
-                          <source src={`/videos/DMV-chapter-video-${num}.mp4`} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
+              <div className="space-y-16">
+                <div>
+                  <h2 className="text-2xl font-black text-dark mb-8 pb-4 border-b border-gray-100 uppercase tracking-tight">Life at DC/Maryland/VA Chapter</h2>
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    {[1, 2, 3, 4].map((num) => (
+                      <div key={num} className="bg-white rounded-3xl p-3 shadow-xl shadow-primary/5 border border-gray-100 group hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
+                        <div className="aspect-video rounded-2xl overflow-hidden bg-black relative">
+                          <video 
+                            controls 
+                            preload="metadata"
+                            className="w-full h-full object-cover"
+                          >
+                            <source src={`/videos/life-at-bupexausa-video-${num}.mp4`} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
+
+                {/* SHARED MEMORIES */}
+                <ChapterGalleryClient 
+                  title="SHARED MEMORIES OF BUPEXSA DMV"
+                  images={[
+                    '/images/chapters/dmv/memory-1.png',
+                    '/images/chapters/dmv/memory-2.png',
+                    '/images/chapters/dmv/memory-3.png',
+                    '/images/chapters/dmv/memory-4.png',
+                    '/images/chapters/dmv/memory-5.jpg',
+                    '/images/chapters/dmv/memory-6.jpg',
+                    '/images/chapters/dmv/memory-7.jpg',
+                    '/images/chapters/dmv/memory-8.png',
+                    '/images/chapters/dmv/memory-9.png',
+                    '/images/chapters/dmv/memory-10.png',
+                    '/images/chapters/dmv/memory-11.png',
+                    '/images/chapters/dmv/memory-12.png',
+                    '/images/gallery/bupexsa-gathering.jpg',
+                  ]}
+                />
               </div>
             )}
           </div>

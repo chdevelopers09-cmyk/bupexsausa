@@ -21,84 +21,76 @@ export default function AboutPage() {
 
 
 
-      {/* Vision & Mission — side-by-side in one section */}
-      <section className="section-padding bg-gray-50">
+
+
+      <section className="section-padding bg-white overflow-hidden" id="our-story">
         <div className="container-wide">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-            {/* Vision */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178Z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-              </div>
-              <h2 className="text-2xl md:text-3xl font-black text-dark mb-2">VISION STATEMENT — BUPEXSA USA</h2>
-              <p className="text-primary font-medium mb-4 text-sm uppercase tracking-wide">What We Aspire To Be</p>
-              <div className="w-12 h-1 bg-primary rounded-full mb-6" />
-              <p className="text-gray-500 text-lg leading-relaxed">
-                To build a united, empowered, and compassionate global community of Buea Presbyterian ex-students who embody Christ-centered love, support one another deeply, and contribute meaningfully to society.
-              </p>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="inline-block px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] bg-primary/10 text-primary mb-6">
+                History
+              </span>
+              <h2 className="text-3xl md:text-5xl font-black text-dark mb-6">OUR STORY</h2>
+              <h3 className="text-xl md:text-2xl font-bold text-primary mb-8 italic">From a shared table to Footprint: The Birth of BUPEXSA USA</h3>
+              <div className="w-24 h-1.5 bg-primary mx-auto rounded-full"></div>
             </div>
 
-            {/* Mission */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
-                </svg>
-              </div>
-              <h2 className="text-2xl md:text-3xl font-black text-dark mb-2">MISSION STATEMENT — BUPEXSA USA</h2>
-              <p className="text-primary font-medium mb-4 text-sm uppercase tracking-wide">What We Set Out To Do</p>
-              <div className="w-12 h-1 bg-primary rounded-full mb-6" />
-              <p className="text-gray-500 text-lg leading-relaxed">
-                To foster fellowship, preserve our shared Presbyterian heritage, and strengthen the bonds among ex-students through service, mutual support, and charitable initiatives rooted in the love of Christ.
+            <div className="prose prose-lg max-w-none text-gray-500 space-y-8 leading-relaxed">
+              <p>
+                The idea of Buea Presbyterian Ex-Student Association (BUPEXSA) United States (USA) began around July 2011. As a few BUPEXSANS discovered themselves in the (District of Columbia, Maryland and Virginia) DMV. At the time, communication amongst us in the United States was not as easy as it is today. Finding one another was often tedious, and there was no central platform that connected us. However, as we gradually became aware of the growing presence of BUPEXSA alumni, particularly in the DMV area, the vision of bringing everyone together began to form.
               </p>
+              
+              <p>
+                The conversations intensified when a couple of us linked during the Cameroon convention soccer game finals in Laurel Maryland. We took some pictures together and spent time catching up on old school memories and reconnecting after a long while. After the finals, we reunited at Ndasi Sylvia&apos;s house in Hyattsville, where she warmly hosted us with food and drinks. Present during the gathering were: Wananbowa Simon Ayompe, Adua Tebo Jonas, Ndasi Sylvia herself, Lum Ndeng Anne Marie, Ndah Germaine, and Njogoh Anim. Later, that night I took the group to a soya spot in Lanham (Princess) where the conversations about reconnecting and strengthening our bond intensified even more. With everyone engaged and enthusiastic, Anne Marie took the initiative to create a group chat which was newly introduced by WhatsApp, adding those who were present and encouraging us to inform and add other schoolmates about the existence of a Bupexsa group.
+              </p>
+
+              <p>
+                We began intentionally searching for BUPEXSA alumni phone numbers, connecting with people, and adding them into what became one of the first BUPEXSA USA WhatsApp group. If memory serves me right, Anne-Marie played a major role in spearheading this effort, helping to gather contacts and keep the communication alive for a long while. After many months of conversations, individual meetups, and growing excitement, we finally decided it was time to have an official BUPEXSA gathering. I had the privilege of hosting the very first BUPEXSA USA meeting in my little apartment in Laurel, Maryland on a Saturday evening in December of 2011. The turnout exceeded expectations as you can see from past pictures.
+              </p>
+
+              <p>
+                We had alumni represented from almost all batches, and beyond the meeting itself, there was laughter, reconnection, storytelling, and a genuine sense that something meaningful had just begun. It was the first time many of us experienced BUPEXSA fellowship again on the American soil, and it felt special. Following that successful first meeting, the group remained active. We continued holding meetings in the homes of different members, strengthening friendships and discussing ways to build the association further. Not long after, we organized a larger event in a hall around Lanham a memorable gathering that marked another major milestone in our growth. If I recall correctly, Ms. Nelly (who is a former Mathematics teacher of PCSS Buea Town) was invited to the occasion. 
+              </p>
+
+              <p>
+                From that point onward, BUPEXSA USA was no longer just an idea. It had become a living community spearheaded by our first ever president Mr Osong Ama Baron. Though there were seasons when activities slowed down, the foundation that was laid during those early years never disappeared. The relationships remained, the group endured, and today it is heartwarming to see us still here, reconnecting and continuing what began with a simple desire to find one another and stay united.
+              </p>
+
+              <p className="font-bold text-dark">
+                Indeed, what started as scattered conversations among a handful of PCSS graduates residing in the DMV over a decade ago, has grown into a lasting family and for that, we can all be proud.
+              </p>
+
+              <div className="pt-10 border-t border-gray-100 mt-12">
+                <p className="text-dark font-black text-xl mb-1">Long Live BUPEXSA USA,</p>
+                <p className="text-dark font-black text-xl mb-6">Long Live PCSS BUEA Town.</p>
+                
+                <div className="bg-gray-50 p-6 rounded-2xl border-l-4 border-primary">
+                  <p className="text-dark font-bold">Narrator and Author:</p>
+                  <p className="text-primary font-black text-lg">Wanambowa Simon Ayompe</p>
+                  <p className="text-gray-400 text-sm italic">PCSS Alumnus</p>
+                </div>
+              </div>
             </div>
 
+            {/* Bottom Image */}
+            <div className="mt-20 relative">
+              <div className="absolute -inset-4 border-2 border-primary/20 rounded-[3rem] translate-x-4 translate-y-4 pointer-events-none"></div>
+              <div className="rounded-[2.5rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
+                <img 
+                  src="/images/about/first-meeting.png" 
+                  alt="The First BUPEXSA USA Gathering" 
+                  className="w-full h-auto"
+                />
+              </div>
+              <p className="text-center mt-6 text-gray-400 text-sm font-medium italic">
+                Past pictures from one of the earliest gatherings that laid the foundation for BUPEXSA USA.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <ImageTextSection
-        variant="image-right"
-        heading="BUPEXSA USA — FOUNDING NARRATIVE"
-        bodyTitle="Founded on Excellence"
-        body={`
-          <p>Established in 1993, Presbyterian Comprehensive Secondary School (PCSS) Buea has long stood as a beacon of academic excellence, moral grounding, and disciplined leadership formation in Cameroon. For decades, the school has shaped students who carry its values into universities, careers, and communities across the world.</p>
-          <p>As many graduates journeyed to the United States to pursue higher education and professional opportunities, a shared desire emerged, the desire to remain connected to the institution that molded them and to the lifelong friendships forged on its campus. Out of this desire, Buea Presbyterian ExStudents Association USA (BUPEXSA USA) was born.</p>
-          <p>BUPEXSA USA exists to ensure that no matter how far we travel or how many years pass, we remain united by our roots, our Presbyterian identity, and our commitment to the excellence PCSS Buea instilled in us.</p>
-          <p className="mt-6 text-sm text-gray-400 font-medium italic">*Mailing Address: 5821 Poole Dr, The Colony, Texas 75056.</p>
-        `}
-        image="/images/about/empowering-generation.jpg"
-        ctaLabel="See Our Projects"
-        ctaUrl="/donations"
-      />
-
-      <CardGridSection
-        bgVariant="sky"
-        heading="Our Core Values"
-        cards={[
-          {
-            icon: 'award',
-            title: 'Integrity',
-            body: 'We operate with transparency and accountability in all our endeavors.'
-          },
-          {
-            icon: 'users',
-            title: 'Fellowship',
-            body: 'We foster a sense of belonging and mutual support among all alumni.'
-          },
-          {
-            icon: 'heart',
-            title: 'Philanthropy',
-            body: 'We are committed to giving back to our alma mater and communities.'
-          }
-        ]}
-      />
-
-      <TeamGridSection variant="four-col" heading="Executive Branch of Alumni" />
+      <TeamGridSection variant="four-col" heading="EXECUTIVE BENCH BUPEXSA USA" />
     </>
   );
 }

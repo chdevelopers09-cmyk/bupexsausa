@@ -31,10 +31,8 @@ export default function DonationsPage() {
           <p>We pride ourselves on the direct impact of your donations. 100% of funds designated for school projects are used for those projects, with regular financial reporting provided to all donors.</p>
           <p>From providing clean water systems to equipping the computer lab, your support is transforming the learning environment at PCSS Buea for hundreds of students every year.</p>
         `}
-        image="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=1000"
+        image="/images/impact.png"
       />
-
-      <TestimonialSection />
     </>
   );
 }

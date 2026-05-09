@@ -253,10 +253,10 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                       </div>
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[11px] font-black text-gray-500 ml-1">Graduation Year <span className="text-red-500">*</span></label>
+                      <label className="text-[11px] font-black text-gray-500 ml-1">Graduation Year <span className="text-gray-300 font-medium">(optional)</span></label>
                       <div className="relative">
                         <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-blue-200 z-10" />
-                        <select name="graduation_year" value={formData.graduation_year} onChange={handleInputChange} className="w-full pl-9 pr-8 py-2 rounded-lg bg-gray-50/50 border border-gray-100 text-dark focus:bg-white focus:border-[#8B5CF6] outline-none appearance-none cursor-pointer font-bold text-[13px]" required>
+                        <select name="graduation_year" value={formData.graduation_year} onChange={handleInputChange} className="w-full pl-9 pr-8 py-2 rounded-lg bg-gray-50/50 border border-gray-100 text-dark focus:bg-white focus:border-[#8B5CF6] outline-none appearance-none cursor-pointer font-bold text-[13px]">
                           <option value="">Select</option>
                           {gYears.map(year => <option key={year} value={year}>{year}</option>)}
                         </select>
@@ -324,7 +324,7 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                   <button 
                     type="button" 
                     onClick={() => { 
-                      const requiredFields = ['full_name', 'username', 'email', 'password', 'confirm_password', 'batch', 'graduation_year', 'us_state', 'phone'];
+                      const requiredFields = ['full_name', 'username', 'email', 'password', 'confirm_password', 'batch', 'us_state', 'phone'];
                       const missing = requiredFields.filter(f => !formData[f as keyof typeof formData]);
                       
                       if (missing.length > 0) {
