@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient, createAdminClient } from '@/lib/supabase/server'
-import { sendWelcomeEmail } from '@/lib/resend'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -144,19 +143,7 @@ export async function signup(formData: FormData) {
     proof_storage_path: proofPath,
   })
 
-  // Send Welcome Email
-  try {
-    await sendWelcomeEmail({
-      email,
-      fullName: full_name,
-      memberId: member_id,
-      graduationYear: graduation_year || undefined,
-      batch: batch || undefined,
-    });
-  } catch (err) {
-    console.error('Failed to send welcome email:', err);
-  }
-
+  // Email sending removed as requested
   revalidatePath('/', 'layout')
   return { 
     success: true, 
@@ -174,18 +161,4 @@ export async function logout() {
   await supabase.auth.signOut()
   revalidatePath('/', 'layout')
   redirect('/')
-}
-
-export async function signInWithGoogle() {
-  const supabase = await createClient()
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
-    },
-  })
-
-  if (data.url) {
-    redirect(data.url)
-  }
 }

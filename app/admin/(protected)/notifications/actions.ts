@@ -3,9 +3,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 
-// Mocking Resend for now, but ready for integration
-// import { Resend } from 'resend'
-// const resend = new Resend(process.env.RESEND_API_KEY)
+// In-app notifications for members
 
 export async function sendBulkNotification(formData: FormData) {
   const supabase = await createAdminClient()

@@ -3,7 +3,6 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-import { sendWelcomeEmail } from '@/lib/resend';
 
 export async function approveMember(memberId: string) {
   const supabase = await createAdminClient();
@@ -60,19 +59,6 @@ export async function approveMember(memberId: string) {
     title: 'Membership Activated!',
     body: `Welcome to BUPEXSA USA! Your Membership ID is ${membershipId}. You now have full access to the portal.`
   });
-
-  // Send Welcome/Approval Email
-  try {
-    await sendWelcomeEmail({
-      email: member.email,
-      fullName: member.full_name,
-      memberId: membershipId,
-      graduationYear: member.graduation_year,
-      batch: member.batch,
-    });
-  } catch (err) {
-    console.error('Failed to send approval email:', err);
-  }
 
   revalidatePath('/admin/members');
   revalidatePath(`/admin/members/${memberId}`);
