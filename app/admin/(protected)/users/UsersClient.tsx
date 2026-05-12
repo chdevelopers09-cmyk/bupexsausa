@@ -1,4 +1,5 @@
 'use client';
+// Version: 1.0.1 - Force refresh for Password Generator UI
 
 import { useState } from 'react';
 import { Search, ShieldCheck, User, XCircle, Settings, Edit2, Trash2, CheckCircle2, AlertCircle, X } from 'lucide-react';
