@@ -2,8 +2,13 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
 export async function proxy(request: NextRequest) {
-  const { response } = await updateSession(request)
-  return response
+  try {
+    const { response } = await updateSession(request)
+    return response
+  } catch (e) {
+    console.error('Interception Error:', e)
+    return NextResponse.next()
+  }
 }
 
 export const config = {
