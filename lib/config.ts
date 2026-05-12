@@ -23,6 +23,17 @@ export const SITE_CONFIG = {
     return 'https://www.bupexsausa.org';
   },
 
+  // Backward Compatibility Fields (needed by Footer/Contact forms)
+  email: 'bupexsausa25@gmail.com',
+  phone: '+1 (404) 555-0123',
+  address: 'P.O. Box 12345, Atlanta, GA 30301',
+  socialLinks: {
+    facebook: 'https://facebook.com/bupexsausa',
+    twitter: 'https://twitter.com/bupexsausa',
+    instagram: 'https://instagram.com/bupexsausa',
+    youtube: 'https://youtube.com/@bupexsausa',
+  },
+
   // Auth Constants
   auth: {
     loginPath: '/login',
@@ -32,7 +43,7 @@ export const SITE_CONFIG = {
     adminRedirect: '/admin',
   },
 
-  // Contact
+  // Contact (Structured)
   contact: {
     email: 'bupexsausa25@gmail.com',
     phone: '+1 (404) 555-0123',

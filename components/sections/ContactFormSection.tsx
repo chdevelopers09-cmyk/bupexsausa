@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle2, ChevronDown } from 'lucide-react';
-import { SITE_CONFIG } from '@/lib/mock-data';
+import { SITE_CONFIG } from '@/lib/config';
 
 interface ContactFormSectionProps {
   heading?: string;

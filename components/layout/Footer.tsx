@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Globe, Camera, X, Play, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
-import { SITE_CONFIG } from '@/lib/mock-data';
+import { SITE_CONFIG } from '@/lib/config';
 import { createAdminClient } from '@/lib/supabase/admin';
 
 
