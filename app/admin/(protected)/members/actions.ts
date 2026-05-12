@@ -31,7 +31,8 @@ export async function approveMember(memberId: string) {
 
   const nextSerial = (count || 0) + 1;
   const paddedSerial = String(nextSerial).padStart(4, '0');
-  const membershipId = `BX-${member.graduation_year || new Date().getFullYear()}-${paddedSerial}`;
+  const stateCode = member.us_state?.substring(0, 2).toUpperCase() || 'XX';
+  const membershipId = `BUPEXSA-${new Date().getFullYear()}-${stateCode}-${paddedSerial}`;
 
   // 3. Calculate Expiry (1 year from today)
   const expiryDate = new Date();
@@ -51,6 +52,14 @@ export async function approveMember(memberId: string) {
   if (updateError) {
     return { error: updateError.message };
   }
+
+  // 5. Create Notification
+  await supabase.from('notifications').insert({
+    member_id: memberId,
+    type: 'SUCCESS',
+    title: 'Membership Activated!',
+    body: `Welcome to BUPEXSA USA! Your Membership ID is ${membershipId}. You now have full access to the portal.`
+  });
 
   // Send Welcome/Approval Email
   try {
@@ -170,6 +179,21 @@ export async function updatePaymentDetails(paymentId: string, details: any, memb
   if (error) return { error: error.message };
 
   revalidatePath(`/admin/members/${memberId}`);
+  revalidatePath('/admin/payments');
+  
+  return { success: true };
+}
+
+export async function createPaymentRecord(details: any) {
+  const supabase = await createAdminClient();
+  
+  const { error } = await supabase
+    .from('payments')
+    .insert(details);
+
+  if (error) return { error: error.message };
+
+  revalidatePath(`/admin/members/${details.member_id}`);
   revalidatePath('/admin/payments');
   
   return { success: true };

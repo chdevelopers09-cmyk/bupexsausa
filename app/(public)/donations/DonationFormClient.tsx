@@ -13,6 +13,8 @@ const PAYMENT_METHODS = [
   { id: 'cashapp', label: 'CashApp', icon: Smartphone, desc: 'Mobile payment — Admin verified (1-2 days)' },
 ];
 
+import { trackDonation } from './actions';
+
 export default function DonationFormClient() {
   const [amount, setAmount] = useState<number | ''>('');
   const [customAmount, setCustomAmount] = useState('');
@@ -43,11 +45,22 @@ export default function DonationFormClient() {
     setLoading(true);
     setError('');
 
-    // Simulate API call
-    await new Promise(r => setTimeout(r, 1500));
+    const res = await trackDonation({
+      amount: Number(finalAmount),
+      email,
+      name: anonymous ? 'Anonymous' : name,
+      method,
+      message,
+      anonymous
+    });
 
-    setSubmitted(true);
-    setLoading(false);
+    if (res.error) {
+      setError(res.error);
+      setLoading(false);
+    } else {
+      setSubmitted(true);
+      setLoading(false);
+    }
   };
 
   if (submitted) {

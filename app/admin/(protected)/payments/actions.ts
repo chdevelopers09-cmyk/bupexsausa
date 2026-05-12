@@ -2,6 +2,7 @@
 
 import { createAdminClient } from '@/lib/supabase/admin';
 import { revalidatePath } from 'next/cache';
+import { approveMember } from '../members/actions';
 
 export async function approvePayment(paymentId: string, memberId: string) {
   const supabase = await createAdminClient();
@@ -14,28 +15,45 @@ export async function approvePayment(paymentId: string, memberId: string) {
 
   if (pError) return { error: pError.message };
 
-  // 2. Fetch current member to check expiry
+  // 2. Fetch current member to check status
   const { data: member } = await supabase
     .from('members')
-    .select('expiry_date, status')
+    .select('status, membership_id')
     .eq('id', memberId)
     .single();
 
   if (member) {
-    // 3. Update Member Status and Expiry
-    const newExpiry = new Date(member.expiry_date || new Date());
-    newExpiry.setFullYear(newExpiry.getFullYear() + 1);
+    if (member.status === 'PENDING' || !member.membership_id) {
+      // Use existing approveMember logic to handle ID generation and emails
+      await approveMember(memberId);
+    } else {
+      // Existing active member - just update expiry (renewal)
+      const { data: memberData } = await supabase
+        .from('members')
+        .select('expiry_date')
+        .eq('id', memberId)
+        .single();
+        
+      const newExpiry = new Date(memberData?.expiry_date || new Date());
+      newExpiry.setFullYear(newExpiry.getFullYear() + 1);
 
-    const { error: mError } = await supabase
-      .from('members')
-      .update({ 
-        status: 'ACTIVE',
-        expiry_date: newExpiry.toISOString()
-      })
-      .eq('id', memberId);
-      
-    if (mError) return { error: mError.message };
+      await supabase
+        .from('members')
+        .update({ 
+          status: 'ACTIVE',
+          expiry_date: newExpiry.toISOString()
+        })
+        .eq('id', memberId);
+    }
   }
+
+  // 3. Create Notification for the member
+  await supabase.from('notifications').insert({
+    member_id: memberId,
+    type: 'PAYMENT',
+    title: 'Payment Approved',
+    body: `Your payment has been verified. Thank you for your support of BUPEXSA USA.`
+  });
 
   revalidatePath('/admin/payments');
   revalidatePath(`/admin/members/${memberId}`);

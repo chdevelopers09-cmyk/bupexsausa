@@ -31,7 +31,9 @@ export default async function NewUserPage() {
                        userEmail.includes('usman') ||
                        userEmail.includes('aims') ||
                        profile?.role === 'SUPERADMIN' ||
+                       profile?.role === 'admin' ||
                        (user.app_metadata as any)?.role === 'superadmin' ||
+                       (user.app_metadata as any)?.role === 'admin' ||
                        process.env.NODE_ENV === 'development'; // Bypass for development
   
   if (!isSuperAdmin) {

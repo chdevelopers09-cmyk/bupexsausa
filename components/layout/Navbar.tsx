@@ -71,6 +71,7 @@ export default function Navbar() {
                 src="/bupexsausa.png" 
                 alt="BUPEXSA USA Logo" 
                 fill
+                sizes="(max-width: 768px) 56px, 64px"
                 className="object-contain p-1"
                 priority
               />

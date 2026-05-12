@@ -21,6 +21,8 @@ export default async function AdminDashboard() {
     totalMembers: 0,
     activeMembers: 0,
     revenueYTD: 0,
+    membershipRevenue: 0,
+    donationRevenue: 0,
     pendingApprovals: 0
   };
   let recentMembers: any[] = [];
@@ -39,7 +41,7 @@ export default async function AdminDashboard() {
     const supabase = await createAdminClient();
 
     // Fetch metrics in parallel for speed
-    const [totalRes, activeRes, pendingRes, revenueRes, recentRes] = await Promise.all([
+    const [totalRes, activeRes, pendingRes, membershipRevenueRes, donationRevenueRes, recentRes] = await Promise.all([
       supabase.from('members').select('*', { count: 'exact', head: true })
         .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
         .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`),
@@ -55,6 +57,7 @@ export default async function AdminDashboard() {
         .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`),
         
       supabase.from('payments').select('amount').eq('status', 'COMPLETED').eq('type', 'MEMBERSHIP'),
+      supabase.from('payments').select('amount').eq('status', 'COMPLETED').eq('type', 'DONATION'),
       
       supabase.from('members').select('*')
         .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
@@ -63,15 +66,21 @@ export default async function AdminDashboard() {
         .limit(5)
     ]);
 
+    const membershipRevenue = membershipRevenueRes.data?.reduce((sum: number, p: any) => sum + Number(p.amount), 0) || 0;
+    const donationRevenue = donationRevenueRes.data?.reduce((sum: number, p: any) => sum + Number(p.amount), 0) || 0;
+    const totalRevenue = membershipRevenue + donationRevenue;
+
     stats = {
       totalMembers: totalRes.count || 0,
       activeMembers: activeRes.count || 0,
-      revenueYTD: revenueRes.data?.reduce((sum: number, p: any) => sum + Number(p.amount), 0) || 0,
+      revenueYTD: totalRevenue,
+      membershipRevenue: membershipRevenue,
+      donationRevenue: donationRevenue,
       pendingApprovals: pendingRes.count || 0
     };
     recentMembers = recentRes.data || [];
 
-    if (totalRes.error || activeRes.error || pendingRes.error || revenueRes.error || recentRes.error) {
+    if (totalRes.error || activeRes.error || pendingRes.error || membershipRevenueRes.error || donationRevenueRes.error || recentRes.error) {
        console.error("Database error detected in Dashboard");
     }
 
@@ -79,6 +88,9 @@ export default async function AdminDashboard() {
     console.error('Failed to load Admin Dashboard:', err);
     errorState = err.message || 'Server environment configuration error';
   }
+
+  const revenueTarget = 50000; // More realistic annual target for starting associations
+  const progressPercent = Math.min((stats.revenueYTD / revenueTarget) * 100, 100);
 
   return (
     <div className="space-y-10">
@@ -104,7 +116,7 @@ export default async function AdminDashboard() {
            color="blue"
          />
          <MetricCard
-           title="Active Subscriptions"
+           title="Active Members"
            value={stats.activeMembers}
            change="Live"
            isPositive={true}
@@ -112,17 +124,17 @@ export default async function AdminDashboard() {
            color="purple"
          />
          <MetricCard
-           title="Revenue (YTD)"
+           title="Total Revenue"
            value={`$${stats.revenueYTD.toLocaleString()}`}
-           change="Verified"
+           change="Combined"
            isPositive={true}
            icon={DollarSign}
            color="green"
          />
          <MetricCard
-           title="Pending Approvals"
+           title="Pending Actions"
            value={stats.pendingApprovals}
-           change="Requires Action"
+           change="Members"
            isPositive={null}
            icon={UserCheck}
            color="orange"
@@ -155,7 +167,7 @@ export default async function AdminDashboard() {
                               <span className="font-bold text-slate-900 text-sm">{user.full_name}</span>
                               <p className="text-[10px] text-slate-400 mt-0.5">{user.email}</p>
                            </td>
-                           <td className="px-6 py-4 text-sm text-slate-600 font-medium">{user.graduation_year || 'N/A'}</td>
+                           <td className="px-6 py-4 text-sm text-slate-600 font-medium">{user.batch || user.graduation_year || 'N/A'}</td>
                            <td className="px-6 py-4 text-sm text-slate-600 font-medium">{user.us_state}</td>
                            <td className="px-6 py-4">
                               <span className={cn(
@@ -179,25 +191,34 @@ export default async function AdminDashboard() {
 
          {/* Right Sidebar: Recent Payments & Alerts */}
          <div className="space-y-8 flex flex-col">
-            <div className="bg-[#0F172A] rounded-3xl p-8 text-white relative overflow-hidden flex-shrink-0">
+            <div className="bg-[#0F172A] rounded-3xl p-8 text-white relative overflow-hidden flex-shrink-0 shadow-2xl">
                <div className="absolute -top-10 -right-10 h-40 w-40 bg-primary/20 rounded-full blur-3xl"></div>
                <h3 className="text-xl font-bold mb-6">Financial Pulse</h3>
                <div className="space-y-6">
-                  <div>
-                     <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Dues Collected (YTD)</p>
-                     <p className="text-3xl font-black leading-none">${stats.revenueYTD.toLocaleString()}</p>
-                     <div className="flex items-center gap-1.5 text-green-400 text-xs font-bold mt-2">
-                        <TrendingUp className="h-3 w-3" />
-                        <span>Live verified revenue</span>
-                     </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                       <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest mb-1">Dues</p>
+                       <p className="text-xl font-black">${(stats as any).membershipRevenue.toLocaleString()}</p>
+                    </div>
+                    <div>
+                       <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest mb-1">Donations</p>
+                       <p className="text-xl font-black">${(stats as any).donationRevenue.toLocaleString()}</p>
+                    </div>
                   </div>
                   <div className="h-px bg-slate-800"></div>
-                  <div className="flex items-center justify-between">
-                     <span className="text-sm text-slate-400">Target for 2026</span>
-                     <span className="text-sm font-bold">$100,000</span>
+                  <div>
+                     <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest mb-1">Total Collections</p>
+                     <p className="text-4xl font-black leading-none">${stats.revenueYTD.toLocaleString()}</p>
+                  </div>
+                  <div className="flex items-center justify-between pt-2">
+                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Progress to Target</span>
+                     <span className="text-xs font-bold">${revenueTarget.toLocaleString()}</span>
                   </div>
                   <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                     <div className={cn("bg-primary h-full transition-all duration-1000")} style={{ width: `${Math.min((stats.revenueYTD / 100000) * 100, 100)}%` }} />
+                     <div 
+                        className="bg-primary h-full transition-all duration-1000" 
+                        style={{ width: `${progressPercent}%` }} 
+                     />
                   </div>
                </div>
             </div>

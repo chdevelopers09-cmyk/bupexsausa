@@ -34,7 +34,9 @@ export default async function UserManagementPage() {
                        userEmail === 'emidev7@gmail.com' ||
                        userEmail.endsWith('@rubilian.com') || 
                        profile?.role === 'SUPERADMIN' ||
-                       (user.app_metadata as any)?.role === 'superadmin';
+                       profile?.role === 'admin' || // Allow all admins to access
+                       (user.app_metadata as any)?.role === 'superadmin' ||
+                       (user.app_metadata as any)?.role === 'admin';
   
   if (!isSuperAdmin) {
     redirect('/admin');

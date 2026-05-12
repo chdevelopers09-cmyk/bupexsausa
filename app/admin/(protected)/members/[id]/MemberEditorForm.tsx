@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Save, CheckCircle2, AlertCircle } from 'lucide-react';
-import { updateMemberDetails, updatePaymentDetails } from '../actions';
+import { updateMemberDetails, updatePaymentDetails, createPaymentRecord } from '../actions';
 
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -19,9 +19,9 @@ export default function MemberEditorForm({ member, latestPayment }: { member: an
     status: member.status,
     role: member.role,
     // Payment fields
-    payment_method: latestPayment?.method?.toLowerCase() || '',
-    payment_amount: latestPayment?.amount?.toString() || '',
-    payment_status: latestPayment?.status || '',
+    payment_method: latestPayment?.method?.toLowerCase() || 'card',
+    payment_amount: latestPayment?.amount?.toString() || '0',
+    payment_status: latestPayment?.status || 'PENDING_VERIFICATION',
   });
 
   const [loading, setLoading] = useState(false);
@@ -48,13 +48,22 @@ export default function MemberEditorForm({ member, latestPayment }: { member: an
 
       if (result.error) throw new Error(result.error);
 
-      // Update payment if exists
+      // Update or create payment
       if (latestPayment) {
         await updatePaymentDetails(latestPayment.id, {
           method: formData.payment_method.toUpperCase(),
           amount: Number(formData.payment_amount),
           status: formData.payment_status,
         }, member.id);
+      } else if (formData.payment_amount && Number(formData.payment_amount) > 0) {
+        // Create new payment record if one didn't exist but admin entered an amount
+        await createPaymentRecord({
+          member_id: member.id,
+          type: 'MEMBERSHIP',
+          amount: Number(formData.payment_amount),
+          method: formData.payment_method.toUpperCase(),
+          status: formData.payment_status,
+        });
       }
       
       setMsg({ type: 'success', text: 'Member and payment details updated successfully.' });
@@ -168,48 +177,46 @@ export default function MemberEditorForm({ member, latestPayment }: { member: an
           </select>
         </div>
 
-        {latestPayment && (
-          <div className="md:col-span-2 mt-6 pt-6 border-t border-slate-100">
-            <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Payment & Registration Details</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Payment Method</label>
-                <select
-                  value={formData.payment_method}
-                  onChange={e => setFormData({ ...formData, payment_method: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none"
-                >
-                  <option value="card">Credit Card (Stripe)</option>
-                  <option value="paypal">PayPal</option>
-                  <option value="cashapp">CashApp</option>
-                  <option value="zelle">Zelle</option>
-                  <option value="cash">Cash / Offline</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Amount Paid ($)</label>
-                <input
-                  type="number"
-                  value={formData.payment_amount}
-                  onChange={e => setFormData({ ...formData, payment_amount: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Payment Status</label>
-                <select
-                  value={formData.payment_status}
-                  onChange={e => setFormData({ ...formData, payment_status: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none"
-                >
-                  <option value="COMPLETED">Completed</option>
-                  <option value="PENDING_VERIFICATION">Pending Verification</option>
-                  <option value="FAILED">Failed</option>
-                </select>
-              </div>
+        <div className="md:col-span-2 mt-6 pt-6 border-t border-slate-100">
+          <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Payment & Registration Details</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Payment Method</label>
+              <select
+                value={formData.payment_method}
+                onChange={e => setFormData({ ...formData, payment_method: e.target.value })}
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none"
+              >
+                <option value="card">Credit Card (Stripe)</option>
+                <option value="paypal">PayPal</option>
+                <option value="cashapp">CashApp</option>
+                <option value="zelle">Zelle</option>
+                <option value="cash">Cash / Offline</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Amount Paid ($)</label>
+              <input
+                type="number"
+                value={formData.payment_amount}
+                onChange={e => setFormData({ ...formData, payment_amount: e.target.value })}
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Payment Status</label>
+              <select
+                value={formData.payment_status}
+                onChange={e => setFormData({ ...formData, payment_status: e.target.value })}
+                className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none"
+              >
+                <option value="COMPLETED">Completed</option>
+                <option value="PENDING_VERIFICATION">Pending Verification</option>
+                <option value="FAILED">Failed</option>
+              </select>
             </div>
           </div>
-        )}
+        </div>
       </div>
 
       <div className="pt-6 mt-6 border-t border-slate-100 flex justify-end">

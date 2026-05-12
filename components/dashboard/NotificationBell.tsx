@@ -127,6 +127,8 @@ export default function NotificationBell({ userId }: { userId: string }) {
       case 'PAYMENT': return <CreditCard className="h-4 w-4 text-green-600" />;
       case 'EVENT': return <CalendarIcon className="h-4 w-4 text-primary" />;
       case 'ALERT': return <AlertCircle className="h-4 w-4 text-orange-600" />;
+      case 'SUCCESS': return <Check className="h-4 w-4 text-green-600" />;
+      case 'URGENT': return <AlertCircle className="h-4 w-4 text-red-600" />;
       default: return <Info className="h-4 w-4 text-accent" />;
     }
   };
@@ -136,6 +138,8 @@ export default function NotificationBell({ userId }: { userId: string }) {
       case 'PAYMENT': return "bg-green-50";
       case 'EVENT': return "bg-purple-50";
       case 'ALERT': return "bg-orange-50";
+      case 'SUCCESS': return "bg-green-50";
+      case 'URGENT': return "bg-red-50";
       default: return "bg-blue-50";
     }
   };

@@ -14,8 +14,8 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { signup, signInWithGoogle } from '../actions';
 
 export default function RegisterClient({ settings = {} }: { settings?: any }) {
-  const membershipFee = parseFloat(settings.membership_fee || '100');
-  const registrationFee = 50; // Fixed registration fee
+  const membershipFee = parseFloat(settings.membership_fee || SITE_CONFIG.annualFee.toString());
+  const registrationFee = SITE_CONFIG.registrationFee; // Use from config
   const totalDue = membershipFee + registrationFee;
 
   const gYears = GRADUATION_YEARS();
