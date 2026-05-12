@@ -11,14 +11,21 @@ import {
   ArrowRight,
   UserCheck,
   Zap,
-  DollarSign
+  DollarSign,
+  AlertCircle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default async function AdminDashboard() {
-  const supabase = await createAdminClient();
+  let stats = {
+    totalMembers: 0,
+    activeMembers: 0,
+    revenueYTD: 0,
+    pendingApprovals: 0
+  };
+  let recentMembers: any[] = [];
+  let errorState = null;
 
-  // Fetch real-time metrics
   const adminRoles = ['admin', 'superadmin', 'portal_manager', 'web_manager', 'ADMIN', 'SUPERADMIN', 'PORTAL_MANAGER', 'WEB_MANAGER'];
   const superAdminEmails = [
     'chdevelopers09@gmail.com',
@@ -28,55 +35,59 @@ export default async function AdminDashboard() {
     'bupexsausa25@gmail.com'
   ];
 
-  // Fetch real-time metrics for ALUMNI only
-  const { count: totalMembers } = await supabase
-    .from('members')
-    .select('*', { count: 'exact', head: true })
-    .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
-    .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`);
+  try {
+    const supabase = await createAdminClient();
 
-  const { count: activeMembers } = await supabase
-    .from('members')
-    .select('*', { count: 'exact', head: true })
-    .eq('status', 'ACTIVE')
-    .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
-    .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`);
+    // Fetch metrics in parallel for speed
+    const [totalRes, activeRes, pendingRes, revenueRes, recentRes] = await Promise.all([
+      supabase.from('members').select('*', { count: 'exact', head: true })
+        .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
+        .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`),
+        
+      supabase.from('members').select('*', { count: 'exact', head: true })
+        .eq('status', 'ACTIVE')
+        .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
+        .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`),
+        
+      supabase.from('members').select('*', { count: 'exact', head: true })
+        .eq('status', 'PENDING')
+        .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
+        .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`),
+        
+      supabase.from('payments').select('amount').eq('status', 'COMPLETED').eq('type', 'MEMBERSHIP'),
+      
+      supabase.from('members').select('*')
+        .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
+        .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`)
+        .order('created_at', { ascending: false })
+        .limit(5)
+    ]);
 
-  const { count: pendingApprovals } = await supabase
-    .from('members')
-    .select('*', { count: 'exact', head: true })
-    .eq('status', 'PENDING')
-    .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
-    .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`);
-  
-  const { data: revenueData } = await supabase
-    .from('payments')
-    .select('amount')
-    .eq('status', 'COMPLETED')
-    .eq('type', 'MEMBERSHIP');
+    stats = {
+      totalMembers: totalRes.count || 0,
+      activeMembers: activeRes.count || 0,
+      revenueYTD: revenueRes.data?.reduce((sum: number, p: any) => sum + Number(p.amount), 0) || 0,
+      pendingApprovals: pendingRes.count || 0
+    };
+    recentMembers = recentRes.data || [];
 
-  const revenueYTD = revenueData?.reduce((sum, p) => sum + Number(p.amount), 0) || 0;
+    if (totalRes.error || activeRes.error || pendingRes.error || revenueRes.error || recentRes.error) {
+       console.error("Database error detected in Dashboard");
+    }
 
-  const { data: recentMembers } = await supabase
-    .from('members')
-    .select('*')
-    .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
-    .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`)
-    .order('created_at', { ascending: false })
-    .limit(5);
-
-  const stats = {
-    totalMembers: totalMembers || 0,
-    activeMembers: activeMembers || 0,
-    revenueYTD: revenueYTD,
-    pendingApprovals: pendingApprovals || 0
-  };
+  } catch (err: any) {
+    console.error('Failed to load Admin Dashboard:', err);
+    errorState = err.message || 'Server environment configuration error';
+  }
 
   return (
     <div className="space-y-10">
       <div className="flex items-center justify-between">
          <h1 className="text-3xl font-black text-slate-900">Platform Overview</h1>
          <div className="flex items-center gap-3">
+            {errorState && <span className="text-xs font-bold text-red-500 bg-red-50 px-3 py-1 rounded-full animate-pulse flex items-center gap-2">
+              <AlertCircle className="h-3 w-3" /> Error: {errorState}
+            </span>}
             <span className="text-sm font-medium text-slate-500">Real-time database sync</span>
             <button className="btn-primary text-xs py-2 px-4 shadow-none">Refresh Data</button>
          </div>

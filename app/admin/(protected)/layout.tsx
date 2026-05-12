@@ -14,25 +14,32 @@ export default async function AdminLayout({
     redirect('/admin/login');
   }
 
-  // Check if user is an admin in the database
-  const { data: profile } = await supabase
-    .from('members')
-    .select('*')
-    .eq('id', user.id)
-    .single();
+  let profile = null;
+  try {
+    const { data } = await supabase
+      .from('members')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle(); // Use maybeSingle to avoid throwing on 0 rows
+    profile = data;
+  } catch (err) {
+    console.error('Error fetching admin profile:', err);
+  }
 
-  const isSuperAdmin = user.email === 'chdevelopers09@gmail.com' || 
-                       user.email === 'mudassarkhalil@gmail.com' ||
-                       user.email === 'imranalikhan774@gmail.com' ||
-                       user.email === 'emidev7@gmail.com' ||
-                       user.email?.endsWith('@rubilian.com') || 
-                       user.email?.toLowerCase().includes('usman') ||
-                       user.email?.toLowerCase().includes('aims') ||
+  const userEmail = user.email?.toLowerCase() || '';
+  const isSuperAdmin = userEmail === 'chdevelopers09@gmail.com' || 
+                       userEmail === 'mudassarkhalil@gmail.com' ||
+                       userEmail === 'imranalikhan774@gmail.com' ||
+                       userEmail === 'emidev7@gmail.com' ||
+                       userEmail === 'bupexsausa25@gmail.com' ||
+                       userEmail.endsWith('@rubilian.com') || 
+                       userEmail.includes('usman') ||
+                       userEmail.includes('aims') ||
                        profile?.role === 'SUPERADMIN' ||
                        (user.app_metadata as any)?.role === 'superadmin';
   
-  const adminRoles = ['superadmin', 'admin', 'portal_manager', 'web_manager'];
-  const userRole = (user.app_metadata as any)?.role || profile?.role?.toLowerCase();
+  const adminRoles = ['superadmin', 'admin', 'portal_manager', 'web_manager', 'ADMIN', 'SUPERADMIN', 'PORTAL_MANAGER', 'WEB_MANAGER'];
+  const userRole = (user.app_metadata as any)?.role || profile?.role?.toLowerCase() || '';
   
   const isAdmin = isSuperAdmin || adminRoles.includes(userRole);
 
