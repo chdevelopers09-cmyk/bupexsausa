@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 import { createClient } from '@/lib/supabase/server'
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { response, supabase } = await updateSession(request)
 
   const {
@@ -32,18 +32,21 @@ export async function proxy(request: NextRequest) {
     }
 
     if (!user) {
-      const url = new URL('/login', request.url)
+      const loginPath = request.nextUrl.pathname.startsWith('/admin') ? '/admin/login' : '/login';
+      const url = new URL(loginPath, request.url)
       url.searchParams.set('next', request.nextUrl.pathname)
       return NextResponse.redirect(url)
     }
     
     const isAdmin = user.app_metadata?.role === 'admin' || 
+                    user.app_metadata?.role === 'superadmin' ||
                     user.email === 'chdevelopers09@gmail.com' ||
-                    user.email?.includes('chdevelopers') ||
-                    user.email?.includes('aims') ||
-                    user.email?.includes('tech') ||
-                    user.email?.includes('cmyk') ||
-                    user.email?.endsWith('@rubilian.com');
+                    user.email === 'mudassarkhalil@gmail.com' ||
+                    user.email === 'imranalikhan774@gmail.com' ||
+                    user.email === 'emidev7@gmail.com' ||
+                    user.email?.endsWith('@rubilian.com') ||
+                    user.email?.includes('usman') ||
+                    user.email?.includes('aims');
     
     if (!isAdmin) {
        return NextResponse.redirect(new URL('/dashboard', request.url))
