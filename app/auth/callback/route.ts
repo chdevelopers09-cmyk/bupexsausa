@@ -10,10 +10,11 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(new URL(next, requestUrl.origin));
+      const { SITE_CONFIG } = await import('@/lib/mock-data');
+      return NextResponse.redirect(new URL(next, SITE_CONFIG.url));
     }
   }
 
-  // Return to login with error message
-  return NextResponse.redirect(new URL('/login?error=auth-callback-failed', requestUrl.origin));
+  const { SITE_CONFIG } = await import('@/lib/mock-data');
+  return NextResponse.redirect(new URL('/login?error=auth-callback-failed', SITE_CONFIG.url));
 }
