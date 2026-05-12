@@ -123,15 +123,28 @@ export default function UserManagementClient() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider ml-1">Account Password</label>
+                  <div className="flex items-center justify-between ml-1">
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-wider">Account Password</label>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+                        const pass = Array.from({length: 12}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+                        setFormData({...formData, password: pass});
+                      }}
+                      className="text-[9px] font-black text-primary uppercase tracking-widest hover:underline"
+                    >
+                      Generate Strong
+                    </button>
+                  </div>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-300" />
                     <input
-                      type="password"
+                      type="text"
                       required
                       value={formData.password}
                       onChange={e => setFormData({ ...formData, password: e.target.value })}
-                      className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-slate-50 border border-slate-100 focus:bg-white focus:border-primary outline-none transition-all font-bold text-sm text-slate-900"
+                      className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-slate-50 border border-slate-100 focus:bg-white focus:border-primary outline-none transition-all font-bold text-sm text-slate-900 font-mono"
                       placeholder="••••••••••••"
                       minLength={8}
                     />

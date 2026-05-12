@@ -238,12 +238,25 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Reset Password (Optional)</label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest">Reset Password (Optional)</label>
+                  <button 
+                    type="button" 
+                    onClick={() => {
+                      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+                      const pass = Array.from({length: 12}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+                      setEditingUser({...editingUser, password: pass});
+                    }}
+                    className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline"
+                  >
+                    Generate Strong Password
+                  </button>
+                </div>
                 <input
                   type="text"
                   value={editingUser.password || ''}
                   onChange={e => setEditingUser({...editingUser, password: e.target.value})}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none"
+                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none font-mono"
                   placeholder="Enter new password (min 8 chars)..."
                   minLength={8}
                 />
