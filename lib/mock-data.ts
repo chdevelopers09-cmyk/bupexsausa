@@ -385,49 +385,5 @@ export const MOCK_GALLERY = [
   { id: '21', category: 'Social', alt: 'Alumni gathering at PCC Dallas', path: '/images/gallery/community-1.jpg' },
 ];
 
-export const SITE_CONFIG = {
-  name: 'BUPEXSA USA',
-  tagline: 'Connecting PCSS Buea Alumni Across America',
-  description: 'BUPEXSA USA is the official alumni association of Presbyterian Comprehensive Secondary School Buea, uniting graduates residing in the United States.',
-  url: (process.env.NEXT_PUBLIC_SITE_URL?.startsWith('http') ? process.env.NEXT_PUBLIC_SITE_URL : `https://${process.env.NEXT_PUBLIC_SITE_URL || 'bupexsausa.org'}`).replace('https://https://', 'https://'),
-  email: 'bupexsausa25@gmail.com',
-  phone: '+1 (404) 555-0123',
-  address: 'P.O. Box 12345, Atlanta, GA 30301',
-  membershipFee: 150,
-  annualFee: 100,
-  registrationFee: 50,
-  zelleHandle: 'bupexsausa25@gmail.com',
-  cashappHandle: '$BUPEXSAUSA',
-  socialLinks: {
-    facebook: 'https://facebook.com/bupexsausa',
-    instagram: 'https://instagram.com/bupexsausa',
-    twitter: 'https://twitter.com/bupexsausa',
-    youtube: 'https://youtube.com/@bupexsausa',
-    whatsapp: 'https://wa.me/14045550123',
-  },
-  // Payment method mock handles & links
-  payments: {
-    stripe: {
-      checkoutUrl: 'https://checkout.stripe.com/pay/cs_test_bupexsausa_100',
-      publishableKey: 'pk_test_51BupexsaUSA000000000000000',
-    },
-    paypal: {
-      email: 'bupexsausa25@gmail.com',
-      clientId: 'AaBbCcDdEeFf-BUPEXSAUSA-MOCK-PAYPAL',
-      checkoutUrl: 'https://www.paypal.com/paypalme/bupexsausa/100',
-    },
-    cashapp: {
-      cashtag: '$BUPEXSAUSA',
-      displayName: 'BUPEXSA USA Treasury',
-    },
-    zelle: {
-      email: 'bupexsausa25@gmail.com',
-      phone: '+1 (404) 555-0123',
-      recipientName: 'BUPEXSA USA',
-    },
-    applePay: {
-      merchantId: 'merchant.org.bupexsausa.pay',
-      displayName: 'BUPEXSA USA',
-    },
-  },
-};
+// SITE_CONFIG has been moved to lib/config.ts for enterprise stabilization
+

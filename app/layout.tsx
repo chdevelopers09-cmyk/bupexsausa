@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { SITE_CONFIG } from "@/lib/mock-data";
-
-let safeMetadataBase: URL | undefined;
-try {
-  safeMetadataBase = new URL(SITE_CONFIG.url || 'https://bupexsausa.org');
-} catch (e) {
-  safeMetadataBase = undefined;
-}
+import { SITE_CONFIG, getAbsoluteUrl } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: {
@@ -15,7 +8,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
-  metadataBase: safeMetadataBase,
+  metadataBase: new URL(SITE_CONFIG.url),
 };
 
 export default function RootLayout({

@@ -6,7 +6,7 @@ import {
   ShieldCheck, AlertCircle, Users, Heart, ArrowRight,
   Smartphone, Mail, DollarSign, ExternalLink, Lock, Phone, Copy, Check
 } from 'lucide-react';
-import { SITE_CONFIG } from '@/lib/mock-data';
+import { SITE_CONFIG } from '@/lib/config';
 import { cn, formatCurrency, formatDateShort } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';

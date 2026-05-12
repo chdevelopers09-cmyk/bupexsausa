@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Heart, DollarSign, CreditCard, Smartphone, Building, CheckCircle2, ArrowRight, Copy, Check } from 'lucide-react';
-import { SITE_CONFIG } from '@/lib/mock-data';
+import { SITE_CONFIG } from '@/lib/config';
 
 const PRESET_AMOUNTS = [10, 25, 50, 100, 250];
 

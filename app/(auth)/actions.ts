@@ -156,9 +156,13 @@ export async function signup(formData: FormData) {
   }
 }
 
-export async function logout() {
+export async function logout(isAdmin: boolean = false) {
   const supabase = await createClient()
   await supabase.auth.signOut()
   revalidatePath('/', 'layout')
-  redirect('/')
+  if (isAdmin) {
+    redirect('/admin/login')
+  } else {
+    redirect('/login')
+  }
 }

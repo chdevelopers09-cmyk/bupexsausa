@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Mail, Lock, LogIn, ArrowLeft, CheckCircle, Eye, EyeOff, ArrowRight } from 'lucide-react';
-import { SITE_CONFIG } from '@/lib/mock-data';
+import { SITE_CONFIG } from '@/lib/config';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 

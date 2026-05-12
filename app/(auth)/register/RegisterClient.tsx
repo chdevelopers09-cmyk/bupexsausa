@@ -7,7 +7,7 @@ import {
   CheckCircle2, CreditCard, ShieldCheck, Check, Sparkles,
   DollarSign, Calendar, Info, Smartphone, X, ExternalLink, Image as ImageIcon
 } from 'lucide-react';
-import { SITE_CONFIG } from '@/lib/mock-data';
+import { SITE_CONFIG } from '@/lib/config';
 import { US_STATES, GRADUATION_YEARS } from '@/lib/utils';
 import { useState, useTransition } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';

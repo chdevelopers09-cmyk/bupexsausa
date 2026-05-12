@@ -18,7 +18,7 @@ import {
   UserPlus
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SITE_CONFIG } from '@/lib/mock-data';
+import { SITE_CONFIG } from '@/lib/config';
 
 interface SidebarProps {
   isSuperAdmin: boolean;

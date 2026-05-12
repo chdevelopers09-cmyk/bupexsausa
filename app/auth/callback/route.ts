@@ -10,11 +10,13 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      const { SITE_CONFIG } = await import('@/lib/mock-data');
-      return NextResponse.redirect(new URL(next, SITE_CONFIG.url));
+      const { SITE_CONFIG } = await import('@/lib/config');
+      // If we have a next param, use it. Otherwise go to dashboard or home.
+      const redirectPath = next || '/dashboard';
+      return NextResponse.redirect(new URL(redirectPath, SITE_CONFIG.url));
     }
   }
 
-  const { SITE_CONFIG } = await import('@/lib/mock-data');
+  const { SITE_CONFIG } = await import('@/lib/config');
   return NextResponse.redirect(new URL('/login?error=auth-callback-failed', SITE_CONFIG.url));
 }

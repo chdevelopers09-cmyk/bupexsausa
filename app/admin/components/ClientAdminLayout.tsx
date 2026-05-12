@@ -24,7 +24,7 @@ import {
   User as UserIcon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SITE_CONFIG } from '@/lib/mock-data';
+import { SITE_CONFIG } from '@/lib/config';
 import { createClient } from '@/lib/supabase/client';
 
 interface ClientAdminLayoutProps {
@@ -66,7 +66,7 @@ export default function ClientAdminLayout({ children, isSuperAdmin, profile, use
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.href = '/login';
+    window.location.href = '/admin/login';
   };
 
   const userInitials = profile?.full_name
