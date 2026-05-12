@@ -389,7 +389,7 @@ export const SITE_CONFIG = {
   name: 'BUPEXSA USA',
   tagline: 'Connecting PCSS Buea Alumni Across America',
   description: 'BUPEXSA USA is the official alumni association of Presbyterian Comprehensive Secondary School Buea, uniting graduates residing in the United States.',
-  url: process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://bupexsausa.org'),
+  url: (process.env.NEXT_PUBLIC_SITE_URL?.startsWith('http') ? process.env.NEXT_PUBLIC_SITE_URL : `https://${process.env.NEXT_PUBLIC_SITE_URL || 'bupexsausa.org'}`).replace('https://https://', 'https://'),
   email: 'bupexsausa25@gmail.com',
   phone: '+1 (404) 555-0123',
   address: 'P.O. Box 12345, Atlanta, GA 30301',
