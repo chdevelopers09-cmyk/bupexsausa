@@ -10,13 +10,22 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   try {
-    // 0. Safety Net: If user lands on home with a "code" (Supabase recovery/signup), 
-    // redirect to callback manually to ensure session is established.
+    // 0. Safety Net: Force-intercept any auth codes on the home page
     const code = request.nextUrl.searchParams.get('code');
-    if (code && pathname === '/') {
-      const callbackUrl = request.nextUrl.clone();
-      callbackUrl.pathname = '/auth/callback';
-      // Keep existing search params (code, next, etc)
+    const type = request.nextUrl.searchParams.get('type');
+    
+    if (code && (pathname === '/' || pathname === '')) {
+      console.log('Middleware: Intercepted auth code, redirecting to callback...');
+      const callbackUrl = new URL('/auth/callback', request.url);
+      callbackUrl.searchParams.set('code', code);
+      if (type) callbackUrl.searchParams.set('type', type);
+      // Ensure we preserve the "next" destination if it exists
+      const next = request.nextUrl.searchParams.get('next');
+      if (next) callbackUrl.searchParams.set('next', next);
+      else if (type === 'recovery' || pathname.includes('reset')) {
+        callbackUrl.searchParams.set('next', '/reset-password');
+      }
+      
       return NextResponse.redirect(callbackUrl);
     }
 

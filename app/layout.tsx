@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SITE_CONFIG, getAbsoluteUrl } from "@/lib/config";
+import AuthHandshake from "@/components/auth/AuthHandshake";
 
 export const metadata: Metadata = {
   title: {
@@ -19,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" style={{ scrollBehavior: 'smooth' }} suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
+        <AuthHandshake />
         {children}
       </body>
     </html>
