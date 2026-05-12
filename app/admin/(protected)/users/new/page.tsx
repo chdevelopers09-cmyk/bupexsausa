@@ -12,6 +12,10 @@ export default async function NewUserPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
+  if (!user) {
+    redirect('/admin/login');
+  }
+
   // Fetch profile to check role
   const { data: profile } = await supabase
     .from('members')

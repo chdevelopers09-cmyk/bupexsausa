@@ -44,7 +44,7 @@ export default function NotificationBell({ userId }: { userId: string }) {
         schema: 'public',
         table: 'notifications',
         filter: `member_id=eq.${userId}`
-      }, (payload) => {
+      }, (payload: any) => {
         setNotifications(prev => [payload.new, ...prev]);
       })
       .subscribe();

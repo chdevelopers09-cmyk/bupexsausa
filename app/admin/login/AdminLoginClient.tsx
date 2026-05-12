@@ -62,7 +62,7 @@ export default function AdminLoginClient() {
             <div className="space-y-2">
               <div className="flex items-center justify-between mb-1 px-1">
                 <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Security Key</label>
-                <Link href="/forgot-password" size="sm" className="text-[10px] text-primary font-black uppercase tracking-widest hover:underline transition-all">
+                <Link href="/forgot-password" className="text-[10px] text-primary font-black uppercase tracking-widest hover:underline transition-all">
                   Reset
                 </Link>
               </div>

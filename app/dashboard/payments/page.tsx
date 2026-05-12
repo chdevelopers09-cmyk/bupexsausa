@@ -132,7 +132,7 @@ function MembershipPaymentsContent() {
 
           // Fetch settings
           const { data: settingsData } = await supabase.from('site_settings').select('*');
-          const settingsObj = settingsData?.reduce((acc, s) => ({ ...acc, [s.key]: s.value }), {}) || {};
+          const settingsObj = settingsData?.reduce((acc: Record<string, any>, s: any) => ({ ...acc, [s.key]: s.value }), {}) || {};
           setSettings(settingsObj);
 
           // Fetch payments

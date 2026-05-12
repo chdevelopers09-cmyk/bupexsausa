@@ -548,7 +548,7 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                                 accept="image/*" 
                                 className="hidden"
                                 onChange={(e) => setProofFile(e.target.files?.[0] || null)}
-                                required={paymentMethod !== 'card'}
+                                required
                               />
                            </label>
                         </div>
@@ -617,7 +617,7 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                                 accept="image/*" 
                                 className="hidden"
                                 onChange={(e) => setProofFile(e.target.files?.[0] || null)}
-                                required={paymentMethod !== 'card'}
+                                required
                               />
                            </label>
                         </div>
@@ -672,7 +672,7 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                                 accept="image/*" 
                                 className="hidden"
                                 onChange={(e) => setProofFile(e.target.files?.[0] || null)}
-                                required={paymentMethod !== 'card'}
+                                required
                               />
                            </label>
                         </div>
