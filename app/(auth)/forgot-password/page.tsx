@@ -17,8 +17,9 @@ export default function ForgotPasswordPage() {
     setLoading(true);
     setError('');
 
+    const { SITE_CONFIG } = await import('@/lib/mock-data');
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+      redirectTo: `${SITE_CONFIG.url}/auth/callback?next=/reset-password`,
     });
 
     if (resetError) {
