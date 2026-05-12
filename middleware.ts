@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Protect admin routes
-  if (request.nextUrl.pathname.startsWith('/admin')) {
+  if (request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/admin/login')) {
     console.log(`[PROXY] Path: ${request.nextUrl.pathname} | Host: ${hostname} | User: ${user?.email} | IsDev: ${isDev}`);
     
     // DEVELOPMENT BYPASS: Allow all local/dev access
