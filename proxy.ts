@@ -1,56 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/session'
 export async function proxy(request: NextRequest) {
-  const { response, supabase } = await updateSession(request)
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  const hostname = request.nextUrl.hostname;
-  const isDev = process.env.NODE_ENV === 'development' || 
-                hostname === 'localhost' || 
-                hostname === '127.0.0.1' || 
-                hostname.startsWith('192.168.') || 
-                hostname.startsWith('10.') || 
-                hostname.startsWith('172.');
-
-  // Protect dashboard routes
-  if (request.nextUrl.pathname.startsWith('/dashboard') && !user) {
-    return NextResponse.redirect(new URL('/login', request.url))
-  }
-
-  // Protect admin routes
-  if (request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/admin/login')) {
-    console.log(`[PROXY] Path: ${request.nextUrl.pathname} | Host: ${hostname} | User: ${user?.email} | IsDev: ${isDev}`);
-    
-    // DEVELOPMENT BYPASS: Allow all local/dev access
-    if (isDev) {
-      return response;
-    }
-
-    if (!user) {
-      const loginPath = request.nextUrl.pathname.startsWith('/admin') ? '/admin/login' : '/login';
-      const url = new URL(loginPath, request.url)
-      url.searchParams.set('next', request.nextUrl.pathname)
-      return NextResponse.redirect(url)
-    }
-    
-    const isAdmin = user.app_metadata?.role === 'admin' || 
-                    user.app_metadata?.role === 'superadmin' ||
-                    user.email === 'chdevelopers09@gmail.com' ||
-                    user.email === 'mudassarkhalil@gmail.com' ||
-                    user.email === 'imranalikhan774@gmail.com' ||
-                    user.email === 'emidev7@gmail.com' ||
-                    user.email?.endsWith('@rubilian.com') ||
-                    user.email?.includes('usman') ||
-                    user.email?.includes('aims');
-    
-    if (!isAdmin) {
-       return NextResponse.redirect(new URL('/dashboard', request.url))
-    }
-  }
-
+  const { response } = await updateSession(request)
   return response
 }
 
