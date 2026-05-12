@@ -44,7 +44,7 @@
 
 ## 1. Project Overview
 
-BUPEXSA USA (Buea Presbyterian College Secondary School Alumni Association — USA Chapter) requires a full-featured, web-based alumni management platform that connects graduates, manages memberships, processes payments, promotes events, and enables online donations.
+BUPEXSA USA (Buea Presbyterian Comprehensive Secondary School Alumni Association — USA Chapter) requires a full-featured, web-based alumni management platform that connects graduates, manages memberships, processes payments, promotes events, and enables online donations.
 
 Version 2.2 corrects the customisation model for the Visual Builder's Section Library. In v2.1, admins could change a section's layout variant, column count, spacing, and container width — structural decisions that belong to the designer. In v2.2, **each library variant has a fixed design** (layout, structure, spacing, visual arrangement) that is set once by the developer and locked. Admins edit only the **content** inside that fixed design: text, images, and colors. This prevents admins from accidentally breaking the site's design system while still giving them full control over what the site says and shows.
 

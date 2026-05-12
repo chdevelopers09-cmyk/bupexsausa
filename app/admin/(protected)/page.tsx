@@ -19,9 +19,35 @@ export default async function AdminDashboard() {
   const supabase = await createAdminClient();
 
   // Fetch real-time metrics
-  const { count: totalMembers } = await supabase.from('members').select('*', { count: 'exact', head: true });
-  const { count: activeMembers } = await supabase.from('members').select('*', { count: 'exact', head: true }).eq('status', 'ACTIVE');
-  const { count: pendingApprovals } = await supabase.from('members').select('*', { count: 'exact', head: true }).eq('status', 'PENDING');
+  const adminRoles = ['admin', 'superadmin', 'portal_manager', 'web_manager', 'ADMIN', 'SUPERADMIN', 'PORTAL_MANAGER', 'WEB_MANAGER'];
+  const superAdminEmails = [
+    'chdevelopers09@gmail.com',
+    'mudassarkhalil@gmail.com',
+    'imranalikhan774@gmail.com',
+    'emidev7@gmail.com',
+    'bupexsausa25@gmail.com'
+  ];
+
+  // Fetch real-time metrics for ALUMNI only
+  const { count: totalMembers } = await supabase
+    .from('members')
+    .select('*', { count: 'exact', head: true })
+    .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
+    .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`);
+
+  const { count: activeMembers } = await supabase
+    .from('members')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'ACTIVE')
+    .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
+    .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`);
+
+  const { count: pendingApprovals } = await supabase
+    .from('members')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'PENDING')
+    .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
+    .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`);
   
   const { data: revenueData } = await supabase
     .from('payments')
@@ -34,6 +60,8 @@ export default async function AdminDashboard() {
   const { data: recentMembers } = await supabase
     .from('members')
     .select('*')
+    .not('role', 'in', `(${adminRoles.map(r => `"${r}"`).join(',')})`)
+    .not('email', 'in', `(${superAdminEmails.map(e => `"${e}"`).join(',')})`)
     .order('created_at', { ascending: false })
     .limit(5);
 

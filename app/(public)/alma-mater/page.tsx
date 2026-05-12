@@ -5,7 +5,7 @@ import TextBlockSection from '@/components/sections/TextBlockSection';
 
 export const metadata = {
   title: 'Our Alma Mater',
-  description: 'The history and spirit of Presbyterian College Secondary School (PCSS) Buea.',
+  description: 'The history and spirit of Presbyterian Comprehensive Secondary School (PCSS) Buea.',
 };
 
 export default function AlmaMaterPage() {

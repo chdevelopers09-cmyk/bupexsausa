@@ -8,11 +8,12 @@ import { usePathname } from 'next/navigation';
 interface MembershipExpiryPopupProps {
   memberName?: string;
   expiryDate?: string; // ISO date string
+  membershipStatus?: string;
   membershipFee?: number;
   onDismiss?: () => void;
 }
 
-export default function MembershipExpiryPopup({ memberName, expiryDate, membershipFee = 100, onDismiss }: MembershipExpiryPopupProps) {
+  export default function MembershipExpiryPopup({ memberName, expiryDate, membershipStatus, membershipFee = 100, onDismiss }: MembershipExpiryPopupProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
   const pathname = usePathname();
@@ -20,31 +21,33 @@ export default function MembershipExpiryPopup({ memberName, expiryDate, membersh
   useEffect(() => {
     // Check if membership is expired or expiring soon
     const checkExpiry = () => {
-      if (!expiryDate) {
-        // No expiry date = simulate expired for demo
-        setShowPopup(true);
-        setShowBanner(true);
+      // If membership is explicitly ACTIVE and not expired, don't show anything
+      if (membershipStatus === 'ACTIVE') {
+        if (!expiryDate) return;
+        
+        const expiry = new Date(expiryDate);
+        const now = new Date();
+        const daysUntilExpiry = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        
+        // Only show banner if expiring in less than 30 days
+        if (daysUntilExpiry > 0 && daysUntilExpiry <= 30) {
+          setShowBanner(true);
+          setShowPopup(false);
+        }
         return;
       }
 
-      const expiry = new Date(expiryDate);
-      const now = new Date();
-      const daysUntilExpiry = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-
-      if (daysUntilExpiry <= 0) {
-        // Already expired
+      // Show for PENDING or EXPIRED
+      if (!expiryDate || new Date(expiryDate) <= new Date() || membershipStatus === 'EXPIRED') {
         setShowPopup(true);
-        setShowBanner(true);
-      } else if (daysUntilExpiry <= 30) {
-        // Expiring within 30 days
         setShowBanner(true);
       }
     };
 
-    // Delay so it appears after page load (2s for better visibility)
+    // Delay so it appears after page load
     const timer = setTimeout(checkExpiry, 2000);
     return () => clearTimeout(timer);
-  }, [expiryDate]);
+  }, [expiryDate, membershipStatus]);
 
   const handleRenewClick = (e: React.MouseEvent) => {
     // Dispatch a custom event that the payments page can listen to

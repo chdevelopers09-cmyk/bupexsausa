@@ -72,7 +72,7 @@ export default async function MembershipPage() {
         faqs={[
           {
             question: "Who can join BUPEXSA USA?",
-            answer: "Any person who attended or graduated from Presbyterian College Secondary School (PCSS) Buea and currently resides in the USA."
+            answer: "Any person who attended or graduated from Presbyterian Comprehensive Secondary School (PCSS) Buea and currently resides in the USA."
           },
           {
             question: "What are the membership dues?",

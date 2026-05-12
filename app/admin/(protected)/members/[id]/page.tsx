@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, User, Mail, Calendar, MapPin, Building, ShieldCheck, Download, AlertTriangle, CreditCard, Activity } from 'lucide-react';
+import ProfileAvatarUpload from './ProfileAvatarUpload';
 import MemberEditorForm from './MemberEditorForm';
 import MemberApprovalActions from '../MemberApprovalActions';
 
@@ -49,9 +50,11 @@ export default async function AdminMemberDetailPage({ params }: { params: Promis
           
           {/* Quick Stats Card */}
           <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-8 flex items-start gap-6">
-            <div className="h-24 w-24 rounded-full bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center text-slate-400 font-bold text-xl border-4 border-white shadow-xl">
-              {member.avatar_path ? <img src={member.avatar_path} alt="avatar" className="h-full w-full object-cover" /> : member.full_name.charAt(0)}
-            </div>
+            <ProfileAvatarUpload 
+              memberId={member.id} 
+              currentAvatar={member.avatar_path} 
+              fallback={member.full_name.charAt(0)} 
+            />
             <div className="flex-1">
               <div className="flex justify-between items-start">
                 <div>
@@ -92,7 +95,7 @@ export default async function AdminMemberDetailPage({ params }: { params: Promis
               </h3>
             </div>
             <div className="p-8">
-              <MemberEditorForm member={member} />
+              <MemberEditorForm member={member} latestPayment={payments?.[0]} />
             </div>
           </div>
         </div>

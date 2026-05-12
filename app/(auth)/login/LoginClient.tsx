@@ -7,15 +7,27 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
 import { Suspense } from 'react';
-import { login, signInWithGoogle } from '../actions';
+import { login, signInWithGoogle, resendVerification } from '../actions';
 import { useSearchParams } from 'next/navigation';
 
 export default function LoginClient() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
   const message = searchParams.get('message');
+  const emailParam = searchParams.get('email');
   const next = searchParams.get('next') || '/dashboard';
   const [showPassword, setShowPassword] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendMsg, setResendMsg] = useState({ type: '', text: '' });
+
+  const handleResend = async () => {
+    if (!emailParam) return;
+    setResending(true);
+    const res = await resendVerification(emailParam);
+    setResending(false);
+    if (res.error) setResendMsg({ type: 'error', text: res.error });
+    else setResendMsg({ type: 'success', text: 'Verification link sent! Please check your email.' });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50/30 py-10 px-6 flex items-center justify-center">
@@ -31,11 +43,34 @@ export default function LoginClient() {
 
         <div className="p-8">
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 text-xs font-bold rounded-xl flex items-center gap-3 animate-shake">
-              <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-              {error}
+            <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 text-xs font-bold rounded-xl space-y-3 animate-shake">
+              <div className="flex items-center gap-3">
+                <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                {error}
+              </div>
+              {emailParam && !resendMsg.text && (
+                <button 
+                  type="button" 
+                  onClick={handleResend}
+                  disabled={resending}
+                  className="ml-5 text-[#8B5CF6] hover:underline uppercase tracking-widest text-[10px] font-black"
+                >
+                  {resending ? 'Sending...' : 'Resend Verification Link'}
+                </button>
+              )}
             </div>
           )}
+
+          {resendMsg.text && (
+            <div className={cn(
+              "mb-6 p-4 text-xs font-bold rounded-xl flex items-center gap-3 animate-in fade-in zoom-in duration-300",
+              resendMsg.type === 'success' ? "bg-emerald-50 border border-emerald-100 text-emerald-600" : "bg-red-50 border border-red-100 text-red-600"
+            )}>
+              {resendMsg.type === 'success' ? <CheckCircle className="h-4 w-4" /> : <span className="h-2 w-2 rounded-full bg-red-500" />}
+              {resendMsg.text}
+            </div>
+          )}
+
           {message && (
             <div className="mb-6 p-4 bg-emerald-50 border border-emerald-100 text-emerald-600 text-xs font-bold rounded-xl flex items-center gap-3">
               <CheckCircle className="h-4 w-4" />
@@ -62,7 +97,7 @@ export default function LoginClient() {
             <div className="space-y-2">
               <div className="flex items-center justify-between mb-1 px-1">
                 <label className="text-[12px] font-black text-gray-600">Password</label>
-                <Link href="/reset-password" className="text-[10px] text-[#8B5CF6] font-black uppercase tracking-widest hover:underline">
+                <Link href="/forgot-password" title="Click to reset your password" className="text-[10px] text-[#8B5CF6] font-black uppercase tracking-widest hover:underline">
                   Forgot?
                 </Link>
               </div>

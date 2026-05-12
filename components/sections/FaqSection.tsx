@@ -17,7 +17,7 @@ interface FaqSectionProps {
 const defaultFaqs: FaqItem[] = [
   {
     question: "Who is eligible to join BUPEXSA USA?",
-    answer: "Any former student of Presbyterian College Secondary School (PCSS) Buea who currently resides in the United States is eligible to join."
+    answer: "Any former student of Presbyterian Comprehensive Secondary School (PCSS) Buea who currently resides in the United States is eligible to join."
   },
   {
     question: "How much is the annual membership fee?",

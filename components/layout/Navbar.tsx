@@ -1,10 +1,11 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ChevronDown, Bell, User, LogOut, Settings } from 'lucide-react';
+import { Menu, X, ChevronDown, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SITE_CONFIG } from '@/lib/mock-data';
 
 const navItems = [
   { label: 'Home', href: '/' },
@@ -65,8 +66,14 @@ export default function Navbar() {
         <nav className="flex items-center justify-between h-20 md:h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center group py-2" id="nav-logo">
-            <div className="h-14 w-14 md:h-16 md:w-16 rounded-xl bg-white flex items-center justify-center shadow-md transition-all group-hover:scale-105 group-hover:shadow-xl overflow-hidden border border-gray-100 p-0.5">
-              <img src="/bupexsausa.png" alt="BUPEXSA USA Logo" className="w-full h-full object-contain" />
+            <div className="h-14 w-14 md:h-16 md:w-16 rounded-xl bg-white flex items-center justify-center shadow-md transition-all group-hover:scale-105 group-hover:shadow-xl overflow-hidden border border-gray-100 p-0.5 relative">
+              <Image 
+                src="/bupexsausa.png" 
+                alt="BUPEXSA USA Logo" 
+                fill
+                className="object-contain p-1"
+                priority
+              />
             </div>
           </Link>
 
@@ -112,7 +119,7 @@ export default function Navbar() {
                     href={item.href}
                     className={cn(
                       'nav-link text-sm',
-                      isActive(item.href) && pathname !== '/' + '' && 'nav-link-active'
+                      isActive(item.href) && pathname !== '/' && 'nav-link-active'
                     )}
                   >
                     {item.label}

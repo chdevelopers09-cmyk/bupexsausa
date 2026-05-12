@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -19,19 +19,27 @@ import {
   ImageIcon,
   Mail,
   Settings,
-  UserPlus
+  UserPlus,
+  ChevronDown,
+  User as UserIcon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SITE_CONFIG } from '@/lib/mock-data';
+import { createClient } from '@/lib/supabase/client';
 
 interface ClientAdminLayoutProps {
   children: React.ReactNode;
   isSuperAdmin: boolean;
+  profile: any;
+  userEmail: string | undefined;
 }
 
-export default function ClientAdminLayout({ children, isSuperAdmin }: ClientAdminLayoutProps) {
+export default function ClientAdminLayout({ children, isSuperAdmin, profile, userEmail }: ClientAdminLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const supabase = createClient();
 
   const adminLinks = [
     { label: 'Admin Dashboard', href: '/admin', icon: BarChart3 },
@@ -42,8 +50,28 @@ export default function ClientAdminLayout({ children, isSuperAdmin }: ClientAdmi
     { label: 'Regional Chapters', href: '/admin/chapters', icon: Globe },
     { label: 'Gallery Admin', href: '/admin/gallery', icon: ImageIcon },
     { label: 'Bulk Notifications', href: '/admin/notifications', icon: Mail },
+    { label: 'Portal Users', href: '/admin/users', icon: UserPlus },
     { label: 'System Settings', href: '/admin/settings', icon: Settings },
   ];
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/login';
+  };
+
+  const userInitials = profile?.full_name
+    ? profile.full_name.split(' ').map((n: any) => n[0]).join('').toUpperCase()
+    : 'AD';
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex font-sans">
@@ -89,24 +117,6 @@ export default function ClientAdminLayout({ children, isSuperAdmin }: ClientAdmi
             );
           })}
 
-          {/* Super Admin Section - Explicitly Highlighted */}
-          {isSuperAdmin && (
-            <div className="pt-6 mt-6 border-t border-slate-800 space-y-1">
-              <p className={cn("px-4 mb-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]", !isSidebarOpen && "hidden")}>Super Admin</p>
-              <Link
-                href="/admin/users"
-                className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all group",
-                  pathname.startsWith('/admin/users')
-                    ? "bg-emerald-600 text-white shadow-lg shadow-emerald-900/20"
-                    : "hover:bg-slate-800 hover:text-white"
-                )}
-              >
-                <UserPlus className={cn("h-5 w-5 shrink-0 transition-colors", pathname.startsWith('/admin/users') ? "text-white" : "text-slate-500 group-hover:text-emerald-400")} />
-                {isSidebarOpen && <span className="animate-fade-in text-emerald-400 font-bold">User Management</span>}
-              </Link>
-            </div>
-          )}
         </nav>
 
         <div className="p-4 border-t border-slate-800">
@@ -142,7 +152,7 @@ export default function ClientAdminLayout({ children, isSuperAdmin }: ClientAdmi
                     const href = `/admin/${arr.slice(0, idx + 1).join('/')}`;
                     const isLast = idx === arr.length - 1;
                     return (
-                      <div key={href} className="flex items-center gap-2">
+                      <div key={segment} className="flex items-center gap-2">
                         <ChevronRight className="h-4 w-4 text-slate-300" />
                         <Link 
                           href={href} 
@@ -172,14 +182,53 @@ export default function ClientAdminLayout({ children, isSuperAdmin }: ClientAdmi
                 <span className="absolute top-2 right-2 h-2 w-2 bg-primary rounded-full border-2 border-white"></span>
               </button>
 
-              <div className="flex items-center gap-3 pl-4">
-                 <div className="text-right hidden sm:block">
-                    <p className="text-sm font-bold text-slate-900 leading-none">{isSuperAdmin ? 'Super Admin' : 'Admin'}</p>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">{isSuperAdmin ? 'Full Access' : 'Admin Access'}</p>
-                 </div>
-                 <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-white font-black text-sm shadow-lg shadow-primary/25">
-                    {isSuperAdmin ? 'SA' : 'AD'}
-                 </div>
+              {/* Profile Dropdown */}
+              <div className="relative" ref={dropdownRef}>
+                <div 
+                  className="flex items-center gap-3 pl-4 cursor-pointer group"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
+                   <div className="text-right hidden sm:block">
+                      <p className="text-sm font-bold text-slate-900 leading-none group-hover:text-primary transition-colors">
+                        {profile?.full_name || (isSuperAdmin ? 'Super Admin' : 'Admin')}
+                      </p>
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
+                        {isSuperAdmin ? 'Full Access' : 'Admin Access'}
+                      </p>
+                   </div>
+                   <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-white font-black text-sm shadow-lg shadow-primary/25 overflow-hidden transition-transform group-hover:scale-105">
+                      {profile?.avatar_path ? (
+                        <img src={profile.avatar_path} alt="Avatar" className="w-full h-full object-cover" />
+                      ) : userInitials}
+                   </div>
+                   <ChevronDown className="h-4 w-4 text-slate-400 group-hover:text-primary transition-colors" />
+                </div>
+
+                {/* Dropdown Menu */}
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50 animate-in fade-in zoom-in duration-200">
+                     <div className="p-4 border-b border-slate-50">
+                        <p className="text-sm font-bold text-slate-900 truncate">{profile?.full_name}</p>
+                        <p className="text-xs text-slate-500 mt-1 truncate">{userEmail}</p>
+                     </div>
+                     <div className="p-2">
+                        <Link href="/dashboard/profile" className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:text-primary hover:bg-slate-50 transition-colors">
+                           <UserIcon className="h-4 w-4" /> My Profile
+                        </Link>
+                        <Link href="/dashboard/settings" className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:text-primary hover:bg-slate-50 transition-colors">
+                           <Settings className="h-4 w-4" /> Account Settings
+                        </Link>
+                     </div>
+                     <div className="p-2 border-t border-slate-50">
+                        <button 
+                          onClick={handleLogout}
+                          className="flex items-center gap-3 px-4 py-2.5 w-full rounded-xl text-sm font-bold text-red-500 hover:bg-red-50 transition-colors"
+                        >
+                           <LogOut className="h-4 w-4" /> Sign Out
+                        </button>
+                     </div>
+                  </div>
+                )}
               </div>
            </div>
         </header>

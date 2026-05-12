@@ -43,18 +43,47 @@ export default function AdminPaymentsClient({ initialPayments }: { initialPaymen
         }
     };
 
+    const stats = {
+        totalRevenue: payments
+            .filter(p => p.status === 'COMPLETED')
+            .reduce((sum, p) => sum + (Number(p.amount) || 0), 0),
+        donationsTotal: payments
+            .filter(p => p.status === 'COMPLETED' && p.type === 'DONATION')
+            .reduce((sum, p) => sum + (Number(p.amount) || 0), 0),
+        membershipPaid: payments
+            .filter(p => p.status === 'COMPLETED' && p.type === 'MEMBERSHIP')
+            .length,
+        pendingCount: payments.filter(p => p.status === 'PENDING_VERIFICATION').length,
+        pendingAmount: payments
+            .filter(p => p.status === 'PENDING_VERIFICATION')
+            .reduce((sum, p) => sum + (Number(p.amount) || 0), 0),
+    };
+
     return (
         <div className="space-y-8 animate-fade-in">
             {/* Stats Overview */}
-            <div className="grid sm:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
                     <div className="flex justify-between items-start mb-4">
                         <div className="h-10 w-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
                             <DollarSign size={20} />
                         </div>
                     </div>
-                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Total Revenue (MTD)</p>
-                    <p className="text-2xl font-black text-slate-900 mt-1">$4,250.00</p>
+                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Total Revenue</p>
+                    <p className="text-2xl font-black text-slate-900 mt-1">
+                        ${stats.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    </p>
+                </div>
+                <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                    <div className="flex justify-between items-start mb-4">
+                        <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+                            <ArrowUpRight size={20} />
+                        </div>
+                    </div>
+                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Donations Total</p>
+                    <p className="text-2xl font-black text-slate-900 mt-1">
+                        ${stats.donationsTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    </p>
                 </div>
                 <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
                     <div className="flex justify-between items-start mb-4">
@@ -63,7 +92,7 @@ export default function AdminPaymentsClient({ initialPayments }: { initialPaymen
                         </div>
                     </div>
                     <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Membership Dues</p>
-                    <p className="text-2xl font-black text-slate-900 mt-1">42 Paid</p>
+                    <p className="text-2xl font-black text-slate-900 mt-1">{stats.membershipPaid} Paid</p>
                 </div>
                 <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
                     <div className="flex justify-between items-start mb-4">
@@ -72,7 +101,10 @@ export default function AdminPaymentsClient({ initialPayments }: { initialPaymen
                         </div>
                     </div>
                     <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Pending Verification</p>
-                    <p className="text-2xl font-black text-slate-900 mt-1">{payments.filter(p => p.status === 'PENDING_VERIFICATION').length} Items</p>
+                    <p className="text-2xl font-black text-slate-900 mt-1">{stats.pendingCount} Items</p>
+                    <p className="text-[10px] font-bold text-amber-500 mt-1 uppercase tracking-widest">
+                        Total Value: ${stats.pendingAmount.toLocaleString()}
+                    </p>
                 </div>
             </div>
 

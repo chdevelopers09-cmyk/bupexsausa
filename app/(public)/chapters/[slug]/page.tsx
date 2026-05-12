@@ -61,9 +61,9 @@ export default async function ChapterDetailPage({ params }: ChapterDetailPagePro
           />
         ) : (
           <img
-            src={getImageUrl(chapter.banner_image_path) || '/images/leadership/president.jpg'}
+            src={chapter.banner_image_path ? getImageUrl(chapter.banner_image_path) : '/images/usa-flag.png'}
             alt={chapter.name}
-            className="absolute inset-0 w-full h-full object-cover opacity-40"
+            className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay"
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-primary/30" />

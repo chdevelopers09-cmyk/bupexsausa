@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient, createAdminClient } from '@/lib/supabase/server'
+import { sendWelcomeEmail } from '@/lib/resend'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -28,13 +29,37 @@ export async function login(formData: FormData) {
 
   const { error } = await supabase.auth.signInWithPassword({ email, password })
   const next = (formData.get('next') as string) || '/dashboard'
+  const isNextAdmin = next.startsWith('/admin')
 
   if (error) {
-    redirect(`/login?error=${encodeURIComponent(error.message)}&next=${encodeURIComponent(next)}`)
+    const errorMsg = encodeURIComponent(error.message)
+    const nextPath = encodeURIComponent(next)
+    
+    if (error.message.includes('Email not confirmed')) {
+      const loginBase = isNextAdmin ? '/admin/login' : '/login'
+      return redirect(`${loginBase}?error=${encodeURIComponent('Please verify your email address before logging in.')}&email=${encodeURIComponent(email)}`)
+    }
+    
+    const loginBase = isNextAdmin ? '/admin/login' : '/login'
+    return redirect(`${loginBase}?error=${errorMsg}&next=${nextPath}`)
   }
 
   revalidatePath('/', 'layout')
   redirect(next)
+}
+
+export async function resendVerification(email: string) {
+  const supabase = await createClient()
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email,
+    options: {
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+    }
+  })
+  
+  if (error) return { error: error.message }
+  return { success: true }
 }
 
 export async function signup(formData: FormData) {
@@ -65,23 +90,25 @@ export async function signup(formData: FormData) {
   const membership_status = isManualPayment ? 'PENDING_VERIFICATION' : 'ACTIVE'
   const member_id = `BUP-${Math.floor(100000 + Math.random() * 900000)}`
 
-  // Use Admin Client to create user
-  const { data: userData, error: createError } = await adminSupabase.auth.admin.createUser({
+  // Use Standard Client to sign up (triggers verification email)
+  const { data: userData, error: createError } = await supabase.auth.signUp({
     email,
     password,
-    email_confirm: true,
-    user_metadata: {
-      username,
-      full_name,
-      graduation_year,
-      us_state,
-      phone,
-      batch,
-      profession,
-      how_did_you_hear,
-      membership_plan: formData.get('membership_plan') as string,
-      membership_status: membership_status,
-      member_id: member_id,
+    options: {
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+      data: {
+        username,
+        full_name,
+        graduation_year: graduation_year || null,
+        us_state: us_state || 'Unknown',
+        phone,
+        batch,
+        profession,
+        how_did_you_hear,
+        membership_plan: formData.get('membership_plan') as string,
+        membership_status: membership_status,
+        member_id: member_id,
+      }
     }
   })
 
@@ -89,7 +116,8 @@ export async function signup(formData: FormData) {
     return { error: createError.message }
   }
 
-  const userId = userData.user.id
+  const userId = userData.user?.id
+  if (!userId) return { error: 'Failed to initialize account' }
   let proofPath = null
 
   // Handle manual payment proof upload
@@ -116,23 +144,27 @@ export async function signup(formData: FormData) {
     proof_storage_path: proofPath,
   })
 
-  // Log in the user immediately
-  const { error: loginError } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
-
-  if (loginError) {
-    return { error: 'Registration successful, but login failed. Please log in manually.' }
+  // Send Welcome Email
+  try {
+    await sendWelcomeEmail({
+      email,
+      fullName: full_name,
+      memberId: member_id,
+      graduationYear: graduation_year || undefined,
+      batch: batch || undefined,
+    });
+  } catch (err) {
+    console.error('Failed to send welcome email:', err);
   }
 
   revalidatePath('/', 'layout')
   return { 
     success: true, 
+    needsVerification: true,
     member: {
       id: member_id,
       full_name,
-      plan: formData.get('membership_plan')
+      email,
     }
   }
 }

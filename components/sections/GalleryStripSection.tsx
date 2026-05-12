@@ -1,5 +1,7 @@
 'use client';
+
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Camera, Play } from 'lucide-react';
 import { MOCK_GALLERY } from '@/lib/mock-data';
 
@@ -47,7 +49,7 @@ export default function GalleryStripSection({
                       muted
                       loop
                       playsInline
-                      preload="metadata"
+                      preload="none"
                       onMouseEnter={(e) => e.currentTarget.play()}
                       onMouseLeave={(e) => e.currentTarget.pause()}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 bg-black"
@@ -59,11 +61,15 @@ export default function GalleryStripSection({
                     </div>
                   </div>
                 ) : (
-                  <img
-                    src={image.path}
-                    alt={image.alt}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
+                  <div className="relative h-full w-full">
+                    <Image
+                      src={image.path}
+                      alt={image.alt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                  </div>
                 )
               ) : (
                 <div className="w-full h-full bg-gray-100 flex items-center justify-center">

@@ -48,7 +48,7 @@ export default async function Footer() {
               </div>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-5">
-              Connecting Presbyterian College Secondary School Buea graduates across the United States. Building community, fostering excellence, giving back.
+              Connecting Presbyterian Comprehensive Secondary School Buea graduates across the United States. Building community, fostering excellence, giving back.
             </p>
             {/* Social links */}
             <div className="flex items-center gap-3">

@@ -9,7 +9,7 @@ export default function DashboardWelcome({ profile }: { profile: any }) {
   const [showCard, setShowCard] = useState(false);
 
   // Check if dues are overdue
-  const isOverdue = profile.expiry_date && new Date(profile.expiry_date) < new Date();
+  const isOverdue = profile?.expiry_date && new Date(profile.expiry_date) < new Date();
 
   return (
     <>
@@ -27,7 +27,7 @@ export default function DashboardWelcome({ profile }: { profile: any }) {
                   <div>
                      <p className="font-bold text-sm text-red-100">Membership Dues Overdue</p>
                      <p className="text-xs text-red-200/80 mt-1 leading-relaxed">
-                        Your annual membership expired on {new Date(profile.expiry_date).toLocaleDateString()}. Please renew your membership to maintain active status and benefits.
+                        Your annual membership expired on {profile?.expiry_date ? new Date(profile.expiry_date).toLocaleDateString() : 'N/A'}. Please renew your membership to maintain active status and benefits.
                      </p>
                      <Link href="/dashboard/payments" className="inline-flex items-center gap-1.5 mt-3 text-xs font-black uppercase tracking-widest text-white hover:text-red-200 transition-colors">
                         <CreditCard className="h-3 w-3" /> Renew Now

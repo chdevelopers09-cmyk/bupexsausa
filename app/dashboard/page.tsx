@@ -25,37 +25,19 @@ export default async function DashboardOverview() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
-  const { data: profile } = await supabase
-    .from('members')
-    .select('*, chapters(name)')
-    .eq('id', user.id)
-    .single();
+  // Fetch all dashboard data in parallel for maximum speed
+  const [profileRes, notificationsRes, rsvpsRes, paymentsRes] = await Promise.all([
+    supabase.from('members').select('*, chapters(name)').eq('id', user.id).single(),
+    supabase.from('notifications').select('*').eq('member_id', user.id).order('created_at', { ascending: false }).limit(3),
+    supabase.from('rsvps').select('*, events(*)').eq('member_id', user.id).order('created_at', { ascending: false }).limit(3),
+    supabase.from('payments').select('*').eq('member_id', user.id).order('created_at', { ascending: false }).limit(3)
+  ]);
 
-  // Fetch real notifications
-  const { data: notifications } = await supabase
-    .from('notifications')
-    .select('*')
-    .eq('member_id', user.id)
-    .order('created_at', { ascending: false })
-    .limit(3);
-
-  // Fetch RSVPs
-  const { data: rsvps } = await supabase
-    .from('rsvps')
-    .select('*, events(*)')
-    .eq('member_id', user.id)
-    .order('created_at', { ascending: false })
-    .limit(3);
-
+  const profile = profileRes.data;
+  const notifications = notificationsRes.data;
+  const rsvps = rsvpsRes.data;
+  const payments = paymentsRes.data;
   const upcomingEvents = rsvps?.map(r => r.events).filter(Boolean) || [];
-
-  // Fetch Recent Payments
-  const { data: payments } = await supabase
-    .from('payments')
-    .select('*')
-    .eq('member_id', user.id)
-    .order('created_at', { ascending: false })
-    .limit(3);
 
   return (
     <div className="space-y-10">

@@ -10,7 +10,7 @@ interface AlmaMaterSectionProps {
 
 export default function AlmaMaterSection({
   heading = 'The PCSS Buea Legacy',
-  body = 'Presbyterian College Secondary School (PCSS) Buea has a rich history of academic excellence and character building. Founded in 1985, our alma mater has produced some of the finest professionals serving across the globe today.',
+  body = 'Presbyterian Comprehensive Secondary School (PCSS) Buea has a rich history of academic excellence and character building. Founded in 1985, our alma mater has produced some of the finest professionals serving across the globe today.',
   image,
   linkLabel = 'Learn more about PCSS Buea',
 }: AlmaMaterSectionProps) {

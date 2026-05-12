@@ -388,7 +388,7 @@ export const MOCK_GALLERY = [
 export const SITE_CONFIG = {
   name: 'BUPEXSA USA',
   tagline: 'Connecting PCSS Buea Alumni Across America',
-  description: 'BUPEXSA USA is the official alumni association of Presbyterian College Secondary School Buea, uniting graduates residing in the United States.',
+  description: 'BUPEXSA USA is the official alumni association of Presbyterian Comprehensive Secondary School Buea, uniting graduates residing in the United States.',
   url: process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://bupexsausa.org'),
   email: 'bupexsausa25@gmail.com',
   phone: '+1 (404) 555-0123',

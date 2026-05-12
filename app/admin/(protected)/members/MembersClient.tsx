@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Search, Filter, Download, MoreVertical, ShieldCheck, CheckCircle2, XCircle, Clock, AlertTriangle } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import { approveMember, rejectMember } from './actions';
+import { approveMember, rejectMember, deleteMember } from './actions';
 
 export default function MembersClient({ initialMembers }: { initialMembers: any[] }) {
   const [members, setMembers] = useState(initialMembers);
@@ -40,6 +40,15 @@ export default function MembersClient({ initialMembers }: { initialMembers: any[
   };
 
   const handleStatusChange = async (id: string, newStatus: string) => {
+    if (newStatus === 'DELETE') {
+      if (!confirm('Are you sure you want to completely delete this member? This cannot be undone.')) return;
+      const res = await deleteMember(id);
+      if (res.success) {
+        setMembers(members.filter(m => m.id !== id));
+      } else alert(res.error);
+      return;
+    }
+
     if (newStatus === 'ACTIVE') {
       const res = await approveMember(id);
       if (res.success) {
@@ -171,6 +180,7 @@ export default function MembersClient({ initialMembers }: { initialMembers: any[
                       <option value="EXPIRED">Set Expired</option>
                       <option value="REJECTED">Reject</option>
                       <option value="SUSPENDED">Suspend</option>
+                      <option value="DELETE">Delete Member</option>
                     </select>
                     <button className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors">
                       <MoreVertical className="h-4 w-4" />

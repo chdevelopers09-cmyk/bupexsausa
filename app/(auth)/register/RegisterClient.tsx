@@ -5,7 +5,7 @@ import {
   UserPlus, ArrowLeft, Mail, Lock, User, Phone, GraduationCap, 
   MapPin, Briefcase, ChevronDown, ArrowRight, Eye, EyeOff,
   CheckCircle2, CreditCard, ShieldCheck, Check, Sparkles,
-  DollarSign, Calendar, Info, Smartphone, X, ExternalLink
+  DollarSign, Calendar, Info, Smartphone, X, ExternalLink, Image as ImageIcon
 } from 'lucide-react';
 import { SITE_CONFIG } from '@/lib/mock-data';
 import { US_STATES, GRADUATION_YEARS } from '@/lib/utils';
@@ -55,6 +55,14 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
     cvc: '',
     cardName: ''
   });
+
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(id);
+    setTimeout(() => setCopied(null), 2000);
+  };
 
   const validatePassword = (pwd: string) => {
     const errs: string[] = [];
@@ -125,8 +133,13 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
         setStep(1);
         router.push(`/register?error=${encodeURIComponent(result.error)}`);
       } else if (result?.success) {
-        setRegistrationResult(result.member);
-        setStep(3);
+        if (result.needsVerification) {
+          setRegistrationResult({ ...result.member, needsVerification: true });
+          setStep(3);
+        } else {
+          setRegistrationResult(result.member);
+          setStep(3);
+        }
       }
     });
   };
@@ -477,93 +490,191 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                   )}
 
                   {paymentMethod === 'paypal' && (
-                    <div className="p-6 text-center space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <div className="h-16 w-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto">
-                        <DollarSign className="h-8 w-8 text-blue-600" />
+                    <div className="p-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                        <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                          <DollarSign className="h-6 w-6 text-blue-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Send Payment To</h3>
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-dark font-black text-sm">{SITE_CONFIG.payments.paypal.email}</span>
+                            <button 
+                              type="button"
+                              onClick={() => copyToClipboard(SITE_CONFIG.payments.paypal.email, 'paypal')}
+                              className="text-[9px] font-black text-blue-600 bg-white px-2.5 py-1 rounded-lg border border-blue-200 hover:bg-blue-600 hover:text-white transition-all shadow-sm active:scale-95"
+                            >
+                              {copied === 'paypal' ? 'COPIED!' : 'COPY'}
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="font-black text-dark uppercase tracking-widest text-[10px] mb-1">PayPal Payment</h3>
-                        <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 mb-4 select-all">
-                          <span className="text-blue-700 font-black text-sm block">bupexsausa25@gmail.com</span>
-                          <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest">PayPal Email</span>
+                      
+                      <div className="space-y-4">
+                        <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                          <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Quick Instructions</h4>
+                          <ul className="space-y-3">
+                            <li className="flex gap-3 text-[11px] font-bold text-gray-600">
+                              <div className="h-5 w-5 bg-[#8B5CF6] text-white rounded-full flex items-center justify-center shrink-0 text-[10px]">1</div>
+                              <span>Login to your PayPal account</span>
+                            </li>
+                            <li className="flex gap-3 text-[11px] font-bold text-gray-600">
+                              <div className="h-5 w-5 bg-[#8B5CF6] text-white rounded-full flex items-center justify-center shrink-0 text-[10px]">2</div>
+                              <span>Send <strong>${totalDue.toFixed(2)}</strong> to the email above</span>
+                            </li>
+                            <li className="flex gap-3 text-[11px] font-bold text-gray-600">
+                              <div className="h-5 w-5 bg-[#8B5CF6] text-white rounded-full flex items-center justify-center shrink-0 text-[10px]">3</div>
+                              <span>Upload the confirmation screenshot below</span>
+                            </li>
+                          </ul>
                         </div>
                         
-                        <div className="space-y-2 text-left bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Upload Payment Receipt</p>
-                           <input 
-                             type="file" 
-                             accept="image/*" 
-                             onChange={(e) => setProofFile(e.target.files?.[0] || null)}
-                             className="w-full text-[11px] file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all cursor-pointer" 
-                           />
-                           <p className="text-[9px] text-gray-400 italic">Please pay directly on PayPal and upload the confirmation screenshot.</p>
+                        <div className="space-y-2">
+                           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Upload Receipt Screenshot</p>
+                           <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-100 rounded-3xl bg-gray-50 hover:bg-gray-100/50 cursor-pointer transition-all">
+                              {proofFile ? (
+                                <div className="flex flex-col items-center gap-1 text-emerald-500">
+                                  <CheckCircle2 className="h-8 w-8" />
+                                  <span className="text-[11px] font-black">{proofFile.name}</span>
+                                </div>
+                              ) : (
+                                <div className="flex flex-col items-center gap-2 text-gray-400">
+                                  <ImageIcon className="h-8 w-8 opacity-20" />
+                                  <span className="text-[11px] font-bold tracking-tight">Tap to upload proof</span>
+                                </div>
+                              )}
+                              <input 
+                                type="file" 
+                                accept="image/*" 
+                                className="hidden"
+                                onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                                required={paymentMethod !== 'card'}
+                              />
+                           </label>
                         </div>
                       </div>
                     </div>
                   )}
 
                   {paymentMethod === 'applepay' && (
-                    <div className="p-6 text-center space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <div className="h-16 w-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
-                        <Smartphone className="h-8 w-8 text-dark" />
+                    <div className="p-10 text-center space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="h-20 w-20 bg-gray-900 text-white rounded-3xl flex items-center justify-center mx-auto shadow-2xl">
+                        <Smartphone className="h-10 w-10" />
                       </div>
                       <div>
-                        <h3 className="font-black text-dark uppercase tracking-widest text-[10px] mb-1">Apple Pay</h3>
-                        <p className="text-gray-400 text-[11px] font-bold">Merchant: <span className="text-dark">{SITE_CONFIG.payments.applePay.displayName}</span></p>
-                        <p className="text-gray-400 text-[11px] font-bold mt-1">Double-click side button or use Face ID / Touch ID to pay <span className="text-dark">${totalDue.toFixed(2)}</span></p>
+                        <h3 className="font-black text-dark uppercase tracking-[0.2em] text-[11px] mb-2">Apple Pay</h3>
+                        <p className="text-gray-400 text-[12px] font-bold">Double-click side button to pay</p>
+                        <p className="text-[#8B5CF6] font-black text-2xl mt-2">${totalDue.toFixed(2)}</p>
                       </div>
                     </div>
                   )}
 
                   {paymentMethod === 'cashapp' && (
-                    <div className="p-6 text-center space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <div className="h-16 w-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto shadow-sm">
-                        <DollarSign className="h-8 w-8" />
-                      </div>
-                      <div>
-                        <div className="inline-block bg-emerald-50 px-4 py-1.5 rounded-full text-emerald-700 font-black text-md mb-2">
-                          {settings.cashapp_handle || SITE_CONFIG.payments.cashapp.cashtag}
+                    <div className="p-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="bg-emerald-500 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl shadow-emerald-100">
+                        <div className="absolute top-0 right-0 p-8 opacity-10">
+                          <DollarSign className="h-24 w-24" />
                         </div>
-                        <p className="text-gray-500 text-[11px] font-bold mb-1">{SITE_CONFIG.payments.cashapp.displayName}</p>
-                        <p className="text-gray-400 text-[11px] font-bold px-4 leading-relaxed mb-4">
-                          Send exactly <span className="text-dark">${totalDue.toFixed(2)}</span> to the Cashtag above.
-                          Include your <span className="text-dark">Email Address</span> in the memo.
-                        </p>
-                        <div className="space-y-2 text-left bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Upload CashApp Receipt</p>
-                           <input 
-                             type="file" 
-                             accept="image/*" 
-                             onChange={(e) => setProofFile(e.target.files?.[0] || null)}
-                             className="w-full text-[11px] file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 transition-all cursor-pointer" 
-                           />
+                        <div className="relative z-10">
+                          <h3 className="text-[10px] font-black text-emerald-200 uppercase tracking-widest mb-4">Cash App Handle</h3>
+                          <div className="flex items-center justify-between">
+                            <span className="text-2xl font-black">{settings.cashapp_handle || SITE_CONFIG.payments.cashapp.cashtag}</span>
+                            <button 
+                              type="button"
+                              onClick={() => copyToClipboard(settings.cashapp_handle || SITE_CONFIG.payments.cashapp.cashtag, 'cashapp')}
+                              className="bg-white/20 hover:bg-white/30 text-white text-[10px] font-black px-4 py-2 rounded-xl backdrop-blur-md transition-all active:scale-95"
+                            >
+                              {copied === 'cashapp' ? 'COPIED!' : 'COPY $TAG'}
+                            </button>
+                          </div>
+                          <p className="text-emerald-100 text-[11px] font-bold mt-4">Send exactly ${totalDue.toFixed(2)}</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                          <p className="text-[11px] font-bold text-gray-500 leading-relaxed text-center">
+                            Please include your <span className="text-dark font-black">Full Name</span> in the payment memo so we can verify your account immediately.
+                          </p>
+                        </div>
+                        
+                        <div className="space-y-2">
+                           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Upload Confirmation Screen</p>
+                           <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-100 rounded-3xl bg-gray-50 hover:bg-gray-100/50 cursor-pointer transition-all">
+                              {proofFile ? (
+                                <div className="flex flex-col items-center gap-1 text-emerald-500">
+                                  <CheckCircle2 className="h-8 w-8" />
+                                  <span className="text-[11px] font-black">{proofFile.name}</span>
+                                </div>
+                              ) : (
+                                <div className="flex flex-col items-center gap-2 text-gray-400">
+                                  <ImageIcon className="h-8 w-8 opacity-20" />
+                                  <span className="text-[11px] font-bold tracking-tight">Tap to upload proof</span>
+                                </div>
+                              )}
+                              <input 
+                                type="file" 
+                                accept="image/*" 
+                                className="hidden"
+                                onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                                required={paymentMethod !== 'card'}
+                              />
+                           </label>
                         </div>
                       </div>
                     </div>
                   )}
 
                   {paymentMethod === 'zelle' && (
-                    <div className="p-6 text-center space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <div className="h-16 w-16 bg-purple-50 text-[#8B5CF6] rounded-full flex items-center justify-center mx-auto">
-                        <Mail className="h-8 w-8" />
-                      </div>
-                      <div className="space-y-2">
-                        <div className="bg-gray-50 p-3 rounded-xl border border-gray-100 select-all">
-                          <span className="text-dark font-black text-sm block">{settings.zelle_handle || SITE_CONFIG.payments.zelle.email}</span>
-                          <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Recipient Handle / Info</span>
+                    <div className="p-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="bg-white rounded-3xl p-6 border-2 border-[#8B5CF6]/20 relative shadow-sm">
+                        <div className="flex items-start gap-4">
+                          <div className="h-14 w-14 bg-purple-50 text-[#8B5CF6] rounded-2xl flex items-center justify-center shrink-0">
+                            <Mail className="h-7 w-7" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Zelle Recipient</h3>
+                            <p className="text-dark font-black text-sm break-all mb-2">{settings.zelle_handle || SITE_CONFIG.payments.zelle.email}</p>
+                            <button 
+                              type="button"
+                              onClick={() => copyToClipboard(settings.zelle_handle || SITE_CONFIG.payments.zelle.email, 'zelle')}
+                              className="text-[9px] font-black text-[#8B5CF6] border border-[#8B5CF6]/20 px-3 py-1.5 rounded-lg hover:bg-[#8B5CF6] hover:text-white transition-all active:scale-95"
+                            >
+                              {copied === 'zelle' ? 'COPIED TO CLIPBOARD!' : 'COPY RECIPIENT INFO'}
+                            </button>
+                          </div>
                         </div>
-                        <p className="text-gray-400 text-[11px] font-bold px-4 leading-relaxed mb-4">
-                          Send <span className="text-dark">${totalDue.toFixed(2)}</span> to the handle above.
-                          <br />Memo: <span className="text-dark">Membership - {formData.full_name || 'Your Name'}</span>
-                        </p>
-                        <div className="space-y-2 text-left bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Upload Zelle Receipt</p>
-                           <input 
-                             type="file" 
-                             accept="image/*" 
-                             onChange={(e) => setProofFile(e.target.files?.[0] || null)}
-                             className="w-full text-[11px] file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:bg-purple-600 file:text-white hover:file:bg-purple-700 transition-all cursor-pointer" 
-                           />
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="bg-purple-50/50 p-4 rounded-2xl border border-purple-100">
+                          <p className="text-[11px] font-bold text-purple-600 leading-relaxed text-center">
+                            Memo: <span className="text-purple-800 font-black">Membership - {formData.full_name || 'Your Name'}</span>
+                          </p>
+                        </div>
+                        
+                        <div className="space-y-2">
+                           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Upload Zelle Receipt</p>
+                           <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-100 rounded-3xl bg-gray-50 hover:bg-gray-100/50 cursor-pointer transition-all">
+                              {proofFile ? (
+                                <div className="flex flex-col items-center gap-1 text-emerald-500">
+                                  <CheckCircle2 className="h-8 w-8" />
+                                  <span className="text-[11px] font-black">{proofFile.name}</span>
+                                </div>
+                              ) : (
+                                <div className="flex flex-col items-center gap-2 text-gray-400">
+                                  <ImageIcon className="h-8 w-8 opacity-20" />
+                                  <span className="text-[11px] font-bold tracking-tight">Tap to upload proof</span>
+                                </div>
+                              )}
+                              <input 
+                                type="file" 
+                                accept="image/*" 
+                                className="hidden"
+                                onChange={(e) => setProofFile(e.target.files?.[0] || null)}
+                                required={paymentMethod !== 'card'}
+                              />
+                           </label>
                         </div>
                       </div>
                     </div>
@@ -592,29 +703,54 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
               </div>
             )}
 
-            {/* Step 3: Success Welcome */}
+            {/* Step 3: Success Welcome / Verification */}
             {step === 3 && (
-              <div className="text-center space-y-5 animate-in zoom-in duration-500 py-6">
-                <div className="h-14 w-14 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-md">
-                  <Check className="h-7 w-7" />
+              <div className="text-center space-y-6 animate-in zoom-in duration-500 py-6">
+                <div className={`h-16 w-16 ${registrationResult?.needsVerification ? 'bg-blue-500' : 'bg-green-500'} text-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg`}>
+                  {registrationResult?.needsVerification ? <Mail className="h-8 w-8" /> : <Check className="h-8 w-8" />}
                 </div>
-                <div>
-                  <h2 className="text-2xl font-black text-dark tracking-tight">Success!</h2>
-                  <p className="text-gray-400 text-[12px] font-medium">Welcome to the BUPEXSA Family.</p>
+                
+                <div className="space-y-2">
+                  <h2 className="text-2xl font-black text-dark tracking-tight">
+                    {registrationResult?.needsVerification ? 'Check Your Email' : 'Success!'}
+                  </h2>
+                  <p className="text-gray-400 text-[13px] font-medium px-8">
+                    {registrationResult?.needsVerification 
+                      ? `We've sent a verification link to ${registrationResult?.email}. Please confirm your email to activate your account.`
+                      : 'Welcome to the BUPEXSA Family. Your account is now active.'}
+                  </p>
                 </div>
-                <div className="bg-gray-50 rounded-2xl p-4 border border-gray-50 space-y-2 text-left max-w-xs mx-auto">
-                   <div className="flex justify-between items-center">
-                    <span className="text-gray-400 font-black text-[9px] uppercase tracking-widest">ID</span>
-                    <span className="font-mono font-black text-md text-[#8B5CF6]">{registrationResult?.id || 'BUP-000000'}</span>
+
+                {!registrationResult?.needsVerification && (
+                  <div className="bg-gray-50 rounded-2xl p-4 border border-gray-50 space-y-2 text-left max-w-xs mx-auto">
+                     <div className="flex justify-between items-center">
+                      <span className="text-gray-400 font-black text-[9px] uppercase tracking-widest">ID</span>
+                      <span className="font-mono font-black text-md text-[#8B5CF6]">{registrationResult?.id || 'BUP-000000'}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-400 font-black text-[9px] uppercase tracking-widest">Status</span>
+                      <span className="text-green-600 font-black text-[9px] uppercase tracking-widest">Active</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 font-black text-[9px] uppercase tracking-widest">Status</span>
-                    <span className="text-green-600 font-black text-[9px] uppercase tracking-widest">Active</span>
+                )}
+
+                {registrationResult?.needsVerification ? (
+                  <div className="space-y-4 pt-4">
+                    <button 
+                      onClick={() => window.location.href = '/login'}
+                      className="inline-flex items-center justify-center w-full max-w-xs py-3.5 rounded-2xl bg-dark text-white font-black text-md hover:bg-primary transition-all group"
+                    >
+                      Return to Login
+                    </button>
+                    <p className="text-[11px] text-gray-400">
+                      Didn&apos;t receive the email? Check your spam folder or <button className="text-primary font-bold hover:underline">click here to resend</button>.
+                    </p>
                   </div>
-                </div>
-                <Link href="/dashboard" className="inline-flex items-center justify-center w-full max-w-xs py-3.5 rounded-2xl bg-dark text-white font-black text-md hover:bg-primary transition-all group">
-                  Enter Dashboard <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                ) : (
+                  <Link href="/dashboard" className="inline-flex items-center justify-center w-full max-w-xs py-3.5 rounded-2xl bg-dark text-white font-black text-md hover:bg-primary transition-all group">
+                    Enter Dashboard <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                )}
               </div>
             )}
 
