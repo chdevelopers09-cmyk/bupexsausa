@@ -208,9 +208,9 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
                   <input
                     type="text"
                     value={editingUser.username || ''}
-                    onChange={e => setEditingUser({...editingUser, username: e.target.value})}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-primary/20 outline-none"
-                    required
+                    readOnly
+                    className="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm text-slate-500 cursor-not-allowed outline-none font-bold"
+                    title="Username cannot be changed after creation"
                   />
                 </div>
               </div>
