@@ -248,7 +248,7 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
                       const pass = Array.from({length: 12}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
                       setEditingUser({...editingUser, password: pass});
                     }}
-                    className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline"
+                    className="px-2 py-1 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg text-[9px] font-black uppercase tracking-widest transition-all border border-primary/20"
                   >
                     Generate Strong Password
                   </button>
