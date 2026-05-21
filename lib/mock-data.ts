@@ -141,7 +141,7 @@ export const MOCK_LEADERSHIP = [
       'Board Chair of CETALF (U.S.-based non-profit)',
       'President of BUPEXSA USA'
     ],
-    photo_path: '/images/leadership/celine-njeck-actual.jpg',
+    photo_path: '/images/leadership/celine-njeck-profile.jpeg',
     order: 1,
   },
   {
@@ -253,18 +253,18 @@ export const MOCK_LEADERSHIP = [
     id: '7',
     slug: 'cordelia-ngonde',
     name: 'Cordelia Ngonde',
-    title: 'Executive PRO',
+    title: 'Social Coordinator',
     chapter: 'National',
     batch: '1999',
-    bio: 'Cordelia Ngonde serves as the Executive PRO for BUPEXSA USA, where she is dedicated to fostering engagement, strengthening alumni connections, and curating impactful social experiences.',
-    longBio: 'Cordelia Ngonde serves as the Executive PRO for BUPEXSA USA, where she is dedicated to fostering engagement, strengthening alumni connections, and curating impactful social experiences that unite members across the diaspora. Based in Maryland, she brings a vibrant blend of creativity, structure, and leadership to her role.\n\nA proud alumna of the Class of 1999, Cordelia’s journey in social leadership has been both consistent and impactful. She served as Social Prefect from Form 4 through high school at PCSS Buea, continued as Social Coordinator in her department at the University of Buea, and has remained actively engaged in organizing and leading social initiatives within her communities to date. Her ability to bring people together is a defining strength that has shaped her leadership style.\n\nCordelia is currently pursuing a Doctorate in Healthcare Administration, reflecting her commitment to advancing leadership and driving meaningful impact within complex systems. Professionally, she is an Agile Scrum Lead with expertise in project management, team coordination, stakeholder engagement, and strategic execution. In addition, Cordelia is a dynamic Master of Ceremonies (MC), known for her ability to energize audiences, create memorable experiences, and seamlessly manage events. Her combined strengths in communication, organization, and engagement make her an invaluable asset to BUPEXSA USA.',
+    bio: 'Cordelia Ngonde serves as the Social Coordinator for BUPEXSA USA, where she is dedicated to fostering engagement, strengthening alumni connections, and curating impactful social experiences.',
+    longBio: 'Cordelia Ngonde serves as the Social Coordinator for BUPEXSA USA, where she is dedicated to fostering engagement, strengthening alumni connections, and curating impactful social experiences that unite members across the diaspora. Based in Maryland, she brings a vibrant blend of creativity, structure, and leadership to her role.\n\nA proud alumna of the Class of 1999, Cordelia’s journey in social leadership has been both consistent and impactful. She served as Social Prefect from Form 4 through high school at PCSS Buea, continued as Social Coordinator in her department at the University of Buea, and has remained actively engaged in organizing and leading social initiatives within her communities to date. Her ability to bring people together is a defining strength that has shaped her leadership style.\n\nCordelia is currently pursuing a Doctorate in Healthcare Administration, reflecting her commitment to advancing leadership and driving meaningful impact within complex systems. Professionally, she is an Agile Scrum Lead with expertise in project management, team coordination, stakeholder engagement, and strategic execution. In addition, Cordelia is a dynamic Master of Ceremonies (MC), known for her ability to energize audiences, create memorable experiences, and seamlessly manage events. Her combined strengths in communication, organization, and engagement make her an invaluable asset to BUPEXSA USA.',
     education: [
-      'Doctorate in Healthcare Administration (Candidate)',
-      'University of Buea',
-      'PCSS Buea - Class of 1999'
+      'Doctorate in Healthcare Admin(candidate)',
+      'Masters in Public Health Management',
+      'BSC in Sociology'
     ],
     achievements: [
-      'Executive PRO of BUPEXSA USA',
+      'Social Coordinator of BUPEXSA USA',
       'Agile Scrum Lead and Project Management expert',
       'Professional Master of Ceremonies (MC)'
     ],
@@ -383,6 +383,17 @@ export const MOCK_GALLERY = [
   { id: '27', category: 'Memories', alt: 'PCSS Choir and Graduation group', path: '/images/gallery/legacy-2.jpg' },
   { id: '28', category: 'Apparel', alt: 'Mountain Whispers 20th Anniversary Edition', path: '/images/gallery/legacy-3.jpg' },
   { id: '21', category: 'Social', alt: 'Alumni gathering at PCC Dallas', path: '/images/gallery/community-1.jpg' },
+  { id: 'ss-img-1', category: 'Sunday Service', alt: 'Sunday Service Image 1', path: '/images/gallery/Sunday-service-image1.jpeg' },
+  { id: 'ss-img-2', category: 'Sunday Service', alt: 'Sunday Service Image 2', path: '/images/gallery/Sunday-service-image2.jpeg' },
+  { id: 'ss-img-3', category: 'Sunday Service', alt: 'Sunday Service Image 3', path: '/images/gallery/Sunday-service-image3.jpeg' },
+  { id: 'ss-img-4', category: 'Sunday Service', alt: 'Sunday Service Image 4', path: '/images/gallery/Sunday-service-image4.jpeg' },
+  { id: 'ss-img-5', category: 'Sunday Service', alt: 'Sunday Service Image 5', path: '/images/gallery/Sunday-service-image5.jpeg' },
+  { id: 'ss-img-6', category: 'Sunday Service', alt: 'Sunday Service Image 6', path: '/images/gallery/Sunday-service-image6.jpeg' },
+  { id: 'ss-img-7', category: 'Sunday Service', alt: 'Sunday Service Image 7', path: '/images/gallery/Sunday-service-image7.jpeg' },
+  { id: 'ss-img-8', category: 'Sunday Service', alt: 'Sunday Service Image 8', path: '/images/gallery/Sunday-service-image8.jpeg' },
+  { id: 'ss-img-9', category: 'Sunday Service', alt: 'Sunday Service Image 9', path: '/images/gallery/Sunday-service-image9.jpeg' },
+  { id: 'ss-vid-1', category: 'Sunday Service', alt: 'Sunday Service Video 1', path: '/images/gallery/Sunday-service-video-1.mp4', thumb: '/images/gallery/Sunday-service-image1.jpeg', type: 'video', isVideoLink: false },
+  { id: 'ss-vid-2', category: 'Sunday Service', alt: 'Sunday Service Video 2', path: '/images/gallery/Sunday-service-video-2.mp4', thumb: '/images/gallery/Sunday-service-image2.jpeg', type: 'video', isVideoLink: false },
 ];
 
 // SITE_CONFIG has been moved to lib/config.ts for enterprise stabilization

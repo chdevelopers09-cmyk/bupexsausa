@@ -44,7 +44,7 @@ export async function createAdminUser(formData: FormData) {
     const adminClient = await createAdminClient();
 
     // 1. Create the Auth User
-    const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
+    let { data: authData, error: authError } = await adminClient.auth.admin.createUser({
       email,
       password,
       email_confirm: true,
@@ -52,10 +52,50 @@ export async function createAdminUser(formData: FormData) {
       user_metadata: { full_name, username, status: 'ACTIVE' }
     });
 
+    // 2. Handle "User already exists" by checking if they are missing from members table
+    if (authError && (authError.message.includes('already registered') || authError.message.includes('already exists'))) {
+      const { data: { users } } = await adminClient.auth.admin.listUsers();
+      const existingAuthUser = users.find(u => u.email?.toLowerCase() === email.toLowerCase());
+      
+      if (existingAuthUser) {
+        const { data: existingMember } = await adminClient
+          .from('members')
+          .select('id')
+          .eq('id', existingAuthUser.id)
+          .maybeSingle();
+
+        if (!existingMember) {
+          // Orphaned user found! Repair by creating member record
+          const { error: insertError } = await adminClient.from('members').insert({
+            id: existingAuthUser.id,
+            email: email,
+            full_name,
+            graduation_year: 2000, // Default for admins
+            us_state: 'Unknown',
+            status: 'ACTIVE',
+            role: role === 'superadmin' ? 'admin' : (role || 'admin')
+          });
+
+          if (insertError) throw new Error(`User exists in Auth but failed to repair Member record: ${insertError.message}`);
+          
+          authData = { user: existingAuthUser as any };
+          authError = null;
+        } else {
+          // Already exists in both, update role if needed
+          await adminClient.auth.admin.updateUserById(existingAuthUser.id, {
+            app_metadata: { role }
+          });
+          
+          authData = { user: existingAuthUser as any };
+          authError = null;
+        }
+      }
+    }
+
     if (authError) throw authError;
 
     revalidatePath('/admin/users');
-    return { success: true, user: authData.user };
+    return { success: true, user: authData?.user };
   } catch (error: any) {
     console.error('User Creation Error:', error);
     return { error: error.message || 'Failed to create user.' };

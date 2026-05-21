@@ -55,7 +55,7 @@ export default function GalleryClient({ initialImages = [] }: { initialImages?: 
     };
   });
 
-  const ALL_MEDIA = [...realMedia, ...MOCK_GALLERY.map(m => ({ ...m, thumb: m.path, type: 'image', isVideoLink: false }))];
+  const ALL_MEDIA = [...realMedia, ...MOCK_GALLERY.map(m => ({ ...m, thumb: m.thumb || m.path, type: m.type || 'image', isVideoLink: m.isVideoLink || false }))];
   
   const CATEGORIES = ['All', ...Array.from(new Set(ALL_MEDIA.map(i => i.category)))];
 

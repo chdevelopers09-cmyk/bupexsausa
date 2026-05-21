@@ -6,7 +6,7 @@ import { updateSession } from '@/lib/supabase/middleware';
  * Handles authentication, RBAC, and route protection with zero-crash tolerance.
  */
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   try {

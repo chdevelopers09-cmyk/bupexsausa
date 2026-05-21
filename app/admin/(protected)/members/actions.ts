@@ -187,7 +187,7 @@ export async function createPaymentRecord(details: any) {
 
 export async function createAdminMember(formData: FormData) {
   const supabase = await createAdminClient();
-  const email = formData.get('email') as string;
+  const email = (formData.get('email') as string)?.toLowerCase();
   const username = formData.get('username') as string;
   const full_name = formData.get('full_name') as string;
   const password = formData.get('password') as string || 'Bupexsa2025!';
@@ -205,7 +205,8 @@ export async function createAdminMember(formData: FormData) {
 
   const member_id = `BUP-${Math.floor(100000 + Math.random() * 900000)}`;
 
-  const { data: userData, error } = await supabase.auth.admin.createUser({
+  // 1. Try to create the Auth User
+  let { data: userData, error } = await supabase.auth.admin.createUser({
     email,
     password,
     email_confirm: true,
@@ -223,24 +224,64 @@ export async function createAdminMember(formData: FormData) {
     }
   });
 
-  if (error) return { error: error.message };
+  // 2. If user already exists in Auth, check if they are in members table
+  if (error && (error.message.includes('already registered') || error.message.includes('already exists'))) {
+    const { data: { users } } = await supabase.auth.admin.listUsers();
+    const existingAuthUser = users.find(u => u.email?.toLowerCase() === email);
+    
+    if (existingAuthUser) {
+      const { data: existingMember } = await supabase
+        .from('members')
+        .select('id')
+        .eq('id', existingAuthUser.id)
+        .maybeSingle();
 
-  if (payment_method && payment_amount) {
-    await supabase.from('payments').insert({
-      member_id: userData.user.id,
-      type: 'MEMBERSHIP',
-      amount: Number(payment_amount),
-      method: payment_method.toUpperCase(),
-      status: payment_status || 'COMPLETED',
-    });
+      if (!existingMember) {
+        // Orphaned user found! Let's repair by creating the member record
+        const { error: insertError } = await supabase.from('members').insert({
+          id: existingAuthUser.id,
+          email: email,
+          full_name,
+          graduation_year: parseInt(graduation_year || '2000'),
+          us_state: us_state || 'Unknown',
+          phone,
+          batch,
+          profession,
+          how_did_you_hear,
+          status: status,
+          role: 'member'
+        });
+
+        if (insertError) return { error: `User exists in Auth but failed to repair Member record: ${insertError.message}` };
+        
+        userData = { user: existingAuthUser as any };
+        error = null;
+      } else {
+        return { error: `A member with the email "${email}" already exists in the system.` };
+      }
+    }
   }
 
-  if (status === 'ACTIVE') {
-    await approveMember(userData.user.id);
+  if (error) return { error: error.message };
+
+  if (userData?.user) {
+    if (payment_method && payment_amount) {
+      await supabase.from('payments').insert({
+        member_id: userData.user.id,
+        type: 'MEMBERSHIP',
+        amount: Number(payment_amount),
+        method: payment_method.toUpperCase(),
+        status: payment_status || 'COMPLETED',
+      });
+    }
+
+    if (status === 'ACTIVE') {
+      await approveMember(userData.user.id);
+    }
   }
 
   revalidatePath('/admin/members');
-  return { success: true, memberId: userData.user.id };
+  return { success: true, memberId: userData?.user?.id };
 }
 
 export async function uploadAvatar(memberId: string, formData: FormData) {

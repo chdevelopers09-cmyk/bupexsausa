@@ -30,7 +30,7 @@ export default async function LeadershipProfilePage({ params }: { params: Promis
           
           <div className="flex flex-col md:flex-row gap-12 items-center md:items-end">
             <div className="h-64 w-64 rounded-3xl overflow-hidden border-8 border-white/20 shadow-2xl bg-white shrink-0">
-              <img src={member.photo_path} alt={member.name} className="w-full h-full object-cover" />
+              <img src={member.photo_path} alt={member.name} className="w-full h-full object-cover object-top" />
             </div>
             <div className="text-center md:text-left text-white pb-4">
               <h1 className="text-4xl md:text-6xl font-black mb-4">{member.name}</h1>
