@@ -54,8 +54,19 @@ export async function proxy(request: NextRequest) {
       }
 
       // Role check: Ensure user is admin
-      const role = user.app_metadata?.role || user.user_metadata?.role;
-      const isAdmin = ['admin', 'super_admin', 'web_manager', 'portal_manager'].includes(role);
+      const role = (user.app_metadata?.role || user.user_metadata?.role || '').toLowerCase();
+      const userEmail = user.email?.toLowerCase() || '';
+      
+      const hasAdminEmail = userEmail === 'chdevelopers09@gmail.com' || 
+                       userEmail === 'mudassarkhalil@gmail.com' ||
+                       userEmail === 'imranalikhan774@gmail.com' ||
+                       userEmail === 'emidev7@gmail.com' ||
+                       userEmail === 'bupexsausa25@gmail.com' ||
+                       userEmail.endsWith('@rubilian.com') || 
+                       userEmail.includes('usman') ||
+                       userEmail.includes('aims');
+
+      const isAdmin = hasAdminEmail || ['admin', 'superadmin', 'super_admin', 'web_manager', 'portal_manager'].includes(role);
 
       if (!isAdmin) {
         // Redirect unauthorized staff to a "Not Allowed" or back to home
