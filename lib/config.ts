@@ -55,7 +55,26 @@ export const SITE_CONFIG = {
     membership: 150,
     annual: 100,
     registration: 50,
-  }
+  },
+
+  // Payments
+  payments: {
+    stripe: {
+      checkoutUrl: 'https://buy.stripe.com/test',
+    },
+    paypal: {
+      email: 'bupexsausa25@gmail.com',
+    },
+    cashapp: {
+      cashtag: '$bupexsausa',
+    },
+    zelle: {
+      email: 'bupexsausa25@gmail.com',
+      phone: '+1 (404) 555-0123',
+    },
+  },
+  zelleHandle: 'bupexsausa25@gmail.com',
+  cashappHandle: '$bupexsausa',
 };
 
 export const getAbsoluteUrl = (path: string) => {
