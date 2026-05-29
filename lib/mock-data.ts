@@ -317,6 +317,30 @@ export const MOCK_LEADERSHIP = [
   },
   {
     id: '10',
+    slug: 'edmund-besong',
+    name: 'Edmund Besong',
+    title: 'Auditor, BUPEXSA USA',
+    chapter: 'National',
+    batch: '1999',
+    bio: 'Edmund ("Ed") Besong is a licensed Certified Public Accountant (CPA) and Attorney based in New York City with more than a decade of executive leadership experience spanning finance, legal advisory, corporate strategy, and international business consulting.',
+    longBio: 'Edmund ("Ed") Besong is a licensed Certified Public Accountant (CPA) and Attorney based in New York City with more than a decade of executive leadership experience spanning finance, legal advisory, corporate strategy, and international business consulting. Recognized for his analytical rigor, integrity, and strategic insight, Ed has built a distinguished career advising organizations and entrepreneurs across the United States, Europe, and Africa.\n\nEd currently serves as Senior Director at S&E Management Consulting, Inc., where he leads multidisciplinary engagements in legal advisory, financial management, and business transformation. His practice includes serving as General Counsel, Fractional CFO, and strategic advisor to a diverse portfolio of clients, with expertise in corporate governance, tax compliance, financial oversight, operational restructuring, immigration law, and growth strategy.\n\nIn addition to his professional practice, Ed is an entrepreneur with ventures in agricultural development through Grace Farms in Kigali, garment manufacturing through EdBesong Africa in Buea, hospitality and entertainment establishments — Vault Caribbean restaurant and Reign Amapiano Nightclub — in Douala, and real estate holdings in several cities across Cameroon. These experiences have further strengthened his expertise in financial stewardship, operational management, compliance, and organizational leadership.\n\nDemonstrating a continued commitment to executive education and innovation, Ed will join the inaugural Doctor of Business Administration (DBA) cohort in Technology and AI Strategies at New England College beginning in August 2026.\n\nEd feels honored to serve as Auditor for BUPEXSA USA and remains committed to advancing transparency, accountability, sound governance, and the long-term growth of the association.',
+    education: [
+      'Licensed Certified Public Accountant (CPA)',
+      'Attorney (Licensed)',
+      'Doctor of Business Administration (DBA) — Incoming, New England College (Aug 2026)',
+      'PCSS Buea Town — Batch of 1999'
+    ],
+    achievements: [
+      'Auditor, BUPEXSA USA',
+      'Senior Director, S&E Management Consulting, Inc.',
+      'General Counsel & Fractional CFO to multiple clients',
+      'Founder — Grace Farms (Kigali), EdBesong Africa (Buea)'
+    ],
+    photo_path: '/images/leadership/Edmund-Besong.jpeg',
+    order: 10,
+  },
+  {
+    id: '11',
     slug: 'osong-baron',
     name: 'Emeritus Osong Baron',
     title: '1st BUPEXSA USA President',
@@ -334,11 +358,11 @@ export const MOCK_LEADERSHIP = [
       'Pioneer of the National Alumni Network'
     ],
     photo_path: '/images/leadership/osong-baron.jpg',
-    order: 10,
+    order: 11,
     hideProfile: true,
   },
   {
-    id: '11',
+    id: '12',
     slug: 'pancratius-mukeh',
     name: 'EMERITUS Pancratius Mukeh',
     title: '2nd BUPEXSA USA President',
@@ -355,7 +379,7 @@ export const MOCK_LEADERSHIP = [
       'Senior Executive Adviser'
     ],
     photo_path: '/images/leadership/pancratius-mukeh.jpg',
-    order: 11,
+    order: 12,
     hideProfile: true,
   },
 ];

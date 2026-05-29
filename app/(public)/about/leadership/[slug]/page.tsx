@@ -62,28 +62,9 @@ export default async function LeadershipProfilePage({ params }: { params: Promis
               </h2>
               <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed space-y-6">
                 <p className="text-xl font-medium text-primary/80 italic mb-8 border-l-4 border-accent pl-6">
-                  "{member.bio}"
+                  &quot;{member.bio}&quot;
                 </p>
                 <p>{member.longBio}</p>
-              </div>
-            </div>
-
-            <div className="bg-white p-12 rounded-[2.5rem] shadow-2xl shadow-primary/5 border border-gray-100">
-              <h2 className="text-3xl font-black text-dark mb-8 flex items-center gap-4">
-                <div className="h-8 w-2 bg-accent rounded-full"></div>
-                Key Achievements
-              </h2>
-              <div className="grid md:grid-cols-1 gap-6">
-                {member.achievements?.map((item, index) => (
-                  <div key={index} className="flex items-start gap-6 p-6 rounded-2xl bg-gray-50 hover:bg-accent/5 transition-colors group">
-                    <div className="h-12 w-12 rounded-xl bg-white shadow-md flex items-center justify-center shrink-0 group-hover:bg-accent group-hover:text-white transition-all">
-                      <Award className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <p className="text-lg font-bold text-dark">{item}</p>
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           </div>

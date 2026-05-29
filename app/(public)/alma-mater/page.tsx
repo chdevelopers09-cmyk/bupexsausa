@@ -21,6 +21,7 @@ export default function AlmaMaterPage() {
       <AlmaMaterSection
         body="<p>Our roots in Buea are the foundation of everything we achieve today. Founded in 1985, PCSS Buea has been a cradle of excellence, shaping minds and building character under the watchful eye of Mount Cameroon.</p><p>For those of us now in the USA, these memories remain the heartbeat of our community.</p>"
         image="/images/gallery/school-13.jpg"
+        linkUrl="/about"
       />
 
       {/* Featured Story: First Senior Prefect */}

@@ -302,21 +302,6 @@ export default async function ChapterDetailPage({ params }: ChapterDetailPagePro
               </Link>
             </div>
 
-            {/* Chapter Stats */}
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-xl p-8 space-y-6">
-              <h3 className="font-black text-dark text-sm uppercase tracking-widest">Chapter Stats</h3>
-              {[
-                { label: 'Active Members', value: `${chapter.member_count}+` },
-                { label: 'State', value: chapter.state },
-                { label: 'Status', value: '● Active' },
-              ].map(item => (
-                <div key={item.label} className="flex items-center justify-between text-sm border-b border-gray-50 pb-4 last:border-0 last:pb-0">
-                  <span className="text-gray-500 font-medium">{item.label}</span>
-                  <span className="font-black text-dark">{item.value}</span>
-                </div>
-              ))}
-            </div>
-
             {/* Contact */}
             <div className="bg-purple-50 rounded-3xl p-8 border border-purple-100 space-y-4">
               <h3 className="font-black text-dark text-sm uppercase tracking-widest">Contact This Chapter</h3>

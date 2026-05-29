@@ -82,6 +82,28 @@ export async function middleware(request: NextRequest) {
         url.searchParams.set('next', pathname);
         return NextResponse.redirect(url);
       }
+
+      // Role check: Ensure user is NOT an admin
+      const role = (user.app_metadata?.role || user.user_metadata?.role || '').toLowerCase();
+      const userEmail = user.email?.toLowerCase() || '';
+      
+      const hasAdminEmail = userEmail === 'chdevelopers09@gmail.com' || 
+                       userEmail === 'mudassarkhalil@gmail.com' ||
+                       userEmail === 'imranalikhan774@gmail.com' ||
+                       userEmail === 'emidev7@gmail.com' ||
+                       userEmail === 'bupexsausa25@gmail.com' ||
+                       userEmail.endsWith('@rubilian.com') || 
+                       userEmail.includes('usman') ||
+                       userEmail.includes('aims');
+
+      const isAdmin = hasAdminEmail || ['admin', 'superadmin', 'super_admin', 'web_manager', 'portal_manager'].includes(role);
+
+      if (isAdmin) {
+        // Admins should not access member dashboard, redirect to admin portal
+        const url = request.nextUrl.clone();
+        url.pathname = '/admin';
+        return NextResponse.redirect(url);
+      }
     }
 
     return response;

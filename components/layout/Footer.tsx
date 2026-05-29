@@ -32,56 +32,64 @@ export default async function Footer() {
   const annualFee = settings.membership_fee || 100;
 
   return (
-    <footer className="bg-white text-dark border-t border-gray-100">
-      {/* Top section */}
-      <div className="container-wide py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Brand */}
-          <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-12 w-12 rounded-xl bg-white p-1 flex items-center justify-center overflow-hidden">
-                <img src="/bupexsausa.png" alt="BUPEXSA USA Logo" className="w-full h-full object-contain" />
-              </div>
-              <div>
-                <p className="font-black text-dark text-lg leading-tight tracking-tight">{SITE_CONFIG.name}</p>
-                <p className="text-[10px] text-primary font-bold uppercase tracking-widest leading-tight">Alumni Association</p>
-              </div>
-            </div>
-            <p className="text-gray-400 text-sm leading-relaxed mb-5">
-              Connecting Presbyterian Comprehensive Secondary School Buea graduates across the United States. Building community, fostering excellence, giving back.
+    <footer className="text-white bg-[#1c2331]">
+      {/* Social Bar (The section above footer body) */}
+      <div className="bg-[#6351ce] flex items-center justify-between py-4 px-6 md:px-12">
+        <div className="hidden lg:block text-sm">
+          <span>Get connected with us on social networks:</span>
+        </div>
+        <div className="flex items-center gap-4">
+          {[
+            { icon: (props: any) => <Globe {...props} />, href: SITE_CONFIG.socialLinks.facebook, label: 'Facebook' },
+            { icon: (props: any) => <X {...props} />, href: SITE_CONFIG.socialLinks.twitter, label: 'Twitter' },
+            { icon: (props: any) => <Camera {...props} />, href: SITE_CONFIG.socialLinks.instagram, label: 'Instagram' },
+            { icon: (props: any) => <Play {...props} />, href: SITE_CONFIG.socialLinks.youtube, label: 'YouTube' },
+            {
+              icon: (props: any) => (
+                <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+              ),
+              href: SITE_CONFIG.socialLinks.whatsapp,
+              label: 'WhatsApp',
+            },
+          ].map(({ icon: Icon, href, label }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white hover:text-gray-300 transition-colors"
+              aria-label={label}
+            >
+              <Icon className="h-4 w-4" />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Main Footer Content */}
+      <div className="container-wide py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Column 1: Company Name */}
+          <div>
+            <h6 className="uppercase font-bold mb-4 flex items-center gap-2 text-sm tracking-wider">
+              BUPEXSA USA
+            </h6>
+            <div className="w-12 h-0.5 bg-[#6351ce] mb-4"></div>
+            <p className="text-gray-300 text-sm leading-relaxed">
+              Connecting Presbyterian Comprehensive Secondary School Buea graduates across the United States. Building community, fostering excellence, and giving back to our alma mater.
             </p>
-            {/* Social links */}
-            <div className="flex items-center gap-3">
-              {[
-                { icon: Globe, href: SITE_CONFIG.socialLinks.facebook, label: 'Facebook' },
-                { icon: Camera, href: SITE_CONFIG.socialLinks.instagram, label: 'Instagram' },
-                { icon: X, href: SITE_CONFIG.socialLinks.twitter, label: 'Twitter' },
-                { icon: Play, href: SITE_CONFIG.socialLinks.youtube, label: 'YouTube' },
-              ].map(({ icon: Icon, href, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="h-9 w-9 rounded-lg bg-gray-100 hover:bg-primary flex items-center justify-center transition-all duration-200 hover:scale-110 group"
-                  aria-label={label}
-                >
-                  <Icon className="h-4 w-4 text-gray-500 group-hover:text-white" />
-                </a>
-              ))}
-            </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Column 2: Products / Quick Links */}
           <div>
-            <h3 className="font-bold text-dark text-sm uppercase tracking-wider mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              {quickLinks.map(({ label, href }) => (
+            <h6 className="uppercase font-bold mb-4 text-sm tracking-wider">Quick Links</h6>
+            <div className="w-12 h-0.5 bg-[#6351ce] mb-4"></div>
+            <ul className="space-y-3">
+              {quickLinks.slice(0, 5).map(({ label, href }) => (
                 <li key={href}>
-                  <Link
-                    href={href}
-                    className="text-gray-500 hover:text-primary text-sm transition-colors hover:pl-1 duration-200 inline-block"
-                  >
+                  <Link href={href} className="text-gray-300 hover:text-white text-sm transition-colors">
                     {label}
                   </Link>
                 </li>
@@ -89,16 +97,14 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Member Links */}
+          {/* Column 3: Useful Links */}
           <div>
-            <h3 className="font-bold text-dark text-sm uppercase tracking-wider mb-4">For Members</h3>
-            <ul className="space-y-2">
-              {memberLinks.map(({ label, href }) => (
+            <h6 className="uppercase font-bold mb-4 text-sm tracking-wider">Useful Links</h6>
+            <div className="w-12 h-0.5 bg-[#6351ce] mb-4"></div>
+            <ul className="space-y-3">
+              {memberLinks.slice(0, 5).map(({ label, href }) => (
                 <li key={href}>
-                  <Link
-                    href={href}
-                    className="text-gray-500 hover:text-primary text-sm transition-colors hover:pl-1 duration-200 inline-block"
-                  >
+                  <Link href={href} className="text-gray-300 hover:text-white text-sm transition-colors">
                     {label}
                   </Link>
                 </li>
@@ -106,63 +112,34 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Column 4: Contact */}
           <div>
-            <h3 className="font-bold text-dark text-sm uppercase tracking-wider mb-4">Contact Us</h3>
-            <div className="space-y-4">
-              <a
-                href={`mailto:${SITE_CONFIG.email}`}
-                className="flex items-start gap-3 text-gray-500 hover:text-primary transition-colors group"
-              >
-                <Mail className="h-4 w-4 mt-0.5 group-hover:text-primary flex-shrink-0" />
-                <span className="text-sm">{SITE_CONFIG.email}</span>
-              </a>
-              <a
-                href={`tel:${SITE_CONFIG.phone}`}
-                className="flex items-start gap-3 text-gray-500 hover:text-primary transition-colors group"
-              >
-                <Phone className="h-4 w-4 mt-0.5 group-hover:text-primary flex-shrink-0" />
-                <span className="text-sm">{SITE_CONFIG.phone}</span>
-              </a>
-              <div className="flex items-start gap-3 text-gray-500">
+            <h6 className="uppercase font-bold mb-4 text-sm tracking-wider">Contact</h6>
+            <div className="w-12 h-0.5 bg-[#6351ce] mb-4"></div>
+            <div className="space-y-4 text-gray-300 text-sm">
+              <div className="flex items-start gap-3">
                 <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                <span className="text-sm">{SITE_CONFIG.address}</span>
+                <span>{SITE_CONFIG.address}</span>
               </div>
-            </div>
-
-            {/* CTA */}
-            <div className="mt-6 p-4 rounded-xl bg-gray-50 border border-gray-100">
-              <p className="text-xs text-gray-500 mb-3">Ready to join the BUPEXSA family?</p>
-              <Link
-                href="/register"
-                className="btn-primary text-sm px-4 py-2 w-full justify-center flex flex-col items-center leading-tight"
-                id="footer-register"
-              >
-                <span className="font-black">Join BUPEXSA USA</span>
-                <span className="text-[10px] opacity-80 font-bold">$50 One-time + ${annualFee}/year</span>
-              </Link>
+              <a href={`mailto:${SITE_CONFIG.email}`} className="flex items-center gap-3 hover:text-white transition-colors">
+                <Mail className="h-4 w-4 flex-shrink-0" />
+                <span>{SITE_CONFIG.email}</span>
+              </a>
+              <a href={`tel:${SITE_CONFIG.phone}`} className="flex items-center gap-3 hover:text-white transition-colors">
+                <Phone className="h-4 w-4 flex-shrink-0" />
+                <span>{SITE_CONFIG.phone}</span>
+              </a>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-gray-100">
-        <div className="container-wide py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
-          <p>© {new Date().getFullYear()} BUPEXSA USA. All rights reserved.</p>
-          <div className="flex items-center gap-5">
-            <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
-            <a
-              href="https://bupexsausa.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-primary transition-colors flex items-center gap-1"
-            >
-              bupexsausa.org <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
-        </div>
+      {/* Copyright Bottom Bar */}
+      <div className="bg-[#161c27] text-center py-4 text-sm text-gray-400">
+        © {new Date().getFullYear()} Copyright: 
+        <a href="https://bupexsausa.org" className="text-white hover:text-[#6351ce] ml-1 transition-colors">
+          BUPEXSAUSA.org
+        </a>
       </div>
     </footer>
   );

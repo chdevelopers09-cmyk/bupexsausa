@@ -28,10 +28,11 @@ export const SITE_CONFIG = {
   phone: '+1 (404) 555-0123',
   address: 'P.O. Box 12345, Atlanta, GA 30301',
   socialLinks: {
-    facebook: 'https://facebook.com/bupexsausa',
+    facebook: 'https://www.facebook.com/groups/1051201462702175',
     twitter: 'https://twitter.com/bupexsausa',
-    instagram: 'https://instagram.com/bupexsausa',
+    instagram: 'https://www.instagram.com/bupexsausa/',
     youtube: 'https://youtube.com/@bupexsausa',
+    whatsapp: 'https://wa.me/message/bupexsausa',
   },
 
   // Auth Constants

@@ -26,7 +26,7 @@ export async function login(formData: FormData) {
     }
   }
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password })
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password })
   const next = (formData.get('next') as string) || '/dashboard'
   const isNextAdmin = next.startsWith('/admin')
 
@@ -41,6 +41,36 @@ export async function login(formData: FormData) {
     
     const loginBase = isNextAdmin ? '/admin/login' : '/login'
     return redirect(`${loginBase}?error=${errorMsg}&next=${nextPath}`)
+  }
+
+  // Enforce Portal Separation
+  if (data?.user) {
+    const user = data.user;
+    const role = (user.app_metadata?.role || user.user_metadata?.role || '').toLowerCase();
+    const userEmail = user.email?.toLowerCase() || '';
+    
+    const hasAdminEmail = userEmail === 'chdevelopers09@gmail.com' || 
+                     userEmail === 'mudassarkhalil@gmail.com' ||
+                     userEmail === 'imranalikhan774@gmail.com' ||
+                     userEmail === 'emidev7@gmail.com' ||
+                     userEmail === 'bupexsausa25@gmail.com' ||
+                     userEmail.endsWith('@rubilian.com') || 
+                     userEmail.includes('usman') ||
+                     userEmail.includes('aims');
+
+    const isAdmin = hasAdminEmail || ['admin', 'superadmin', 'super_admin', 'web_manager', 'portal_manager'].includes(role);
+
+    if (isAdmin && !isNextAdmin) {
+      // Admin trying to login via Member portal
+      await supabase.auth.signOut();
+      return redirect(`/login?error=${encodeURIComponent('Administrators must log in through the Admin Portal.')}`)
+    }
+
+    if (!isAdmin && isNextAdmin) {
+      // Member trying to login via Admin portal
+      await supabase.auth.signOut();
+      return redirect(`/admin/login?error=${encodeURIComponent('Access restricted to administrators.')}`)
+    }
   }
 
   revalidatePath('/', 'layout')

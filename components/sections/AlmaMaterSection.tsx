@@ -6,6 +6,7 @@ interface AlmaMaterSectionProps {
   body: string;
   image: string;
   linkLabel?: string;
+  linkUrl?: string;
 }
 
 export default function AlmaMaterSection({
@@ -13,6 +14,7 @@ export default function AlmaMaterSection({
   body = 'Presbyterian Comprehensive Secondary School (PCSS) Buea has a rich history of academic excellence and character building. Founded in 1985, our alma mater has produced some of the finest professionals serving across the globe today.',
   image,
   linkLabel = 'Learn more about PCSS Buea',
+  linkUrl = '/alma-mater',
 }: AlmaMaterSectionProps) {
   return (
     <section className="section-padding bg-dark text-white overflow-hidden relative">
@@ -58,7 +60,7 @@ export default function AlmaMaterSection({
               </div>
             </div>
 
-            <Link href="/alma-mater" className="btn-accent inline-flex items-center gap-2 px-8">
+            <Link href={linkUrl} className="btn-accent inline-flex items-center gap-2 px-8">
               {linkLabel} <ArrowRight className="h-5 w-5" />
             </Link>
           </div>

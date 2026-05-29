@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { ArrowRight, Users, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+import React from 'react';
+
 interface HeroProps {
-  variant?: 'centered-primary' | 'centered-white' | 'dark-overlay' | 'split-image-right' | 'minimal';
-  heading?: string;
-  subheading?: string;
+  variant?: 'centered-primary' | 'centered-white' | 'dark-overlay' | 'split-image-right' | 'minimal' | 'image-overlay-left';
+  heading?: React.ReactNode;
+  subheading?: React.ReactNode;
   backgroundImage?: string;
   cta1Label?: string;
   cta1Url?: string;
@@ -29,6 +31,51 @@ export default function HeroSection({
   sideImage,
   badge,
 }: HeroProps) {
+  if (variant === 'image-overlay-left') {
+    return (
+      <section
+        className="relative pt-32 pb-24 min-h-[800px] lg:min-h-[85vh] flex items-center overflow-hidden"
+        style={{
+          background: backgroundImage
+            ? `url(${backgroundImage}) center 20%/cover no-repeat`
+            : 'linear-gradient(135deg, #1E1B4B 0%, #4C1D95 50%, #1E1B4B 100%)',
+        }}
+      >
+        {/* Gradient overlay to make text readable on the left */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/60 to-transparent" />
+        
+        <div className="container-wide relative z-10 text-left text-white">
+          <div className="max-w-2xl animate-fade-in-up">
+            {badge && (
+              <span className="inline-block mb-6 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider glass text-white/90">
+                {badge}
+              </span>
+            )}
+            
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.1] tracking-tight">
+              {heading}
+            </h1>
+            
+            <div className="text-lg md:text-xl text-white/90 mb-10 leading-relaxed font-light">
+              {subheading}
+            </div>
+            
+            <div className="flex items-center gap-4 flex-wrap">
+              <Link href={cta1Url} className="btn-primary bg-[#e81b89] hover:bg-[#d01579] border-none px-8 py-4 text-base font-bold rounded-sm shadow-xl shadow-pink-500/20" id="hero-left-cta1">
+                {cta1Label}
+              </Link>
+              {showCta2 && (
+                <Link href={cta2Url} className="btn-white bg-transparent border-white/30 hover:border-white px-8 py-4 rounded-sm text-base font-bold" id="hero-left-cta2">
+                  {cta2Label}
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   if (variant === 'minimal') {
     return (
       <section className="pt-24 pb-16 bg-white relative overflow-hidden">
@@ -184,19 +231,7 @@ export default function HeroSection({
           )}
         </div>
 
-        {/* Trust badges */}
-        <div className="flex items-center justify-center gap-8 mt-12 flex-wrap">
-          {[
-            { icon: Users, label: '347+ Members' },
-            { icon: Globe, label: '12 Chapters' },
-            { label: 'Est. 1985', icon: null },
-          ].map(({ icon: Icon, label }) => (
-            <div key={label} className="flex items-center gap-2 text-white/70 text-sm">
-              {Icon && <Icon className="h-4 w-4" />}
-              <span>{label}</span>
-            </div>
-          ))}
-        </div>
+
       </div>
     </section>
   );

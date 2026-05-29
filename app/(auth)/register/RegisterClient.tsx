@@ -145,19 +145,16 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50/20 py-4 px-4 font-sans text-dark">
-      <div className="max-w-[650px] mx-auto animate-fade-in border border-gray-100 rounded-3xl bg-white overflow-hidden shadow-2xl shadow-purple-100/5">
-        {/* Header Section - Ultra Compact */}
-        <div className="bg-[#8B5CF6] py-6 px-8 text-center text-white relative">
-          <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-xl p-1 border border-white/20 overflow-hidden">
-             <img src="/bupexsausa.png" alt="BUPEXSA USA Logo" className="w-full h-full object-contain scale-110" />
-          </div>
-          <h1 className="text-xl font-black tracking-tight">Join BUPEXSA USA</h1>
-          <p className="text-white/70 text-[10px] uppercase font-bold tracking-widest mt-1">Member Registration</p>
-        </div>
+    <div className="w-full max-w-2xl bg-white rounded-[2rem] shadow-xl shadow-slate-100 border border-slate-100 p-6 md:p-12 relative z-10 animate-fade-in">
+      
+      {/* Header/Logo Section */}
+      <div className="mb-8">
+        <p className="text-xs font-black text-amber-600 uppercase tracking-[0.15em] mb-1.5">Member Registration</p>
+        <h2 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight leading-none">Join BUPEXSA USA</h2>
+      </div>
 
         {/* Progress Tracker Section - Ultra Compact */}
-        <div className="bg-white py-3 px-8 border-b border-gray-50">
+        <div className="bg-white py-4 border-b border-slate-100 mb-8 -mx-6 md:-mx-12 px-6 md:px-12">
           <div className="flex items-center justify-between max-w-sm mx-auto">
             <div className="flex items-center gap-2">
               <div className={`h-7 w-7 rounded-full flex items-center justify-center font-black text-[10px] transition-all ${step >= 1 ? 'bg-[#8B5CF6] text-white shadow-sm' : 'bg-gray-100 text-gray-400'}`}>1</div>
@@ -176,7 +173,7 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
           </div>
         </div>
 
-        <div className="p-6">
+        <div className="">
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-100 text-red-600 text-[11px] font-bold rounded-xl flex items-center gap-2 animate-shake">
               <Info className="h-3.5 w-3.5" />
@@ -752,7 +749,6 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
 
           </form>
         </div>
-      </div>
     </div>
   );
 }

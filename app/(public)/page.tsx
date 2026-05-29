@@ -21,16 +21,21 @@ export default function Home() {
   return (
     <>
       <HeroSection
-        variant="centered-white"
-        heading="Connecting PCSS Buea Alumni Across America"
+        variant="image-overlay-left"
+        backgroundImage="/images/about/empowering-generation.jpg"
+        heading={
+          <>
+            Connecting<br />
+            PCSS Buea <span className="text-[#e81b89] italic font-serif">Alumni</span>
+          </>
+        }
         subheading="Join the official BUPEXSA USA platform to reconnect with former classmates, build professional networks, and give back to our alma mater."
-        badge="Official Alumni Platform"
         cta1Label="Join BUPEXSA USA"
         cta1Url="/register"
-        cta2Label="Learn Our Mission"
+        showCta2={false}
       />
 
-      <section className="relative py-24 bg-slate-950 overflow-hidden">
+      <section className="relative py-24 bg-[#f0f9ff] overflow-hidden">
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-[128px] pointer-events-none" />
@@ -41,10 +46,10 @@ export default function Home() {
             <span className="inline-block py-1 px-3 rounded-full bg-primary/20 border border-primary/30 text-primary-light text-sm font-bold tracking-widest uppercase mb-4 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.3)]">
               Our Legacy in Song
             </span>
-            <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">
-              PCSS Buea <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-light to-accent-light">Anthems</span>
+            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight">
+              PCSS Buea <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Anthems</span>
             </h2>
-            <p className="text-slate-300 max-w-2xl mx-auto text-lg md:text-xl font-light">
+            <p className="text-slate-600 max-w-2xl mx-auto text-lg md:text-xl font-light">
               Experience the spirit, pride, and history of PCSS Buea through the melodies that unite generations.
             </p>
           </div>
@@ -105,8 +110,6 @@ export default function Home() {
         </div>
       </section>
 
-      <StatsBarSection variant="white" />
-
       <CardGridSection
         bgVariant="sky"
         heading="Core Values"
@@ -152,68 +155,6 @@ export default function Home() {
 
       <AnnouncementsSection />
 
-      <ChapterSpotlightSection />
-
-      <section className="section-padding bg-gradient-to-br from-slate-50 via-white to-purple-50/50 relative overflow-hidden">
-        {/* Background Decorative Elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -mr-48 -mt-48" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl -ml-48 -mb-48" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('/images/noise.png')] opacity-[0.03] pointer-events-none" />
-
-        <div className="container-wide relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-dark mb-6">Make a Difference Today</h2>
-            <div className="w-24 h-1.5 bg-primary mx-auto rounded-full mb-8"></div>
-            <p className="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">
-              Your support enables us to continue our mission of empowering the next generation of students and strengthening our alumni community.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Student Aid Card */}
-            <div className="group bg-white rounded-[2.5rem] p-10 border border-gray-100 shadow-card hover:shadow-2xl transition-all duration-500 flex flex-col h-full hover:-translate-y-2">
-              <div className="h-16 w-16 rounded-2xl bg-purple-50 flex items-center justify-center mb-8 group-hover:bg-primary transition-colors duration-500 shadow-sm">
-                <Heart className="h-8 w-8 text-primary group-hover:text-white transition-colors duration-500" />
-              </div>
-              <h3 className="text-xl font-black text-dark mb-6 leading-tight group-hover:text-primary transition-colors">DONATE TO OUR STUDENT AID ACCOUNT</h3>
-              <p className="text-gray-500 text-base leading-relaxed mb-8 flex-grow">
-                Your gift helps provide tuition assistance, learning materials, and essential support to students from PCSS Buea who are striving to pursue their education with dignity. Every contribution strengthens our commitment to ensuring that no deserving learner is left behind.
-              </p>
-              <Link href="/donations" className="btn-primary w-full justify-center group-hover:bg-accent transition-colors">
-                Donate Now <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-
-            {/* Grant Pools Card */}
-            <div className="group bg-white rounded-[2.5rem] p-10 border border-gray-100 shadow-card hover:shadow-2xl transition-all duration-500 flex flex-col h-full hover:-translate-y-2">
-              <div className="h-16 w-16 rounded-2xl bg-blue-50 flex items-center justify-center mb-8 group-hover:bg-primary transition-colors duration-500 shadow-sm">
-                <Globe className="h-8 w-8 text-blue-600 group-hover:text-white transition-colors duration-500" />
-              </div>
-              <h3 className="text-xl font-black text-dark mb-6 leading-tight group-hover:text-primary transition-colors">DONATE TO OUR GRANT POOLS</h3>
-              <p className="text-gray-500 text-base leading-relaxed mb-8 flex-grow">
-                Your donation fuels competitive grants that empower alumni-led initiatives, educational programs, and community impact projects across the BUPEXSA USA network. These grants help us uplift lives, expand opportunities, and strengthen the legacy of excellence we inherited from PCSS Buea.
-              </p>
-              <Link href="/donations" className="btn-primary w-full justify-center group-hover:bg-accent transition-colors">
-                Donate Now <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-
-            {/* Community Development Card */}
-            <div className="group bg-white rounded-[2.5rem] p-10 border border-gray-100 shadow-card hover:shadow-2xl transition-all duration-500 flex flex-col h-full hover:-translate-y-2">
-              <div className="h-16 w-16 rounded-2xl bg-green-50 flex items-center justify-center mb-8 group-hover:bg-primary transition-colors duration-500 shadow-sm">
-                <MapPin className="h-8 w-8 text-green-600 group-hover:text-white transition-colors duration-500" />
-              </div>
-              <h3 className="text-xl font-black text-dark mb-6 leading-tight group-hover:text-primary transition-colors">DONATE TO OUR COMMUNITY DEVELOPMENT PROJECTS</h3>
-              <p className="text-gray-500 text-base leading-relaxed mb-8 flex-grow">
-                Our support enables BUPEXSA USA to invest in sustainable community development efforts that improve living conditions, expand access to resources, and promote long-term well-being. Together, we transform compassion into action and create lasting change for communities connected to our alma mater.
-              </p>
-              <Link href="/donations" className="btn-primary w-full justify-center group-hover:bg-accent transition-colors">
-                Donate Now <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <GalleryStripSection count={18} />
     </>

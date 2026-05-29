@@ -9,7 +9,14 @@ import { cn } from '@/lib/utils';
 
 const navItems = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
+  {
+    label: 'About',
+    href: '/about',
+    children: [
+      { label: 'About Us', href: '/about' },
+      { label: 'Executive Bench', href: '/about/executive-bench' },
+    ],
+  },
   { label: 'Membership', href: '/membership' },
   {
     label: 'Chapters',
