@@ -178,7 +178,7 @@ export default function HeroSection({
               <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
               <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-4/3 bg-gradient-to-br from-primary to-dark flex items-center justify-center">
                 {sideImage ? (
-                  <img src={sideImage} alt={heading} className="w-full h-full object-cover" />
+                  <img src={sideImage} alt={typeof heading === 'string' ? heading : 'Hero Image'} className="w-full h-full object-cover" />
                 ) : (
                   <div className="text-center text-white p-8">
                     <Globe className="h-16 w-16 mx-auto mb-4 opacity-80" />
