@@ -16,7 +16,7 @@ const defaultPrimaryStats: Stat[] = [
   { label: 'Active Members', value: '347+', icon: 'users' },
   { label: 'US Chapters', value: '12', icon: 'globe' },
   { label: 'Years of Service', value: '40+', icon: 'award' },
-  { label: 'Raised for PCSS', value: '$125K+', icon: 'dollar' },
+  { label: 'Raised for PCSS', value: '$0', icon: 'dollar' },
 ];
 
 const defaultWhiteStats: Stat[] = [

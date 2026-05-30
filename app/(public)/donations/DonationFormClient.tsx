@@ -300,11 +300,11 @@ export default function DonationFormClient() {
             {/* Total Raised */}
             <div className="bg-white rounded-3xl border border-gray-100 shadow-xl p-8 space-y-4 text-center">
               <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Total Raised for PCSS Buea</p>
-              <p className="text-5xl font-black text-dark">$125K+</p>
+              <p className="text-5xl font-black text-dark">$0</p>
               <div className="w-full bg-gray-100 rounded-full h-3">
-                <div className="h-3 rounded-full bg-gradient-to-r from-primary to-accent" style={{ width: '63%' }} />
+                <div className="h-3 rounded-full bg-gradient-to-r from-primary to-accent" style={{ width: '0%' }} />
               </div>
-              <p className="text-sm text-gray-500">63% toward our $200K 3-year goal</p>
+              <p className="text-sm text-gray-500">0% toward our $200K 3-year goal</p>
             </div>
 
             {/* Tax Info */}
