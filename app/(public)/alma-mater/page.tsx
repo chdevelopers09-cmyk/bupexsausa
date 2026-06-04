@@ -19,7 +19,7 @@ export default function AlmaMaterPage() {
       />
 
       <AlmaMaterSection
-        body="<p>Our roots in Buea are the foundation of everything we achieve today. Founded in 1985, PCSS Buea has been a cradle of excellence, shaping minds and building character under the watchful eye of Mount Cameroon.</p><p>For those of us now in the USA, these memories remain the heartbeat of our community.</p>"
+        body="<p>Our roots in Buea are the foundation of everything we achieve today. Founded in 1993, PCSS Buea has been a cradle of excellence, shaping minds and building character under the watchful eye of Mount Cameroon.</p><p>For those of us now in the USA, these memories remain the heartbeat of our community.</p>"
         image="/images/gallery/school-13.jpg"
         linkUrl="/about"
       />
@@ -34,7 +34,7 @@ export default function AlmaMaterPage() {
               </h2>
               <div className="w-24 h-1.5 bg-primary mx-auto rounded-full"></div>
             </div>
-            
+
             <div className="space-y-8 text-gray-600 leading-relaxed text-lg md:text-xl font-medium">
               <p>If you ever want proof that life has a sense of humor, look no further than my story. Looking back at the unexpected leadership journey that began 33 years ago in September 1993, when PCSS Buea Town had just opened its doors, I walked almost two weeks late. Not because I was trying to be dramatic, but because my family had a few issues going on. I arrived expecting to quietly blend into the boys’ dormitory (dorm). Instead, destiny was waiting for me with an unforgettable exposure, literally.</p>
               <p>At the time, the principal, Dr. Ebune Joseph, had already appointed a senior prefect. I was just a normal Form One boy but there was a political crisis that shut down schools, so we all went home. When classes resumed a month later, the senior prefect never returned. One afternoon during manual labor, I was cutting grass with the seriousness of a boy who didn’t want trouble. Suddenly, I noticed someone cutting grass beside me. I turned and there was the principal himself, watching me like he was studying a specimen. He asked my name, asked how I was performing in class, and told me to see him in his office the next morning. I didn’t sleep well that night.</p>
@@ -46,10 +46,10 @@ export default function AlmaMaterPage() {
 
             <div className="mt-16 flex flex-col md:flex-row items-center gap-10 p-10 md:p-12 bg-gray-50 rounded-[3rem] border border-gray-100 shadow-xl shadow-gray-200/50">
               <div className="h-48 w-48 rounded-[2.5rem] overflow-hidden border-4 border-white shadow-2xl flex-shrink-0 bg-white">
-                <img 
-                  src="/images/awachek-walter.png" 
-                  alt="Mr Awachek Walter" 
-                  className="w-full h-full object-cover object-top" 
+                <img
+                  src="/images/awachek-walter.png"
+                  alt="Mr Awachek Walter"
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
               <div>

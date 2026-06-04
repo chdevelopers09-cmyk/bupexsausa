@@ -1,53 +1,21 @@
 import HeroSection from '@/components/sections/HeroSection';
 
 export const metadata = {
-  title: 'About Us',
-  description: 'Learn about the history, mission, and leadership of BUPEXSA USA.',
+  title: 'Our Story | BUPEXSA USA',
+  description: 'The history and foundation of BUPEXSA USA.',
 };
 
-export default function AboutPage() {
+export default function OurStoryPage() {
   return (
     <>
       <HeroSection
         variant="centered-white"
-        heading="Our Story, Our Mission"
-        subheading="BUPEXSA USA is more than an organization; it's a legacy of friendship and commitment that spans decades and continents."
+        heading="Our Story"
+        subheading="From a shared table to a national footprint: The Birth of BUPEXSA USA."
         badge="About BUPEXSA USA"
       />
-
-      <section className="section-padding bg-white" id="our-mission">
+      <section className="section-padding bg-white overflow-hidden">
         <div className="container-wide">
-          <div className="text-center max-w-3xl mx-auto">
-            <span className="inline-block px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] bg-primary/10 text-primary mb-6">
-              Purpose
-            </span>
-            <h2 className="text-3xl md:text-5xl font-black text-dark mb-6">OUR MISSION</h2>
-            <div className="w-24 h-1.5 bg-primary mx-auto rounded-full mb-8"></div>
-            <p className="text-xl text-gray-600 leading-relaxed font-medium">
-              To connect and empower Presbyterian Comprehensive Secondary School Buea graduates residing in the United States, fostering a strong community, promoting excellence, and giving back to our alma mater through impactful initiatives.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-padding bg-gray-50" id="our-vision">
-        <div className="container-wide">
-          <div className="text-center max-w-3xl mx-auto">
-            <span className="inline-block px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] bg-primary/10 text-primary mb-6">
-              Future
-            </span>
-            <h2 className="text-3xl md:text-5xl font-black text-dark mb-6">OUR VISION</h2>
-            <div className="w-24 h-1.5 bg-primary mx-auto rounded-full mb-8"></div>
-            <p className="text-xl text-gray-600 leading-relaxed font-medium">
-              To be the premier alumni association that unites all BUPEXSANS in the USA, leaving a lasting legacy of support, professional growth, and infrastructural development for PCSS Buea Town and future generations.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-padding bg-white overflow-hidden" id="our-story">
-        <div className="container-wide">
-          {/* Section Header - centered */}
           <div className="text-center mb-16">
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] bg-primary/10 text-primary mb-6">
               History
@@ -57,9 +25,7 @@ export default function AboutPage() {
             <div className="w-24 h-1.5 bg-primary mx-auto rounded-full"></div>
           </div>
 
-          {/* Two-column layout: image left, content right */}
           <div className="grid lg:grid-cols-2 gap-16 items-start">
-            {/* Left: Image */}
             <div className="relative lg:sticky lg:top-32">
               <div className="absolute -inset-4 border-2 border-primary/20 rounded-[3rem] translate-x-4 translate-y-4 pointer-events-none"></div>
               <div className="rounded-[2.5rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
@@ -74,7 +40,6 @@ export default function AboutPage() {
               </p>
             </div>
 
-            {/* Right: Content */}
             <div className="prose prose-lg max-w-none text-gray-500 space-y-8 leading-relaxed">
               <p>
                 The idea of Buea Presbyterian Ex-Student Association (BUPEXSA) United States (USA) began around July 2011. As a few BUPEXSANS discovered themselves in the (District of Columbia, Maryland and Virginia) DMV. At the time, communication amongst us in the United States was not as easy as it is today. Finding one another was often tedious, and there was no central platform that connected us. However, as we gradually became aware of the growing presence of BUPEXSA alumni, particularly in the DMV area, the vision of bringing everyone together began to form.

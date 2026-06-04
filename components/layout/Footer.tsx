@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import { Globe, Camera, X, Play, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
+import { Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
 import { SITE_CONFIG } from '@/lib/config';
 import { createAdminClient } from '@/lib/supabase/admin';
-
 
 const quickLinks = [
   { label: 'About Us', href: '/about' },
@@ -32,7 +31,7 @@ export default async function Footer() {
   const annualFee = settings.membership_fee || 100;
 
   return (
-    <footer className="text-white bg-[#1c2331]">
+    <footer className="text-white bg-[#38BDF8]">
       {/* Social Bar (The section above footer body) */}
       <div className="bg-[#6351ce] flex items-center justify-between py-4 px-6 md:px-12">
         <div className="hidden lg:block text-sm">
@@ -40,10 +39,44 @@ export default async function Footer() {
         </div>
         <div className="flex items-center gap-4">
           {[
-            { icon: (props: any) => <Globe {...props} />, href: SITE_CONFIG.socialLinks.facebook, label: 'Facebook' },
-            { icon: (props: any) => <X {...props} />, href: SITE_CONFIG.socialLinks.twitter, label: 'Twitter' },
-            { icon: (props: any) => <Camera {...props} />, href: SITE_CONFIG.socialLinks.instagram, label: 'Instagram' },
-            { icon: (props: any) => <Play {...props} />, href: SITE_CONFIG.socialLinks.youtube, label: 'YouTube' },
+            { 
+              icon: (props: any) => (
+                <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+                  <path d="M12 2.04c-5.5 0-10 4.48-10 10.02 0 5 3.66 9.15 8.44 9.9v-7H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.9h-2.33v7a10 10 0 0 0 8.44-9.9c0-5.54-4.5-10.02-10-10.02z" />
+                </svg>
+              ), 
+              href: SITE_CONFIG.socialLinks.facebook, 
+              label: 'Facebook' 
+            },
+            { 
+              icon: (props: any) => (
+                <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              ), 
+              href: SITE_CONFIG.socialLinks.twitter, 
+              label: 'X (Twitter)' 
+            },
+            { 
+              icon: (props: any) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+                </svg>
+              ), 
+              href: SITE_CONFIG.socialLinks.instagram, 
+              label: 'Instagram' 
+            },
+            { 
+              icon: (props: any) => (
+                <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+              ), 
+              href: SITE_CONFIG.socialLinks.youtube, 
+              label: 'YouTube' 
+            },
             {
               icon: (props: any) => (
                 <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -125,10 +158,12 @@ export default async function Footer() {
                 <Mail className="h-4 w-4 flex-shrink-0" />
                 <span>{SITE_CONFIG.email}</span>
               </a>
-              <a href={`tel:${SITE_CONFIG.phone}`} className="flex items-center gap-3 hover:text-white transition-colors">
-                <Phone className="h-4 w-4 flex-shrink-0" />
-                <span>{SITE_CONFIG.phone}</span>
-              </a>
+              {(Array.isArray(SITE_CONFIG.phone) ? SITE_CONFIG.phone : [SITE_CONFIG.phone]).map((phoneStr, idx) => (
+                <a key={idx} href={`tel:${phoneStr}`} className="flex items-center gap-3 hover:text-white transition-colors">
+                  <Phone className="h-4 w-4 flex-shrink-0" />
+                  <span>{phoneStr}</span>
+                </a>
+              ))}
             </div>
           </div>
         </div>

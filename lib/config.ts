@@ -25,12 +25,12 @@ export const SITE_CONFIG = {
 
   // Backward Compatibility Fields (needed by Footer/Contact forms)
   email: 'bupexsausa25@gmail.com',
-  phone: '+1 (404) 555-0123',
+  phone: ['+1 (469) 434-8283', '+1 (919) 996-0993'],
   address: 'P.O. Box 12345, Atlanta, GA 30301',
   socialLinks: {
-    facebook: 'https://www.facebook.com/groups/1051201462702175',
+    facebook: 'https://www.facebook.com/share/p/1Exf2otgAz/',
     twitter: 'https://twitter.com/bupexsausa',
-    instagram: 'https://www.instagram.com/bupexsausa/',
+    instagram: 'https://www.instagram.com/bupexsa_usa',
     youtube: 'https://youtube.com/@bupexsausa',
     whatsapp: 'https://wa.me/message/bupexsausa',
   },
@@ -47,7 +47,7 @@ export const SITE_CONFIG = {
   // Contact (Structured)
   contact: {
     email: 'bupexsausa25@gmail.com',
-    phone: '+1 (404) 555-0123',
+    phone: ['+1 (469) 434-8283', '+1 (919) 996-0993'],
     address: 'P.O. Box 12345, Atlanta, GA 30301',
   },
 

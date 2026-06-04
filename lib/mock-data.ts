@@ -299,8 +299,10 @@ export const MOCK_LEADERSHIP = [
     title: 'Public Relations Officer',
     chapter: 'National',
     batch: '1997',
-    bio: 'Dr. Sylvia Dasi is a geneticist with a deep-rooted passion for public health and human development. She has extensive experience in genetics research and global health awareness.',
-    longBio: 'Dr. Sylvia Dasi is a geneticist with a deep-rooted passion for public health and human development. Her interest in genetics began at the University of Maryland Eastern Shore (UMES), where she majored in Biology and was selected for the prestigious Minority Access to Research Careers Scholar Program, established by the National Institutes of Health.\n\nThrough this program, she received advanced training from institutions such as the Jackson Laboratory, the University of Maryland Biotechnology Institute, and the National Institutes of Health (NHGRI and NIA), focusing on the genetic causes of human diseases. Her early exposure to genetics sparked a lifelong dedication to understanding human susceptibility to diseases and advancing control and prevention strategies.\n\nGraduating in 2008 with a Bachelor of Science degree, Dr. Dasi was recognized as the Most Outstanding Student in the Department of Agriculture and Natural Sciences. She then pursued her doctoral studies at Howard University, focusing on identifying DNA changes that might indicate breast cancer progression in women of African descent. She earned her Ph.D. in Human Genetics in 2014, along with a certificate in International Studies.\n\nDr. Dasi extended her expertise beyond academia into public and global health, particularly in breast cancer awareness within the African immigrant communities in the Washington, D.C. metropolitan area. She collaborated with the African Women’s Cancer Awareness Association (AWCAA) to coordinate medical missions to Cameroon, Nigeria, and Tanzania, delivering culturally competent health education on breast cancer awareness, prevention, and control in rural African communities.\n\nIn 2023, she further expanded her expertise by earning a Master of Business Administration (MBA) with a specialization in project management from Walden University. Throughout her career, Dr. Dasi has received numerous accolades for her scholarly contributions, including a Proclamation of Academic Achievement from the Prince George’s County Executive (2008), the Comcast Student Achievement Award (2004), and the State of Maryland Governor’s Volunteer Service Certificate (2013).',
+    location: 'Maryland',
+    expertise: 'Community and Government Relations',
+    bio: 'Dr. Sylvia Dasi is a geneticist with a deep-rooted passion for public health and human development. She has extensive experience in genetics research, global health awareness, and community engagement across the African diaspora.',
+    longBio: 'Dr. Sylvia Dasi is a geneticist with a deep-rooted passion for public health and human development. Her interest in genetics began at the University of Maryland Eastern Shore (UMES), where she majored in Biology and was selected for the prestigious Minority Access to Research Careers Scholar Program, established by the National Institutes of Health. Through this program, she received advanced training from institutions such as the Jackson Laboratory, the University of Maryland Biotechnology Institute, and the National Institutes of Health (NHGRI and NIA), focusing on the genetic causes of human diseases. Her early exposure to genetics sparked a lifelong dedication to understanding human susceptibility to diseases and advancing control and prevention strategies.\n\nGraduating in 2008 with a Bachelor of Science degree, Dr. Dasi was recognized as the Most Outstanding Student in the Department of Agriculture and Natural Sciences. She then pursued her doctoral studies at Howard University, focusing on identifying DNA changes that might indicate breast cancer progression in women of African descent. She earned her Ph.D. in Human Genetics in 2014, along with a certificate in International Studies.\n\nDr. Dasi extended her expertise beyond academia into public and global health, particularly in breast cancer awareness within the African immigrant communities in the Washington, D.C. metropolitan area. She collaborated with the African Women\'s Cancer Awareness Association (AWCAA) to coordinate medical missions to Cameroon, Nigeria, and Tanzania, delivering culturally competent health education on breast cancer awareness, prevention, and control in rural African communities.\n\nIn 2023, she further expanded her expertise by earning a Master of Business Administration (MBA) with a specialization in project management from Walden University. Throughout her career, Dr. Dasi has received numerous accolades for her scholarly contributions, including a Proclamation of Academic Achievement from the Prince George\'s County Executive (2008), the Comcast Student Achievement Award (2004), and the State of Maryland Governor\'s Volunteer Service Certificate (2013). She has also co-authored peer-reviewed publications and serves on various commissions and councils supporting the African diaspora in Maryland.\n\nBeyond her academic and professional accomplishments, Dr. Dasi is an entrepreneur whose business focuses on increasing available access to African foods in the United States market and tools to connect communities through food and culture. She is also a dedicated philanthropist committed to transforming lives through charitable initiatives. Her mission is to bridge the gap between scientific research and community impact, ensuring that underserved populations benefit from advancements in health and disease prevention.',
     education: [
       'Ph.D. in Human Genetics, Howard University (2014)',
       'MBA in Project Management, Walden University (2023)',
@@ -309,8 +311,11 @@ export const MOCK_LEADERSHIP = [
     ],
     achievements: [
       'Public Relations Officer of BUPEXSA USA',
-      'Proclamation of Academic Achievement from Prince George’s County Executive',
-      'State of Maryland Governor’s Volunteer Service Certificate'
+      'Proclamation of Academic Achievement from Prince George\'s County Executive (2008)',
+      'Comcast Student Achievement Award (2004)',
+      'State of Maryland Governor\'s Volunteer Service Certificate (2013)',
+      'Co-authored peer-reviewed publications in Human Genetics',
+      'Serves on commissions supporting the African diaspora in Maryland'
     ],
     photo_path: '/images/leadership/sylvia-dasi.jpg',
     order: 9,
@@ -318,7 +323,7 @@ export const MOCK_LEADERSHIP = [
   {
     id: '10',
     slug: 'edmund-besong',
-    name: 'Edmund Besong',
+    name: 'Ed Besong',
     title: 'Auditor, BUPEXSA USA',
     chapter: 'National',
     batch: '1999',
@@ -381,6 +386,29 @@ export const MOCK_LEADERSHIP = [
     photo_path: '/images/leadership/pancratius-mukeh.jpg',
     order: 12,
     hideProfile: true,
+  },
+  {
+    id: '13',
+    slug: 'desmond-whyte',
+    name: 'Desmond Whyte',
+    title: 'Auditor, BUPEXSA USA',
+    chapter: 'National',
+    batch: '1998',
+    location: 'Maryland, USA',
+    expertise: 'Financial Accounting & Taxation',
+    bio: 'Desmond Whyte is a seasoned Financial Accountant and Tax Professional with extensive experience in accounting, taxation, financial management, and business consulting.',
+    longBio: 'Desmond Whyte is a seasoned Financial Accountant and Tax Professional with extensive experience in accounting, taxation, financial management, and business consulting. As the Founder and Principal Consultant of JEP Consultancy LLC, he has successfully provided financial and tax advisory services to individuals and businesses, helping them achieve compliance, efficiency, and sustainable growth.\n\nKnown for his integrity, analytical skills, and commitment to financial stewardship, Desmond brings a wealth of expertise in financial reporting, tax planning, internal controls, and fiscal accountability. His professional background has equipped him with the diligence and attention to detail necessary to ensure transparency and sound financial oversight.\n\nA proud alumnus of Buea Presbyterian High School (PCSS Buea), Batch of 1998, Desmond remains deeply committed to the community. He resides in Maryland, USA, and serves as the Auditor for BUPEXSA USA, where he is dedicated to supporting the organization\'s mission and ensuring financial accountability.',
+    education: [
+      'Founder and Principal Consultant of JEP Consultancy LLC',
+      'PCSS Buea - Batch of 1998'
+    ],
+    achievements: [
+      'Auditor, BUPEXSA USA',
+      'Principal Consultant, JEP Consultancy LLC',
+      'Resides in Maryland, USA'
+    ],
+    photo_path: '/images/leadership/desmond-whyte.jpg',
+    order: 13,
   },
 ];
 

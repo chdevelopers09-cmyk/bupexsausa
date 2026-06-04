@@ -73,9 +73,11 @@ export default function ContactFormSection({
                 </div>
                 <div>
                   <p className="text-xs font-black uppercase tracking-widest text-primary mb-1">Call Us</p>
-                  <a href={`tel:${SITE_CONFIG.phone}`} className="text-xl font-bold text-dark hover:text-primary transition-colors">
-                    {SITE_CONFIG.phone}
-                  </a>
+                  {(Array.isArray(SITE_CONFIG.phone) ? SITE_CONFIG.phone : [SITE_CONFIG.phone]).map((phoneStr, idx) => (
+                    <a key={idx} href={`tel:${phoneStr}`} className="block text-xl font-bold text-dark hover:text-primary transition-colors">
+                      {phoneStr}
+                    </a>
+                  ))}
                 </div>
               </div>
 

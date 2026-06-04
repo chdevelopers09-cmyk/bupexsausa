@@ -13,8 +13,10 @@ const navItems = [
     label: 'About',
     href: '/about',
     children: [
-      { label: 'About Us', href: '/about' },
-      { label: 'Executive Bench', href: '/about/executive-bench' },
+      { label: 'Our Mission', href: '/about/our-mission' },
+      { label: 'Our Vision', href: '/about/our-vision' },
+      { label: 'Our Story', href: '/about/our-story' },
+      { label: 'Our Executive Bench', href: '/about/executive-bench' },
     ],
   },
   { label: 'Membership', href: '/membership' },
@@ -181,7 +183,7 @@ export default function Navbar() {
                 </Link>
                 {item.children && (
                   <div className="ml-4 pl-4 border-l-2 border-purple-100 mb-1">
-                    {item.children.slice(1).map((child) => (
+                    {item.children.map((child) => (
                       <Link
                         key={child.href}
                         href={child.href}
