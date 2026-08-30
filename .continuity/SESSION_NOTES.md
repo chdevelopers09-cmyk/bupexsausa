@@ -12,3 +12,4 @@
 - Fixed middleware canonical domain redirect in `middleware.ts` and sanitized `SITE_CONFIG.url` in `lib/config.ts` to stop appending `:3000` port to production domain redirects. (Commit `43cff63`)
 - Completely removed application-level canonical domain redirect from `middleware.ts` to prevent infinite 301 redirect loops (`ERR_TOO_MANY_REDIRECTS`) behind reverse proxies and edge CDNs. (Commit `09505da`)
 - Updated `forgot-password/page.tsx` redirect URL to use `/auth/callback?next=/reset-password` with production `https://www.bupexsausa.org` fallback. (Commit `0ef8202`)
+- Updated `sendPasswordReset` in `app/admin/(protected)/members/actions.ts` to use HTTPS canonical domain callback. (Commit `26cc689`)
