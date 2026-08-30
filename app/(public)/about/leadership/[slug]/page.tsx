@@ -1,6 +1,7 @@
 import { MOCK_LEADERSHIP } from '@/lib/mock-data';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, GraduationCap, Award, MapPin, Users, Star } from 'lucide-react';
 
 export default async function LeadershipProfilePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -31,8 +32,8 @@ export default async function LeadershipProfilePage({ params }: { params: Promis
           </Link>
           
           <div className="flex flex-col md:flex-row gap-12 items-center md:items-end">
-            <div className="h-64 w-64 rounded-3xl overflow-hidden border-8 border-white/20 shadow-2xl bg-white shrink-0">
-              <img src={member.photo_path} alt={member.name} className="w-full h-full object-cover object-top" />
+            <div className="h-64 w-64 rounded-3xl overflow-hidden border-8 border-white/20 shadow-2xl bg-white shrink-0 relative">
+              <Image src={member.photo_path} alt={member.name} fill sizes="64px" className="object-cover object-top" />
             </div>
             <div className="text-center md:text-left text-white pb-4">
               <h1 className="text-4xl md:text-6xl font-black mb-4">{member.name}</h1>

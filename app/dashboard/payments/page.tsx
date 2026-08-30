@@ -56,49 +56,33 @@ function MembershipPaymentsContent() {
     }
     
     setSubmitting(true);
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const user = session?.user;
-      if (!user) throw new Error('Not authenticated. Please log in again.');
+      try {
+        const form = new FormData();
+        form.append('proof', proofFile as Blob);
+        form.append('type', selectedPlan === 'annual' ? 'MEMBERSHIP' : 'DONATION');
+        form.append('method', payMethod);
+        form.append('amount', String(selectedPlan === 'annual' ? Number(settings.membership_fee || 100) : Number(donationAmt)));
 
-      const fileExt = proofFile.name.split('.').pop();
-      const filePath = `${user.id}/proof-${Date.now()}.${fileExt}`;
-      
-      const { error: uploadError } = await supabase.storage
-          .from('payment-proofs')
-          .upload(filePath, proofFile);
+        const res = await fetch('/api/payments/submit', { method: 'POST', body: form });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
 
-      if (uploadError) throw uploadError;
+        alert('Payment submitted! Our team will verify the receipt and update your status within 24-48 hours.');
+        setProofFile(null);
 
-      const amount = selectedPlan === 'annual' ? Number(settings.membership_fee || 100) : Number(donationAmt);
-
-      const { error: paymentError } = await supabase.from('payments').insert({
-          member_id: user.id,
-          type: selectedPlan === 'annual' ? 'MEMBERSHIP' : 'DONATION',
-          amount,
-          method: payMethod.toUpperCase(),
-          status: 'PENDING_VERIFICATION',
-          proof_storage_path: filePath,
-      });
-
-      if (paymentError) throw paymentError;
-
-      alert('Payment submitted! Our team will verify the receipt and update your status within 24-48 hours.');
-      setProofFile(null);
-      
-      // Refresh list
-      const { data: updatedPayments } = await supabase
-        .from('payments')
-        .select('*')
-        .eq('member_id', user.id)
-        .order('created_at', { ascending: false });
-      setPayments(updatedPayments || []);
-      setActiveTab('history');
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setSubmitting(false);
-    }
+        // Refresh list from Supabase (same as before)
+        const { data: updatedPayments } = await supabase
+          .from('payments')
+          .select('*')
+          .eq('member_id', (await supabase.auth.getSession()).data.session?.user?.id)
+          .order('created_at', { ascending: false });
+        setPayments(updatedPayments || []);
+        setActiveTab('history');
+      } catch (err: any) {
+        alert(err.message);
+      } finally {
+        setSubmitting(false);
+      }
   };
 
   useEffect(() => {

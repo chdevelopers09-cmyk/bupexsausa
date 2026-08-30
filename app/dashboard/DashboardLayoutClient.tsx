@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import {
   LayoutDashboard,
   User,
@@ -161,9 +162,9 @@ export default function DashboardLayoutClient({
                      </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 border-2 border-white shadow-sm flex items-center justify-center text-primary font-bold overflow-hidden transition-transform group-hover:scale-105 shrink-0">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 border-2 border-white shadow-sm flex items-center justify-center text-primary font-bold overflow-hidden transition-transform group-hover:scale-105 shrink-0 relative">
                        {profile?.avatar_path ? (
-                           <img src={profile.avatar_path} alt="Avatar" className="w-full h-full object-cover" />
+                           <Image src={profile.avatar_path} alt="Avatar" fill sizes="48px" className="object-cover" />
                          ) : userInitials
                        }
                     </div>

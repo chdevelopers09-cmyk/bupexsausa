@@ -20,6 +20,13 @@ export async function GET(request: NextRequest) {
       }
       
       return NextResponse.redirect(new URL(redirectPath, SITE_CONFIG.url));
+    } else {
+      // If exchange fails during a recovery flow, redirect to the reset
+      // UI with a benign error flag so the user sees an actionable page
+      // instead of a silent login error. Detailed diagnostics remain in
+      // server logs for operators to investigate.
+      const { SITE_CONFIG } = await import('@/lib/config');
+      return NextResponse.redirect(new URL('/reset-password?error=auth-callback-failed', SITE_CONFIG.url));
     }
   }
 

@@ -1,11 +1,11 @@
-'use client';
+ 'use client';
 
 import Link from 'next/link';
 import { Eye, EyeOff, ArrowRight, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { login, resendVerification } from '../actions';
 import { useSearchParams } from 'next/navigation';
+import { login, resendVerification } from '../actions';
 
 export default function LoginClient() {
   const searchParams = useSearchParams();
@@ -22,7 +22,7 @@ export default function LoginClient() {
     setResending(true);
     const res = await resendVerification(emailParam);
     setResending(false);
-    if (res.error) setResendMsg({ type: 'error', text: res.error });
+    if (res?.error) setResendMsg({ type: 'error', text: res.error });
     else setResendMsg({ type: 'success', text: 'Verification link sent! Please check your email.' });
   };
 
@@ -74,11 +74,11 @@ export default function LoginClient() {
         </div>
       )}
 
-      {/* Credentials Form */}
+      {/* Credentials Form — submits to the Supabase-backed login() server action */}
       <form action={login} className="space-y-6">
         <input type="hidden" name="next" value={next} />
 
-        {/* Email field */}
+        {/* Email / Username field */}
         <div className="space-y-2">
           <label className="text-sm font-bold text-slate-700 block">Email or Username</label>
           <input
@@ -91,9 +91,7 @@ export default function LoginClient() {
 
         {/* Password field */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <label className="text-sm font-bold text-slate-700 block">Password</label>
-          </div>
+          <label className="text-sm font-bold text-slate-700 block">Password</label>
           <div className="relative">
             <input
               name="password"
@@ -111,7 +109,7 @@ export default function LoginClient() {
           </div>
         </div>
 
-        {/* Remember me option */}
+        {/* Remember me */}
         <div className="flex items-center gap-2.5">
           <input
             type="checkbox"
@@ -123,7 +121,7 @@ export default function LoginClient() {
           </label>
         </div>
 
-        {/* Submit button - left-aligned pill to match Oroko USA */}
+        {/* Submit */}
         <div className="flex flex-col gap-4 items-start pt-2">
           <button
             type="submit"

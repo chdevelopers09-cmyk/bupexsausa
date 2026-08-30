@@ -18,34 +18,27 @@ export default async function AdminMembersPage() {
   const { data: allMembers, error: membersError } = membersRes;
   const { data: authData, error: authError } = authRes;
 
-  const adminRoles = ['admin', 'superadmin', 'web_manager', 'portal_manager', 'ADMIN', 'SUPERADMIN'];
-  const superAdminEmails = [
-    'chdevelopers09@gmail.com',
-    'mudassarkhalil@gmail.com',
-    'imranalikhan774@gmail.com',
-    'emidev7@gmail.com',
-    'bupexsausa25@gmail.com'
-  ];
+  // Centralize staff identifiers so admin vs member filtering is easier
+  const STAFF_ROLES = ['admin', 'superadmin', 'web_manager', 'portal_manager', 'ADMIN', 'SUPERADMIN'];
+  const STAFF_EMAIL_PREFIXES = ['chdevelopers09@gmail.com','mudassarkhalil@gmail.com','imranalikhan774@gmail.com','emidev7@gmail.com','bupexsausa25@gmail.com'];
 
   const adminEmails = new Set(
     (authData?.users || [])
       .filter(u => {
-        const role = u.app_metadata?.role;
-        const email = u.email?.toLowerCase() || '';
-        return adminRoles.includes(role) || 
-               superAdminEmails.includes(email) ||
-               email.endsWith('@rubilian.com');
+        const role = (u.app_metadata?.role || '').toString();
+        const email = (u.email || '').toLowerCase();
+        return STAFF_ROLES.includes(role) || STAFF_EMAIL_PREFIXES.includes(email) || email.endsWith('@rubilian.com');
       })
-      .map(u => u.email?.toLowerCase())
+      .map(u => (u.email || '').toLowerCase())
   );
-  
-  const members = (allMembers || []).filter(m => {
-    const email = m.email?.toLowerCase();
-    const role = m.role;
-    const isExplicitAdmin = adminEmails.has(email) || superAdminEmails.includes(email);
-    const hasAdminRole = adminRoles.includes(role);
 
-    return !hasAdminRole && !isExplicitAdmin && !email?.endsWith('@rubilian.com');
+  // Filter members to exclude staff/admin accounts even if a member row exists
+  const members = (allMembers || []).filter(m => {
+    const email = (m.email || '').toLowerCase();
+    const role = (m.role || '').toString();
+    const hasStaffRole = STAFF_ROLES.includes(role);
+    const isStaffEmail = adminEmails.has(email) || STAFF_EMAIL_PREFIXES.includes(email);
+    return !hasStaffRole && !isStaffEmail;
   });
 
   if (membersError || authError) {

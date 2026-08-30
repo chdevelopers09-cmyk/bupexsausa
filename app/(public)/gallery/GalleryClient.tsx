@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, ZoomIn, Download, Grid, Layers, Play } from 'lucide-react';
+import Image from 'next/image';
 import { MOCK_GALLERY } from '@/lib/mock-data';
 
 export default function GalleryClient({ initialImages = [] }: { initialImages?: any[] }) {
@@ -115,11 +116,9 @@ export default function GalleryClient({ initialImages = [] }: { initialImages?: 
       }
     }
     return (
-      <img
-        src={item.thumb}
-        alt={item.alt}
-        className="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl"
-      />
+      <div className="relative w-full">
+        <Image src={item.thumb} alt={item.alt} width={1600} height={900} className="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl" />
+      </div>
     );
   };
 
@@ -176,12 +175,9 @@ export default function GalleryClient({ initialImages = [] }: { initialImages?: 
                   onClick={() => openLightbox(index)}
                 >
                   {item.thumb ? (
-                    <img
-                      src={item.thumb}
-                      alt={item.alt}
-                      className="w-full h-auto block group-hover:scale-105 transition-transform duration-700"
-                      style={{ aspectRatio: index % 3 === 0 ? '4/5' : index % 3 === 1 ? '16/10' : '1/1' }}
-                    />
+                    <div className="relative block" style={{ aspectRatio: index % 3 === 0 ? '4/5' : index % 3 === 1 ? '16/10' : '1/1' }}>
+                      <Image src={item.thumb} alt={item.alt} fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                    </div>
                   ) : (
                     <div 
                       className="w-full bg-gray-100 flex items-center justify-center group-hover:scale-105 transition-transform duration-700"
@@ -223,7 +219,9 @@ export default function GalleryClient({ initialImages = [] }: { initialImages?: 
                   onClick={() => openLightbox(index)}
                 >
                   {item.thumb ? (
-                    <img src={item.thumb} alt={item.alt} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    <div className="relative w-full h-full">
+                      <Image src={item.thumb} alt={item.alt} fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw" className="object-cover group-hover:scale-110 transition-transform duration-700" />
+                    </div>
                   ) : (
                     <div className="w-full h-full bg-gray-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-700">
                       <Grid className="h-12 w-12 text-gray-300" />

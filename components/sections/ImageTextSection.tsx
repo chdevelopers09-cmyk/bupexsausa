@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -39,8 +40,8 @@ export default function ImageTextSection({
             variant === 'image-right' ? "lg:order-2" : "lg:order-1"
           )}>
             <div className="absolute -inset-4 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl blur-2xl -z-10" />
-            <div className="rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
-              <img src={image} alt={heading || bodyTitle || 'BUPEXSA Image'} className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" />
+            <div className="rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] relative">
+              <Image src={image} alt={heading || bodyTitle || 'BUPEXSA Image'} fill sizes="100vw" className="object-cover transform hover:scale-105 transition-transform duration-700" />
             </div>
           </div>
           <div className={cn(

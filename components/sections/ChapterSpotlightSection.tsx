@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { MapPin, Users, ArrowRight, Compass } from 'lucide-react';
+import Image from 'next/image';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getImageUrl } from '@/lib/utils';
 
@@ -50,10 +51,12 @@ export default async function ChapterSpotlightSection({
                 {chapter.banner_image_path && (
                   <>
                     <div className="absolute inset-0 bg-dark/20 group-hover:bg-dark/0 transition-colors z-10" />
-                    <img
+                    <Image
                       src={getImageUrl(chapter.banner_image_path) || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400'}
                       alt={chapter.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      fill
+                      sizes="100vw"
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                   </>
                 )}

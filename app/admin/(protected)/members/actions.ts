@@ -60,6 +60,20 @@ export async function approveMember(memberId: string) {
     body: `Welcome to BUPEXSA USA! Your Membership ID is ${membershipId}. You now have full access to the portal.`
   });
 
+  // 6. Send transactional email (if configured)
+  try {
+    const { sendEmail } = await import('@/lib/mailer');
+    const to = member.email || (memberId as string);
+    await sendEmail({
+      to,
+      subject: 'BUPEXSA USA — Membership Activated',
+      text: `Hello ${member.full_name || ''},\n\nYour BUPEXSA USA membership is now active. Membership ID: ${membershipId}.\n\nThank you for supporting us.`,
+      html: `<p>Hello ${member.full_name || ''},</p><p>Your BUPEXSA USA membership is now <strong>active</strong>. Membership ID: <strong>${membershipId}</strong>.</p><p>Thank you for supporting BUPEXSA USA.</p>`
+    });
+  } catch (e) {
+    console.warn('Email send failed (non-fatal):', e);
+  }
+
   revalidatePath('/admin/members');
   revalidatePath(`/admin/members/${memberId}`);
   
@@ -236,28 +250,52 @@ export async function createAdminMember(formData: FormData) {
         .eq('id', existingAuthUser.id)
         .maybeSingle();
 
+      // Determine existing role in Auth metadata (if any)
+      const existingRole = ((existingAuthUser.app_metadata as any)?.role || (existingAuthUser.user_metadata as any)?.role || '').toString().toLowerCase();
+
+      // If the Auth user is an admin/staff account, do NOT auto-create a public `members` row.
+      // Instead, sync metadata and treat the operation as successful for Auth-only accounts.
+      const isAdminLike = existingRole && ['admin', 'staff', 'superadmin', 'moderator'].includes(existingRole);
+
       if (!existingMember) {
-        // Orphaned user found! Let's repair by creating the member record
-        const { error: insertError } = await supabase.from('members').insert({
-          id: existingAuthUser.id,
-          email: email,
-          full_name,
-          graduation_year: parseInt(graduation_year || '2000'),
-          us_state: us_state || 'Unknown',
-          phone,
-          batch,
-          profession,
-          how_did_you_hear,
-          status: status,
-          role: 'member'
+        if (isAdminLike) {
+          // Update Auth metadata and avoid creating a members row for staff/admin accounts
+          await supabase.auth.admin.updateUserById(existingAuthUser.id, {
+            app_metadata: { role: existingRole || 'admin' },
+            user_metadata: { full_name, username, status }
+          });
+
+          userData = { user: existingAuthUser as any };
+          error = null;
+        } else {
+          // Orphaned normal user — repair by creating the member record
+          const { error: insertError } = await supabase.from('members').insert({
+            id: existingAuthUser.id,
+            email: email,
+            full_name,
+            graduation_year: parseInt(graduation_year || '2000'),
+            us_state: us_state || 'Unknown',
+            phone,
+            batch,
+            profession,
+            how_did_you_hear,
+            status: status,
+            role: 'member'
+          });
+
+          if (insertError) return { error: `User exists in Auth but failed to repair Member record: ${insertError.message}` };
+
+          userData = { user: existingAuthUser as any };
+          error = null;
+        }
+      } else {
+        // existingMember present — ensure Auth metadata is up-to-date and treat as success
+        await supabase.auth.admin.updateUserById(existingAuthUser.id, {
+          app_metadata: { role: existingRole || 'member' }
         });
 
-        if (insertError) return { error: `User exists in Auth but failed to repair Member record: ${insertError.message}` };
-        
         userData = { user: existingAuthUser as any };
         error = null;
-      } else {
-        return { error: `A member with the email "${email}" already exists in the system.` };
       }
     }
   }

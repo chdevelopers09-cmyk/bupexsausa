@@ -1,4 +1,5 @@
 import HeroSection from '@/components/sections/HeroSection';
+import Image from 'next/image';
 
 export const metadata = {
   title: 'Our Story | BUPEXSA USA',
@@ -29,11 +30,9 @@ export default function OurStoryPage() {
             <div className="relative lg:sticky lg:top-32">
               <div className="absolute -inset-4 border-2 border-primary/20 rounded-[3rem] translate-x-4 translate-y-4 pointer-events-none"></div>
               <div className="rounded-[2.5rem] overflow-hidden shadow-2xl relative z-10 border-8 border-white">
-                <img
-                  src="/images/about/first-meeting.png"
-                  alt="The First BUPEXSA USA Gathering"
-                  className="w-full h-auto"
-                />
+                <div className="relative w-full h-auto">
+                  <Image src="/images/about/first-meeting.png" alt="The First BUPEXSA USA Gathering" width={1200} height={800} className="w-full h-auto" />
+                </div>
               </div>
               <p className="text-center mt-6 text-gray-400 text-sm font-medium italic">
                 Past pictures from one of the earliest gatherings that laid the foundation for BUPEXSA USA.

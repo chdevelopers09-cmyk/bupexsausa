@@ -2,6 +2,7 @@
 // Version: 1.0.1 - Force refresh for Password Generator UI
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Search, ShieldCheck, User, XCircle, Settings, Edit2, Trash2, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { updateAdminUser, deleteAdminUser } from './actions';
 
@@ -128,9 +129,9 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
                 <tr key={user.id} className="hover:bg-slate-50/80 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden shrink-0 flex items-center justify-center text-slate-500 font-bold">
+                      <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden shrink-0 flex items-center justify-center text-slate-500 font-bold relative">
                         {user.avatar_path ? (
-                          <img src={user.avatar_path} alt={user.full_name} className="w-full h-full object-cover" />
+                          <Image src={user.avatar_path} alt={user.full_name} fill sizes="48px" className="object-cover" />
                         ) : (
                           <User className="h-5 w-5" />
                         )}

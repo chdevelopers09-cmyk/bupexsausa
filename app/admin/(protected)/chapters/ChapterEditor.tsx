@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { saveChapter, deleteChapter, uploadChapterMedia } from './actions';
 import { Save, Trash2, ArrowLeft, MapPin, Globe, Image as ImageIcon, Upload, Loader2, Video } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { US_STATES, getImageUrl } from '@/lib/utils';
 
 export default function ChapterEditor({ chapter }: { chapter?: any }) {
@@ -140,7 +141,7 @@ export default function ChapterEditor({ chapter }: { chapter?: any }) {
             </div>
 
             <div className="relative group aspect-video rounded-[2rem] bg-slate-50 border-2 border-dashed border-slate-100 overflow-hidden flex items-center justify-center transition-all hover:border-primary/20">
-               {formData.banner_image_path ? (
+                   {formData.banner_image_path ? (
                  <>
                    {formData.banner_image_path.toLowerCase().match(/\.(mp4|webm|ogg)$/) || formData.banner_image_path.includes('video') ? (
                      <video 
@@ -149,11 +150,9 @@ export default function ChapterEditor({ chapter }: { chapter?: any }) {
                        controls
                      />
                    ) : (
-                     <img 
-                       src={getImageUrl(formData.banner_image_path)} 
-                       alt="Banner Preview" 
-                       className="w-full h-full object-cover"
-                     />
+                     <div className="relative w-full h-full">
+                       <Image src={getImageUrl(formData.banner_image_path)} alt="Banner Preview" fill sizes="100vw" className="object-cover" />
+                     </div>
                    )}
                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <p className="text-white text-[10px] font-black uppercase tracking-widest">Current Media Preview</p>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, ZoomIn, Maximize2 } from 'lucide-react';
+import Image from 'next/image';
 
 interface ChapterGalleryClientProps {
   images: string[];
@@ -44,11 +45,7 @@ export default function ChapterGalleryClient({ images, title = "SHARED MEMORIES"
             onClick={() => openLightbox(index)}
             className="aspect-square rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group cursor-pointer relative"
           >
-            <img 
-              src={img} 
-              alt={`Gallery image ${index + 1}`} 
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-            />
+            <Image src={img} alt={`Gallery image ${index + 1}`} fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw" className="object-cover group-hover:scale-110 transition-transform duration-700" />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
               <div className="h-10 w-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 transform scale-50 group-hover:scale-100 transition-all duration-500">
                 <ZoomIn className="h-5 w-5 text-white" />
@@ -90,11 +87,9 @@ export default function ChapterGalleryClient({ images, title = "SHARED MEMORIES"
           {/* Main Image Container */}
           <div className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center animate-scale-in" onClick={e => e.stopPropagation()}>
             <div className="relative group">
-              <img
-                src={images[lightboxIndex]}
-                alt={`Expanded gallery image ${lightboxIndex + 1}`}
-                className="max-h-[85vh] max-w-full rounded-2xl object-contain shadow-2xl border border-white/10"
-              />
+              <div className="relative w-full">
+                <Image src={images[lightboxIndex]} alt={`Expanded gallery image ${lightboxIndex + 1}`} width={1600} height={900} className="max-h-[85vh] max-w-full rounded-2xl object-contain shadow-2xl border border-white/10" />
+              </div>
               <div className="absolute top-4 right-4 flex gap-2">
                 <a 
                   href={images[lightboxIndex]} 

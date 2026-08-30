@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Search, Filter, Download, MoreVertical, ShieldCheck, CheckCircle2, XCircle, Clock, AlertTriangle } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { approveMember, rejectMember, deleteMember } from './actions';
@@ -131,11 +132,11 @@ export default function MembersClient({ initialMembers }: { initialMembers: any[
               <tr key={member.id} className="hover:bg-slate-50/80 transition-colors group">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden shrink-0 flex items-center justify-center text-slate-500 font-bold">
+                    <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden shrink-0 flex items-center justify-center text-slate-500 font-bold relative">
                       {member.avatar_path ? (
-                        <img src={member.avatar_path} alt={member.full_name} className="w-full h-full object-cover" />
+                        <Image src={member.avatar_path} alt={member.full_name} fill sizes="48px" className="object-cover" />
                       ) : (
-                        member.full_name.charAt(0)
+                        <span className="absolute inset-0 flex items-center justify-center">{member.full_name.charAt(0)}</span>
                       )}
                     </div>
                     <div>

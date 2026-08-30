@@ -42,6 +42,18 @@ export async function trackDonation(data: {
     });
   }
 
+  // Send transactional email to donor if configured
+  try {
+    const { sendEmail } = await import('@/lib/mailer');
+    await sendEmail({
+      to: data.email,
+      subject: 'Thank you for your donation to BUPEXSA USA',
+      text: `Dear ${data.name || 'Friend'},\n\nThank you for your generous donation of $${data.amount}. We appreciate your support.`
+    });
+  } catch (e) {
+    console.warn('Donation email failed (non-fatal)', e);
+  }
+
   if (error) {
     console.error('Failed to track donation:', error);
     return { error: 'Failed to record donation. Please contact support.' };

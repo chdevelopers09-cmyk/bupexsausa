@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, BookOpen, Music, History } from 'lucide-react';
 
 interface AlmaMaterSectionProps {
@@ -29,7 +30,9 @@ export default function AlmaMaterSection({
           <div className="order-2 lg:order-1 relative">
             <div className="absolute -inset-4 border-2 border-primary/30 rounded-3xl translate-x-8 translate-y-8 pointer-events-none hidden lg:block"></div>
             <div className="rounded-2xl overflow-hidden shadow-2xl relative z-20 aspect-[4/5] bg-gray-800">
-               <img src={image} alt="PCSS Buea Alumni" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+              <div className="relative w-full h-full">
+                <Image src={image} alt="PCSS Buea Alumni" fill sizes="100vw" className="object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+              </div>
             </div>
           </div>
 

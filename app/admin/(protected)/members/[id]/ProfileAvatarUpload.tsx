@@ -2,6 +2,7 @@
 
 import { useState, useRef, useTransition } from 'react';
 import { Camera, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 import { uploadAvatar } from '../actions';
 
 export default function ProfileAvatarUpload({ 
@@ -42,11 +43,18 @@ export default function ProfileAvatarUpload({
     });
   };
 
+  const isDataUrl = (u: string | null) => !!u && u.startsWith('data:');
+
   return (
     <div className="relative group cursor-pointer h-24 w-24 shrink-0" onClick={() => fileInputRef.current?.click()}>
       <div className="h-full w-full rounded-full bg-slate-100 overflow-hidden flex items-center justify-center text-slate-400 font-bold text-xl border-4 border-white shadow-xl relative z-10 transition-transform group-hover:scale-105">
         {optimisticAvatar ? (
-          <img src={optimisticAvatar} alt="avatar" className="h-full w-full object-cover" />
+          isDataUrl(optimisticAvatar) ? (
+            // data URLs are rendered via plain <img> because next/image does not support data URIs
+            <img src={optimisticAvatar} alt="avatar" className="h-full w-full object-cover" />
+          ) : (
+            <Image src={optimisticAvatar as string} alt="avatar" fill sizes="64px" className="object-cover" />
+          )
         ) : (
           fallback
         )}

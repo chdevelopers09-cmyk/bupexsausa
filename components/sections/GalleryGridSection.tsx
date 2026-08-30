@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MOCK_GALLERY } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
 import { Maximize2, X } from 'lucide-react';
+import Image from 'next/image';
 
 interface GalleryGridSectionProps {
   heading?: string;
@@ -18,6 +19,7 @@ export default function GalleryGridSection({
   const categories = ['All', ...Array.from(new Set(images.map((img) => img.category)))];
   const [filter, setFilter] = useState('All');
   const [lightbox, setLightbox] = useState<typeof images[0] | null>(null);
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null);
 
   const filteredImages = filter === 'All'
     ? images
@@ -56,11 +58,9 @@ export default function GalleryGridSection({
               className="group relative aspect-square rounded-2xl overflow-hidden shadow-md cursor-pointer"
               onClick={() => setLightbox(image)}
             >
-              <img
-                src={image.path}
-                alt={image.alt}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              />
+              <div className="relative w-full h-full">
+                <Image src={image.path} alt={image.alt} fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw" className="object-cover group-hover:scale-110 transition-transform duration-700" />
+              </div>
               <div className="absolute inset-0 bg-dark/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <div className="h-12 w-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
                   <Maximize2 className="h-6 w-6 text-white" />
@@ -79,19 +79,24 @@ export default function GalleryGridSection({
 
       {/* Lightbox */}
       {lightbox && (
-        <div className="fixed inset-0 z-[100] bg-dark/95 backdrop-blur-lg flex items-center justify-center p-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Image ${lightbox.alt}`}
+          className="fixed inset-0 z-[100] bg-dark/95 backdrop-blur-lg flex items-center justify-center p-4"
+          onClick={() => setLightbox(null)}
+        >
           <button
-            onClick={() => setLightbox(null)}
+            ref={closeBtnRef}
+            onClick={(e) => { e.stopPropagation(); setLightbox(null); }}
             className="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
           >
             <X className="h-6 w-6" />
           </button>
-          <div className="max-w-5xl w-full max-h-screen relative flex flex-col items-center">
-            <img
-              src={lightbox.path}
-              alt={lightbox.alt}
-              className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
-            />
+          <div className="max-w-5xl w-full max-h-screen relative flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
+            <div className="relative w-full">
+              <Image src={lightbox.path} alt={lightbox.alt} width={1600} height={900} loading="lazy" className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl" />
+            </div>
             <div className="mt-8 text-center text-white">
               <span className="text-accent font-black uppercase tracking-widest text-xs">
                 {lightbox.category}
@@ -101,6 +106,54 @@ export default function GalleryGridSection({
           </div>
         </div>
       )}
+
+      {/* Keyboard & focus management for lightbox */}
+      {lightbox && (
+        <_LightboxKeybinds
+          images={filteredImages}
+          current={lightbox}
+          onClose={() => setLightbox(null)}
+          onNavigate={(img) => setLightbox(img)}
+          closeRef={closeBtnRef}
+        />
+      )}
     </section>
   );
+}
+
+function _LightboxKeybinds({ images, current, onClose, onNavigate, closeRef } : {
+  images: any[];
+  current: any;
+  onClose: () => void;
+  onNavigate: (img: any) => void;
+  closeRef: React.RefObject<HTMLButtonElement | null>;
+}) {
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const prevFocus = document.activeElement as HTMLElement | null;
+
+    // Focus close button when available
+    setTimeout(() => closeRef.current?.focus(), 50);
+
+    function handler(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        const idx = images.findIndex((i) => i.id === current.id);
+        if (idx === -1) return;
+        const nextIdx = e.key === 'ArrowLeft' ? (idx === 0 ? images.length - 1 : idx - 1) : (idx === images.length - 1 ? 0 : idx + 1);
+        onNavigate(images[nextIdx]);
+      }
+    }
+
+    window.addEventListener('keydown', handler);
+    return () => {
+      window.removeEventListener('keydown', handler);
+      document.body.style.overflow = prevOverflow;
+      try { prevFocus?.focus?.(); } catch {}
+    };
+  }, [images, current, onClose, onNavigate, closeRef]);
+
+  return null;
 }

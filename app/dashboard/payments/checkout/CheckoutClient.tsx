@@ -118,6 +118,23 @@ export default function CheckoutClient({ fee, memberId }: { fee: number, memberI
                     </div>
                 </div>
                 
+                {/* QR Code Scan Image Display for Zelle and CashApp */}
+                {(method === 'zelle' || method === 'cashapp') && (
+                    <div className="bg-white rounded-2xl p-5 border border-amber-200/60 shadow-sm flex flex-col items-center text-center">
+                        <img 
+                            src={method === 'zelle' ? "/images/payments/zelle-payment-app.jpg" : "/images/payments/cashapp-payment-app.jpg"} 
+                            alt={method === 'zelle' ? "Zelle QR Code" : "Cash App QR Code"}
+                            className="w-48 h-auto object-contain rounded-xl border border-slate-100 shadow-sm hover:scale-105 transition-transform duration-300"
+                        />
+                        <p className="text-xs font-black text-dark mt-2.5">
+                            {method === 'zelle' ? 'BUEA PCSS EX-STUDENTS ASSOCIATION USA' : 'Frida Ngoe-Esoe ($Bupexsausa)'}
+                        </p>
+                        <p className="text-[11px] font-bold text-slate-400 mt-0.5">
+                            Scan with your {method === 'zelle' ? 'banking' : 'Cash App'} app or camera to pay
+                        </p>
+                    </div>
+                )}
+
                 <div className="bg-white/80 rounded-2xl p-6 border border-amber-200/50 space-y-4">
                     <div className="flex items-center justify-between py-2 border-b border-amber-100">
                         <span className="text-xs font-bold text-amber-900/50 uppercase">Recipient</span>

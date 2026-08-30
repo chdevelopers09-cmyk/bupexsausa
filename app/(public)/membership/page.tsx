@@ -90,6 +90,7 @@ export default async function MembershipPage() {
         heading="Ready to Join the Legacy?"
         body="Take the first step today and secure your membership in the fastest-growing Cameroonian alumni association in the US."
         buttonLabel="Register Now"
+        buttonUrl="/register"
       />
     </>
   );

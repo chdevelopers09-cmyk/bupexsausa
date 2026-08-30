@@ -1,11 +1,12 @@
-'use client';
+ 'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, ChevronDown, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { createClient } from '@/lib/supabase/client';
 
 const navItems = [
   { label: 'Home', href: '/' },
@@ -47,7 +48,28 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
   const pathname = usePathname();
+  const router = useRouter();
+  const supabase = createClient();
+
+  // Sync Supabase session into local state reactively
+  useEffect(() => {
+    supabase.auth.getSession().then((res: any) => {
+      setUser(res?.data?.session?.user ?? null);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push('/');
+    router.refresh();
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -72,15 +94,16 @@ export default function Navbar() {
       )}
     >
       <div className="container-wide">
-        <nav className="flex items-center justify-between h-20 md:h-24">
+        <a href="#content" className="sr-only focus:not-sr-only p-2">Skip to content</a>
+        <nav role="navigation" aria-label="Main navigation" className="flex items-center justify-between h-20 md:h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center group py-2" id="nav-logo">
-            <div className="h-14 w-14 md:h-16 md:w-16 rounded-xl bg-white flex items-center justify-center shadow-md transition-all group-hover:scale-105 group-hover:shadow-xl overflow-hidden border border-gray-100 p-0.5 relative">
+              <div className="h-14 w-14 md:h-16 md:w-16 rounded-xl bg-white flex items-center justify-center shadow-md transition-all group-hover:scale-105 group-hover:shadow-xl overflow-hidden border border-gray-100 p-0.5 relative">
               <Image 
                 src="/bupexsausa.png" 
                 alt="BUPEXSA USA Logo" 
                 fill
-                sizes="(max-width: 768px) 56px, 64px"
+                sizes="56px"
                 className="object-contain p-1"
                 priority
               />
@@ -99,6 +122,9 @@ export default function Navbar() {
                 {item.children ? (
                   <>
                     <button
+                      type="button"
+                      aria-haspopup="true"
+                      aria-expanded={activeDropdown === item.href}
                       className={cn(
                         'nav-link flex items-center gap-1 text-sm',
                         isActive(item.href) && 'nav-link-active'
@@ -141,12 +167,17 @@ export default function Navbar() {
 
           {/* CTA */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link href="/login" className="nav-link text-sm" id="nav-login">
-              Log In
-            </Link>
-            <Link href="/register" className="btn-primary text-sm px-5 py-2.5" id="nav-register">
-              Join Now
-            </Link>
+            {user ? (
+              <>
+                <button onClick={handleSignOut} className="nav-link text-sm">Sign out</button>
+                <Link href="/dashboard" className="btn-secondary text-sm px-4 py-2.5">Dashboard</Link>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="nav-link text-sm" id="nav-login">Log In</Link>
+                <Link href="/register" className="btn-primary text-sm px-5 py-2.5" id="nav-register">Join Now</Link>
+              </>
+            )}
             <Link href="/admin" className="p-2 rounded-lg hover:bg-gray-100 transition-colors" title="Admin Panel">
               <Settings className="h-4 w-4 text-gray-500" />
             </Link>
@@ -158,6 +189,7 @@ export default function Navbar() {
             onClick={() => setMobileOpen(!mobileOpen)}
             id="mobile-menu-toggle"
             aria-label="Toggle mobile menu"
+            aria-expanded={mobileOpen}
           >
             {mobileOpen ? <X className="h-5 w-5 text-dark" /> : <Menu className="h-5 w-5 text-dark" />}
           </button>
@@ -197,12 +229,17 @@ export default function Navbar() {
               </div>
             ))}
             <div className="border-t border-gray-100 mt-2 pt-4 flex flex-col gap-2">
-              <Link href="/login" className="btn-secondary w-full justify-center text-sm py-2.5" id="mobile-login">
-                Log In
-              </Link>
-              <Link href="/register" className="btn-primary w-full justify-center text-sm py-2.5" id="mobile-register">
-                Join BUPEXSA USA
-              </Link>
+              {user ? (
+                <>
+                  <button onClick={handleSignOut} className="btn-secondary w-full justify-center text-sm py-2.5">Sign out</button>
+                  <Link href="/dashboard" className="btn-primary w-full justify-center text-sm py-2.5">Dashboard</Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="btn-secondary w-full justify-center text-sm py-2.5" id="mobile-login">Log In</Link>
+                  <Link href="/register" className="btn-primary w-full justify-center text-sm py-2.5" id="mobile-register">Join BUPEXSA USA</Link>
+                </>
+              )}
             </div>
           </div>
         </div>

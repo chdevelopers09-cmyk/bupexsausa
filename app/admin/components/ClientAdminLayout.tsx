@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Menu,
   X,
@@ -196,9 +197,9 @@ export default function ClientAdminLayout({ children, isSuperAdmin, profile, use
                         {isSuperAdmin ? 'Full Access' : 'Admin Access'}
                       </p>
                    </div>
-                   <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-white font-black text-sm shadow-lg shadow-primary/25 overflow-hidden transition-transform group-hover:scale-105">
+                   <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-white font-black text-sm shadow-lg shadow-primary/25 overflow-hidden transition-transform group-hover:scale-105 relative">
                       {profile?.avatar_path ? (
-                        <img src={profile.avatar_path} alt="Avatar" className="w-full h-full object-cover" />
+                        <Image src={profile.avatar_path} alt="Avatar" fill sizes="48px" className="object-cover" />
                       ) : userInitials}
                    </div>
                    <ChevronDown className="h-4 w-4 text-slate-400 group-hover:text-primary transition-colors" />

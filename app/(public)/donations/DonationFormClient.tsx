@@ -217,13 +217,26 @@ export default function DonationFormClient() {
                   </div>
                 </div>
 
-                {/* Zelle / CashApp Instructions */}
+                {/* Zelle / CashApp Instructions & QR Code */}
                 {(method === 'zelle' || method === 'cashapp') && (
-                  <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-3 animate-fade-in">
-                    <p className="font-black text-amber-800 text-sm">📋 Manual Payment Instructions</p>
+                  <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-4 animate-fade-in">
+                    <p className="font-black text-amber-800 text-sm">📋 Scan QR Code or Send Payment</p>
                     <p className="text-sm text-amber-700 leading-relaxed">
-                      After submitting this form, send ${finalAmount || '___'} to the details below. Include your name as reference.
+                      Scan the QR Code below with your app or camera to send ${finalAmount ? (typeof finalAmount === 'number' ? finalAmount.toFixed(2) : parseFloat(finalAmount as string).toFixed(2)) : '___'}.
                     </p>
+                    
+                    {/* QR Code Card */}
+                    <div className="bg-white rounded-2xl p-4 border border-amber-200/60 shadow-sm flex flex-col items-center text-center">
+                      <img 
+                        src={method === 'zelle' ? "/images/payments/zelle-payment-app.jpg" : "/images/payments/cashapp-payment-app.jpg"} 
+                        alt={method === 'zelle' ? "Zelle QR Code" : "Cash App QR Code"}
+                        className="w-48 h-auto object-contain rounded-xl border border-slate-100 shadow-sm"
+                      />
+                      <p className="text-xs font-black text-dark mt-2">
+                        {method === 'zelle' ? 'BUEA PCSS EX-STUDENTS ASSOCIATION USA' : 'Frida Ngoe-Esoe ($Bupexsausa)'}
+                      </p>
+                    </div>
+
                     <div className="bg-white rounded-xl p-4 space-y-2">
                       {method === 'zelle' ? (
                         <div className="flex items-center justify-between">

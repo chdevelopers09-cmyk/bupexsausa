@@ -1,12 +1,15 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { Lock, Eye, EyeOff, CheckCircle2, ArrowRight } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
+  const searchParams = useSearchParams();
+  const callbackError = searchParams.get('error');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -156,9 +159,9 @@ export default function ResetPasswordPage() {
               ))}
             </div>
 
-            {error && (
+            { (callbackError || error) && (
               <div className="bg-red-50 border border-red-200 text-red-700 text-sm font-medium px-4 py-3 rounded-2xl">
-                {error}
+                {callbackError ? 'The password reset link may have expired or already been used. Request a new reset from the Forgot Password page.' : error}
               </div>
             )}
 
@@ -174,5 +177,13 @@ export default function ResetPasswordPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

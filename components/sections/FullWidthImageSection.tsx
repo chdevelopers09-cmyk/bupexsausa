@@ -3,6 +3,8 @@ interface FullWidthImageSectionProps {
   caption?: string;
 }
 
+import Image from 'next/image';
+
 export default function FullWidthImageSection({
   image,
   caption,
@@ -10,11 +12,7 @@ export default function FullWidthImageSection({
   return (
     <section className="bg-white">
       <div className="w-full relative h-[400px] md:h-[600px] overflow-hidden">
-        <img
-          src={image}
-          alt={caption || 'Full width section image'}
-          className="w-full h-full object-cover"
-        />
+        <Image src={image} alt={caption || 'Full width section image'} fill sizes="100vw" className="object-cover" />
         {caption && (
           <div className="absolute bottom-10 left-10 z-10">
             <div className="bg-black/60 backdrop-blur-md px-6 py-3 rounded-lg border border-white/20">

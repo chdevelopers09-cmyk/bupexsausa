@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Users, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -33,17 +34,17 @@ export default function HeroSection({
 }: HeroProps) {
   if (variant === 'image-overlay-left') {
     return (
-      <section
-        className="relative pt-32 pb-24 min-h-[800px] lg:min-h-[85vh] flex items-center overflow-hidden"
-        style={{
-          background: backgroundImage
-            ? `url(${backgroundImage}) center 20%/cover no-repeat`
-            : 'linear-gradient(135deg, #1E1B4B 0%, #4C1D95 50%, #1E1B4B 100%)',
-        }}
-      >
+      <section className="relative pt-32 pb-24 min-h-[800px] lg:min-h-[85vh] flex items-center overflow-hidden">
+        {/* Background image (optimized via Next/Image) */}
+        {backgroundImage && (
+          <div className="absolute inset-0 -z-10">
+            <Image src={backgroundImage} alt="Hero background" fill sizes="100vw" className="object-cover" priority />
+          </div>
+        )}
+
         {/* Gradient overlay to make text readable on the left */}
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-900/60 to-transparent" />
-        
+
         <div className="container-wide relative z-10 text-left text-white">
           <div className="max-w-2xl animate-fade-in-up">
             {badge && (
@@ -178,7 +179,9 @@ export default function HeroSection({
               <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-2xl" />
               <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-4/3 bg-gradient-to-br from-primary to-dark flex items-center justify-center">
                 {sideImage ? (
-                  <img src={sideImage} alt={typeof heading === 'string' ? heading : 'Hero Image'} className="w-full h-full object-cover" />
+                  <div className="relative w-full h-full">
+                    <Image src={sideImage} alt={typeof heading === 'string' ? heading : 'Hero Image'} fill sizes="(max-width: 768px) 50vw, 33vw" className="object-cover" />
+                  </div>
                 ) : (
                   <div className="text-center text-white p-8">
                     <Globe className="h-16 w-16 mx-auto mb-4 opacity-80" />

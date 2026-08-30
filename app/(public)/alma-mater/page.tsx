@@ -2,6 +2,7 @@ import HeroSection from '@/components/sections/HeroSection';
 import AlmaMaterSection from '@/components/sections/AlmaMaterSection';
 import GalleryStripSection from '@/components/sections/GalleryStripSection';
 import TextBlockSection from '@/components/sections/TextBlockSection';
+import Image from 'next/image';
 
 export const metadata = {
   title: 'Our Alma Mater',
@@ -45,13 +46,9 @@ export default function AlmaMaterPage() {
             </div>
 
             <div className="mt-16 flex flex-col md:flex-row items-center gap-10 p-10 md:p-12 bg-gray-50 rounded-[3rem] border border-gray-100 shadow-xl shadow-gray-200/50">
-              <div className="h-48 w-48 rounded-[2.5rem] overflow-hidden border-4 border-white shadow-2xl flex-shrink-0 bg-white">
-                <img
-                  src="/images/awachek-walter.png"
-                  alt="Mr Awachek Walter"
-                  className="w-full h-full object-cover object-top"
-                />
-              </div>
+              <div className="h-48 w-48 rounded-[2.5rem] overflow-hidden border-4 border-white shadow-2xl flex-shrink-0 bg-white relative">
+                  <Image src="/images/awachek-walter.png" alt="Mr Awachek Walter" fill sizes="64px" className="object-cover object-top" />
+                </div>
               <div>
                 <p className="text-primary font-black text-xs uppercase tracking-[0.2em] mb-3">Founding Batch Leader</p>
                 <h4 className="text-dark font-black text-3xl mb-2">Mr Awachek Walter</h4>
@@ -75,7 +72,7 @@ export default function AlmaMaterPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
             {/* Gallery Images - Campus & Community */}
-            {[
+                  {[
               "/images/gallery/school-1.jpg",
               "/images/gallery/school-2.jpg",
               "/images/gallery/school-3.jpg",
@@ -89,10 +86,10 @@ export default function AlmaMaterPage() {
               "/images/gallery/school-11.jpg",
               "/images/gallery/school-12.jpg",
               "/images/gallery/legacy-1.jpg"
-            ].map((img, idx) => (
+                ].map((img, idx) => (
               <div key={`img-campus-${idx}`} className="bg-white rounded-3xl p-3 shadow-xl shadow-primary/5 border border-gray-100 group hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
                 <div className="aspect-video rounded-2xl overflow-hidden bg-gray-100 relative">
-                  <img src={img} alt="BUPEXSA Campus Life" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <Image src={img} alt="BUPEXSA Campus Life" fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw" className="object-cover group-hover:scale-110 transition-transform duration-500" />
                 </div>
               </div>
             ))}
@@ -103,7 +100,7 @@ export default function AlmaMaterPage() {
             ].map((img, idx) => (
               <div key={`img-history-${idx}`} className="bg-white rounded-3xl p-3 shadow-xl shadow-primary/5 border border-gray-100 group hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
                 <div className="aspect-video rounded-2xl overflow-hidden bg-gray-100 relative">
-                  <img src={img} alt="BUPEXSA History" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <Image src={img} alt="BUPEXSA History" fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw" className="object-cover group-hover:scale-110 transition-transform duration-500" />
                 </div>
               </div>
             ))}

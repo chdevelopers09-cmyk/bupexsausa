@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Calendar, MapPin, Users, ArrowRight, Filter, List, Grid3X3 } from 'lucide-react';
+import Image from 'next/image';
 import { MOCK_EVENTS } from '@/lib/mock-data';
 
 const CATEGORIES = ['All', 'Gala', 'Social', 'Fundraiser', 'Meeting'];
@@ -119,7 +120,7 @@ export default function EventsPageClient() {
                     </div>
 
                     <div className="h-64 relative overflow-hidden">
-                      <img src={event.thumbnail_path} alt={event.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <Image src={event.thumbnail_path} alt={event.title} fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw" className="object-cover group-hover:scale-110 transition-transform duration-700" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
                       <div className="absolute bottom-5 right-5">
                         <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-accent text-white`}>{event.category}</span>
@@ -163,8 +164,8 @@ export default function EventsPageClient() {
                     href={`/events/${event.slug}`}
                     className={`flex gap-6 bg-white p-6 rounded-2xl border border-gray-100 hover:border-primary/30 hover:shadow-lg transition-all group ${isPast ? 'opacity-75' : ''}`}
                   >
-                    <div className="h-20 w-20 rounded-2xl overflow-hidden shrink-0">
-                      <img src={event.thumbnail_path} alt={event.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                      <div className="h-20 w-20 rounded-2xl overflow-hidden shrink-0 relative">
+                      <Image src={event.thumbnail_path} alt={event.title} fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw" className="object-cover group-hover:scale-110 transition-transform duration-500" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2 flex-wrap">

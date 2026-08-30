@@ -74,7 +74,7 @@ h1, h2, h3, h4, h5, h6 {
   background-color: var(--color-primary);
 }
 .btn-primary:hover {
-  background-color: var(--color-primary-light);
+  background-color: var(--color-primary-dark);
 }
 
 .btn-secondary {
@@ -250,6 +250,14 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Selection */
 ::selection { background-color: rgba(107,33,168,0.2); color: var(--color-dark); }
+
+/* Focus visible for keyboard users */
+:focus { outline: none; }
+:focus-visible {
+  outline: 3px solid rgba(139,92,246,0.95);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(139,92,246,0.12);
+}
 
 /* Custom Glass Morph */
 .glass-dark {

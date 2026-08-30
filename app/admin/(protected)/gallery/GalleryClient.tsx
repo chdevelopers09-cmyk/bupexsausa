@@ -1,6 +1,7 @@
-'use client'
+ 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Image as ImageIcon, Plus, Trash2, Filter, Upload, X, Play } from 'lucide-react'
 import { uploadMedia, deleteImage, addVideo } from './actions'
 import { cn } from '@/lib/utils'
@@ -186,11 +187,9 @@ export default function GalleryClient({ initialImages }: { initialImages: any[] 
 
           return (
             <div key={img.id} className="group relative aspect-square bg-slate-100 rounded-2xl overflow-hidden border border-slate-100 shadow-sm transition-all hover:shadow-md">
-              <img 
-                src={getImageUrl(img.storage_path)} 
-                alt={img.alt_text} 
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
+              <div className="absolute inset-0 relative">
+                <Image src={getImageUrl(img.storage_path)} alt={img.alt_text} fill sizes="(max-width: 768px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              </div>
               {isVideo && (
                 <div className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-md">
                   <Play className="h-4 w-4 fill-white" />

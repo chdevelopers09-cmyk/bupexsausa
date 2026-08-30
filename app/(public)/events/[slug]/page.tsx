@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Calendar, MapPin, Users, Clock, ArrowLeft, Share2, CheckCircle, Trophy, Utensils, GraduationCap } from 'lucide-react';
+import Image from 'next/image';
 import { MOCK_EVENTS } from '@/lib/mock-data';
 
 interface EventDetailPageProps {
@@ -44,11 +45,9 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
     <div className="min-h-screen bg-white">
       {/* Hero Banner */}
       <div className="relative h-[55vh] min-h-[400px] bg-dark overflow-hidden">
-        <img
-          src={event.thumbnail_path}
-          alt={event.title}
-          className="absolute inset-0 w-full h-full object-cover opacity-50"
-        />
+        <div className="absolute inset-0">
+          <Image src={event.thumbnail_path} alt={event.title} fill sizes="100vw" className="object-cover opacity-50" />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/60 to-transparent" />
 
         {/* Back Button */}
@@ -157,9 +156,9 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                 <div className="grid sm:grid-cols-2 gap-6">
                   {relatedEvents.map(e => (
                     <Link key={e.id} href={`/events/${e.slug}`} className="group flex gap-4 bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-lg transition-all hover:border-primary/20">
-                      <div className="h-16 w-16 rounded-xl overflow-hidden shrink-0">
-                        <img src={e.thumbnail_path} alt={e.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                      </div>
+                          <div className="h-16 w-16 rounded-xl overflow-hidden shrink-0 relative">
+                            <Image src={e.thumbnail_path} alt={e.title} fill sizes="(max-width: 768px) 50vw, 33vw" className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                          </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-black text-primary uppercase tracking-widest mb-1">{new Date(e.start_datetime).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                         <h3 className="font-bold text-dark text-sm leading-tight group-hover:text-primary transition-colors line-clamp-2">{e.title}</h3>

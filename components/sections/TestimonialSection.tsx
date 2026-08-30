@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Quote, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 interface Testimonial {
@@ -60,9 +61,11 @@ export default function TestimonialSection({
             </p>
 
             <div className="flex flex-col items-center">
-              {testimonials[active].image && (
-                <img src={testimonials[active].image} alt={testimonials[active].author} className="h-16 w-16 rounded-full object-cover mb-4 border-2 border-accent" />
-              )}
+                {testimonials[active].image && (
+                  <div className="relative h-16 w-16 rounded-full overflow-hidden mb-4 border-2 border-accent">
+                    <Image src={testimonials[active].image} alt={testimonials[active].author} fill sizes="128px" className="object-cover" />
+                  </div>
+                )}
               <h4 className="text-xl font-bold text-dark">{testimonials[active].author}</h4>
               <p className="text-accent font-semibold text-sm uppercase tracking-widest">{testimonials[active].role}</p>
             </div>

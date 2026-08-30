@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Camera, Play, Image as ImageIcon, Video, X, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -12,11 +12,11 @@ interface GalleryStripSectionProps {
 }
 
 const MOCK_VIDEOS = [
-  { id: 'v1', title: '2026 BUPEXSA USA Convention Highlight', duration: '20:17', thumbnail: '/images/gallery/1.jpg', videoUrl: '/videos/CURRENT-ANTHEM.mp4' },
-  { id: 'v2', title: '2025 Annual Reunion', duration: '1:42', thumbnail: '/images/gallery/2.jpg', videoUrl: '/videos/OLD-ANTHEM.mp4' },
-  { id: 'v3', title: '2024 Gala Dinner', duration: '3:36', thumbnail: '/images/gallery/3.jpg', videoUrl: '/videos/CURRENT-ANTHEM.mp4' },
-  { id: 'v4', title: '2023 Charity Drive', duration: '35:56', thumbnail: '/images/gallery/4.jpg', videoUrl: '/videos/OLD-ANTHEM.mp4' },
-  { id: 'v5', title: '2022 Scholarship Award Ceremony', duration: '21:53', thumbnail: '/images/gallery/5.jpg', videoUrl: '/videos/CURRENT-ANTHEM.mp4' },
+  { id: 'v1', title: '2026 BUPEXSA USA Convention Highlight', duration: '20:17', thumbnail: '/images/gallery/gala1.jpg', videoUrl: '/videos/CURRENT-ANTHEM.mp4' },
+  { id: 'v2', title: '2025 Annual Reunion', duration: '1:42', thumbnail: '/images/gallery/gala2.jpg', videoUrl: '/videos/OLD-ANTHEM.mp4' },
+  { id: 'v3', title: '2024 Gala Dinner', duration: '3:36', thumbnail: '/images/gallery/life3.jpg', videoUrl: '/videos/CURRENT-ANTHEM.mp4' },
+  { id: 'v4', title: '2023 Charity Drive', duration: '35:56', thumbnail: '/images/gallery/community-1.jpg', videoUrl: '/videos/OLD-ANTHEM.mp4' },
+  { id: 'v5', title: '2022 Scholarship Award Ceremony', duration: '21:53', thumbnail: '/images/gallery/memories-1.jpg', videoUrl: '/videos/CURRENT-ANTHEM.mp4' },
 ];
 
 export default function GalleryStripSection({
@@ -26,6 +26,7 @@ export default function GalleryStripSection({
   const [activeTab, setActiveTab] = useState<'images' | 'videos'>('images');
   const [activeVideo, setActiveVideo] = useState(MOCK_VIDEOS[0]);
   const [selectedImage, setSelectedImage] = useState<typeof MOCK_GALLERY[0] | null>(null);
+  const closeRef = useRef<HTMLButtonElement | null>(null);
 
   const images = MOCK_GALLERY.filter(item => !item.path?.endsWith('.mp4')).slice(0, count);
 
@@ -83,7 +84,7 @@ export default function GalleryStripSection({
           {activeTab === 'images' ? (
             /* Images Grid Layout */
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {images.map((image) => (
+                  {images.map((image) => (
                 <div
                   key={image.id}
                   onClick={() => setSelectedImage(image)}
@@ -133,7 +134,7 @@ export default function GalleryStripSection({
                       }`}
                     >
                       <div className="relative h-16 w-24 rounded-lg overflow-hidden flex-shrink-0 bg-black">
-                        <Image src={video.thumbnail} alt={video.title} fill className="object-cover opacity-80" />
+                        <Image src={video.thumbnail} alt={video.title} fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw" className="object-cover opacity-80" />
                         <div className="absolute inset-0 flex items-center justify-center">
                           <Play className={`h-6 w-6 ${activeVideo.id === video.id ? 'text-primary' : 'text-white'} fill-current`} />
                         </div>
@@ -158,6 +159,13 @@ export default function GalleryStripSection({
                   autoPlay
                   className="w-full h-full object-contain"
                 >
+                  <track
+                    src={`/videos/captions/${activeVideo.id}.vtt`}
+                    kind="captions"
+                    srcLang="en"
+                    label="English captions"
+                    default
+                  />
                   Your browser does not support the video tag.
                 </video>
                 
@@ -174,9 +182,16 @@ export default function GalleryStripSection({
 
       {/* Image Modal Lightbox */}
       {selectedImage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-10 bg-black/90 backdrop-blur-sm animate-fade-in">
-          <button 
-            onClick={() => setSelectedImage(null)}
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={selectedImage.alt}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-10 bg-black/90 backdrop-blur-sm animate-fade-in"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button
+            ref={closeRef}
+            onClick={(e) => { e.stopPropagation(); setSelectedImage(null); }}
             className="absolute top-6 right-6 md:top-10 md:right-10 text-white/70 hover:text-white bg-black/50 hover:bg-black/80 rounded-full p-2 transition-colors z-50"
           >
             <X className="h-6 w-6" />
@@ -201,18 +216,19 @@ export default function GalleryStripSection({
           )}
           
           <div className="relative w-full h-full max-w-6xl max-h-[80vh] flex flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
-            {selectedImage.path && (
-              <div className="relative w-full h-full">
-                <Image
-                  src={selectedImage.path}
-                  alt={selectedImage.alt}
-                  fill
-                  className="object-contain"
-                  sizes="100vw"
-                  quality={100}
-                />
-              </div>
-            )}
+              {selectedImage.path && (
+                <div className="relative w-full h-full">
+                  <Image
+                    src={selectedImage.path}
+                    alt={selectedImage.alt}
+                    fill
+                    loading="lazy"
+                    className="object-contain"
+                    sizes="100vw"
+                    quality={100}
+                  />
+                </div>
+              )}
             <div className="absolute bottom-[-40px] left-0 right-0 text-center">
               <p className="text-white font-medium">{selectedImage.alt}</p>
               <p className="text-white/60 text-sm uppercase tracking-wider mt-1">{selectedImage.category}</p>
@@ -220,6 +236,52 @@ export default function GalleryStripSection({
           </div>
         </div>
       )}
+
+      {/* keyboard handlers + scroll lock for strip modal */}
+      {selectedImage && (
+        <_StripLightboxKeybinds
+          images={images}
+          current={selectedImage}
+          onClose={() => setSelectedImage(null)}
+          onNavigate={(img) => setSelectedImage(img)}
+          closeRef={closeRef}
+        />
+      )}
     </section>
   );
+}
+
+function _StripLightboxKeybinds({ images, current, onClose, onNavigate, closeRef } : {
+  images: any[];
+  current: any;
+  onClose: () => void;
+  onNavigate: (img: any) => void;
+  closeRef: React.RefObject<HTMLButtonElement | null>;
+}) {
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const prevFocus = document.activeElement as HTMLElement | null;
+    setTimeout(() => closeRef.current?.focus(), 50);
+
+    function handler(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        const idx = images.findIndex((i) => i.id === current.id);
+        if (idx === -1) return;
+        const nextIdx = e.key === 'ArrowLeft' ? (idx === 0 ? images.length - 1 : idx - 1) : (idx === images.length - 1 ? 0 : idx + 1);
+        onNavigate(images[nextIdx]);
+      }
+    }
+
+    window.addEventListener('keydown', handler);
+    return () => {
+      window.removeEventListener('keydown', handler);
+      document.body.style.overflow = prevOverflow;
+      try { prevFocus?.focus?.(); } catch {}
+    };
+  }, [images, current, onClose, onNavigate, closeRef]);
+
+  return null;
 }

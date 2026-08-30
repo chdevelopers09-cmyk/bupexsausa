@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { MapPin, Users, ArrowLeft, Mail, Calendar, ExternalLink } from 'lucide-react';
 import { MOCK_CHAPTERS, MOCK_LEADERSHIP, MOCK_EVENTS } from '@/lib/mock-data';
@@ -59,12 +60,10 @@ export default async function ChapterDetailPage({ params }: ChapterDetailPagePro
             playsInline
             className="absolute inset-0 w-full h-full object-cover opacity-40"
           />
-        ) : (
-          <img
-            src={chapter.banner_image_path ? getImageUrl(chapter.banner_image_path) : '/images/usa-flag.png'}
-            alt={chapter.name}
-            className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay"
-          />
+          ) : (
+          <div className="absolute inset-0">
+            <Image src={chapter.banner_image_path ? getImageUrl(chapter.banner_image_path) : '/images/usa-flag.png'} alt={chapter.name} fill sizes="100vw" className="object-cover opacity-30 mix-blend-overlay" />
+          </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-primary/30" />
 
@@ -113,11 +112,7 @@ export default async function ChapterDetailPage({ params }: ChapterDetailPagePro
                   
                   <div className="mt-12 flex flex-col sm:flex-row items-center gap-8 p-10 bg-gray-50 rounded-[2.5rem] border border-gray-100">
                     <div className="h-40 w-40 rounded-3xl overflow-hidden border-4 border-white shadow-xl flex-shrink-0 bg-white">
-                      <img 
-                        src="/images/chapters/texas/chilion-tabe.png" 
-                        alt="Chilion Tabe" 
-                        className="w-full h-full object-cover object-top" 
-                      />
+                      <Image src="/images/chapters/texas/chilion-tabe.png" alt="Chilion Tabe" fill sizes="64px" className="object-cover object-top" />
                     </div>
                     <div>
                       <p className="text-gray-400 font-black text-[10px] uppercase tracking-widest mb-1">Author</p>
@@ -140,11 +135,7 @@ export default async function ChapterDetailPage({ params }: ChapterDetailPagePro
                   
                   <div className="mt-12 flex flex-col sm:flex-row items-center gap-8 p-10 bg-gray-50 rounded-[2.5rem] border border-gray-100">
                     <div className="h-40 w-40 rounded-3xl overflow-hidden border-4 border-white shadow-xl flex-shrink-0 bg-white">
-                      <img 
-                        src="/images/chapters/dmv/mirabel-frambo.jpg" 
-                        alt="Dr. Mrs. Mirabel Tanyi Frambo" 
-                        className="w-full h-full object-cover object-top" 
-                      />
+                      <Image src="/images/chapters/dmv/mirabel-frambo.jpg" alt="Dr. Mrs. Mirabel Tanyi Frambo" fill sizes="64px" className="object-cover object-top" />
                     </div>
                     <div>
                       <p className="text-gray-400 font-black text-[10px] uppercase tracking-widest mb-1">Narrator</p>

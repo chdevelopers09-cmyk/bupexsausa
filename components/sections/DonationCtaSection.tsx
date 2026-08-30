@@ -7,6 +7,7 @@ interface DonationCtaSectionProps {
   heading?: string;
   body?: string;
   buttonLabel?: string;
+  buttonUrl?: string;
   colorScheme?: 'primary' | 'dark' | 'white';
 }
 
@@ -15,6 +16,7 @@ export default function DonationCtaSection({
   heading = 'Support Our Mission',
   body = 'Your generous contributions help us provide scholarships, fund infrastructure projects at PCSS Buea, and support our community initiatives.',
   buttonLabel = 'Make a Donation',
+  buttonUrl = '/donations',
   colorScheme = 'primary',
 }: DonationCtaSectionProps) {
   if (variant === 'card') {
@@ -85,7 +87,7 @@ export default function DonationCtaSection({
           {body}
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link href="/donations" className={cn(
+          <Link href={buttonUrl} className={cn(
             "btn-primary px-10 py-4 text-lg",
             colorScheme === 'primary' ? "bg-white text-primary hover:bg-bg-purple shadow-none" : ""
           )}>

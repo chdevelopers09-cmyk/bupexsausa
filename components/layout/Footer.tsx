@@ -25,10 +25,23 @@ const memberLinks = [
 ];
 
 export default async function Footer() {
-  const supabase = await createAdminClient();
-  const { data: settingsData } = await supabase.from('site_settings').select('key, value');
-  const settings = (settingsData?.reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {}) || {}) as any;
-  const annualFee = settings.membership_fee || 100;
+  let annualFee = 100;
+
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (supabaseUrl && supabaseServiceKey) {
+      const supabase = await createAdminClient();
+      const { data: settingsData } = await supabase.from('site_settings').select('key, value');
+      const settings = (settingsData?.reduce((acc: any, s: any) => ({ ...acc, [s.key]: s.value }), {}) || {}) as any;
+      annualFee = settings.membership_fee || annualFee;
+    } else {
+      console.warn('Footer: Supabase admin env missing, using defaults');
+    }
+  } catch (e) {
+    console.warn('Footer: failed to load site settings', e);
+  }
 
   return (
     <footer className="text-white bg-[#38BDF8]">

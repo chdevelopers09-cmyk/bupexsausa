@@ -10,6 +10,30 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   try {
+    // Canonical domain enforcement: redirect to SITE_CONFIG.url if host differs
+    try {
+      const { SITE_CONFIG } = await import('@/lib/config');
+      const canonical = new URL(SITE_CONFIG.url).hostname;
+      const requestHost = request.nextUrl.hostname;
+
+      // Skip canonical redirect for local development or when request is already localhost
+      const isLocal = requestHost === 'localhost' || requestHost === '127.0.0.1' || requestHost === '::1';
+      const isProd = process.env.NODE_ENV === 'production';
+
+      if (requestHost && canonical && requestHost !== canonical) {
+        if (!isProd || isLocal) {
+          // In development, do not redirect to production canonical host
+          // This prevents localhost from being redirected to the production domain during dev.
+        } else {
+          const dest = new URL(request.nextUrl.href);
+          dest.hostname = canonical;
+          return NextResponse.redirect(dest);
+        }
+      }
+    } catch (e) {
+      // Non-fatal: if config import fails, continue without canonical redirect
+      console.warn('Middleware: could not enforce canonical domain', e);
+    }
     // 0. Safety Net: Force-intercept any auth codes on the home page
     const code = request.nextUrl.searchParams.get('code');
     const type = request.nextUrl.searchParams.get('type');

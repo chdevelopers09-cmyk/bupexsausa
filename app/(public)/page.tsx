@@ -39,7 +39,7 @@ export default function Home() {
         {/* Background Decorative Elements */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-[128px] pointer-events-none" />
-        <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-5 mix-blend-overlay pointer-events-none" />
+        <div className="absolute inset-0 bg-[url('/images/impact.png')] opacity-5 mix-blend-overlay pointer-events-none" />
 
         <div className="container-wide relative z-10">
           <div className="text-center mb-20 animate-fade-in-up">
@@ -71,8 +71,10 @@ export default function Home() {
                 <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-black relative shadow-inner flex-grow">
                   <video
                     controls
-                    preload="metadata"
+                    preload="none"
+                    poster="/images/gallery/life1.jpg"
                     className="w-full h-full object-cover"
+                    playsInline
                   >
                     <source src="/videos/CURRENT-ANTHEM.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
@@ -97,8 +99,10 @@ export default function Home() {
                 <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-black relative shadow-inner flex-grow filter grayscale-[20%] group-hover:grayscale-0 transition-all duration-700">
                   <video
                     controls
-                    preload="metadata"
+                    preload="none"
+                    poster="/images/gallery/life3.jpg"
                     className="w-full h-full object-cover"
+                    playsInline
                   >
                     <source src="/videos/OLD-ANTHEM.mp4" type="video/mp4" />
                     Your browser does not support the video tag.

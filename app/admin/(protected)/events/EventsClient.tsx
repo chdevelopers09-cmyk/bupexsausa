@@ -7,6 +7,7 @@ import {
     ChevronRight, ArrowUpRight, Filter, Download 
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 
 export default function AdminEventsClient({ initialEvents }: { initialEvents: any[] }) {
@@ -54,10 +55,12 @@ export default function AdminEventsClient({ initialEvents }: { initialEvents: an
                 {filtered.map(event => (
                     <div key={event.id} className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden flex flex-col sm:flex-row group hover:border-primary/20 transition-all">
                         <div className="sm:w-48 h-48 relative overflow-hidden shrink-0">
-                            <img 
-                                src={event.thumbnail_path || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=400'} 
-                                alt={event.title} 
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            <Image
+                                src={event.thumbnail_path || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=400'}
+                                alt={event.title}
+                                fill
+                                sizes="100vw"
+                                className="object-cover group-hover:scale-110 transition-transform duration-700"
                             />
                             <div className="absolute top-3 left-3 flex flex-col">
                                 <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-white/20 backdrop-blur-md ${event.is_published ? 'bg-emerald-500 text-white' : 'bg-slate-500/80 text-white'}`}>

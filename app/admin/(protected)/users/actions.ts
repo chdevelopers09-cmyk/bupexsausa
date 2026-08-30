@@ -65,27 +65,28 @@ export async function createAdminUser(formData: FormData) {
           .maybeSingle();
 
         if (!existingMember) {
-          // Orphaned user found! Repair by creating member record
-          const { error: insertError } = await adminClient.from('members').insert({
-            id: existingAuthUser.id,
-            email: email,
-            full_name,
-            graduation_year: 2000, // Default for admins
-            us_state: 'Unknown',
-            status: 'ACTIVE',
-            role: role === 'superadmin' ? 'admin' : (role || 'admin')
+          // IMPORTANT: Do NOT auto-create a members table record for an
+          // admin/staff account. Admin users should be stored only in the
+          // Auth system with appropriate `app_metadata.role`. Creating a
+          // members row for admins previously caused staff accounts to
+          // appear in the public Member Directory. Instead, mark the
+          // creation as successful for Auth and leave member record
+          // creation as an explicit, manual action (if intended).
+
+          // Update the existing Auth user metadata with the requested role
+          await adminClient.auth.admin.updateUserById(existingAuthUser.id, {
+            app_metadata: { role },
+            user_metadata: { full_name, username, status: 'ACTIVE' }
           });
 
-          if (insertError) throw new Error(`User exists in Auth but failed to repair Member record: ${insertError.message}`);
-          
           authData = { user: existingAuthUser as any };
           authError = null;
         } else {
-          // Already exists in both, update role if needed
+          // Already exists in members table; ensure Auth metadata is up-to-date
           await adminClient.auth.admin.updateUserById(existingAuthUser.id, {
             app_metadata: { role }
           });
-          
+
           authData = { user: existingAuthUser as any };
           authError = null;
         }

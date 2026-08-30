@@ -11,22 +11,46 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const supabase = createClient();
+  const isDevStub = (supabase as any)?.__isDevStub;
+  const [devLink, setDevLink] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    const { SITE_CONFIG } = await import('@/lib/config');
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${SITE_CONFIG.url}/auth/callback?next=/reset-password`,
-    });
-
-    if (resetError) {
-      setError(resetError.message);
-    } else {
+    if (isDevStub) {
+      // Simulate normal reset flow in dev and show a fake link the developer can use.
+      const fakeToken = `dev-token-${encodeURIComponent(email)}-${Date.now()}`;
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const link = `${origin}/reset-password?token=${fakeToken}`;
+      setDevLink(link);
       setSuccess(true);
+      setLoading(false);
+      console.warn('[supabase dev stub] simulated reset link:', link);
+      return;
     }
+
+    // Use Supabase's built-in password reset — this is the correct flow for a
+    // Supabase-backed app. It sends a reset link that brings the user back to
+    // /reset-password where they can set their new password via supabase.auth.updateUser().
+    try {
+      const redirectTo =
+        `${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')}/reset-password`;
+
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo,
+      });
+
+      if (resetError) {
+        setError(resetError.message);
+      } else {
+        setSuccess(true);
+      }
+    } catch (err: any) {
+      setError(err?.message || 'Failed to send reset email');
+    }
+
     setLoading(false);
   };
 
@@ -41,6 +65,11 @@ export default function ForgotPasswordPage() {
           <p className="text-gray-500 leading-relaxed text-sm">
             We have sent a password reset link to <span className="font-bold text-dark">{email}</span>.
           </p>
+          {devLink && (
+            <p className="text-sm text-gray-600">
+              Dev reset link: <a href={devLink} className="font-mono text-xs text-primary underline break-words">{devLink}</a>
+            </p>
+          )}
           <div className="pt-4">
             <Link href="/login" className="text-primary font-black uppercase tracking-widest text-xs hover:underline inline-flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" /> Back to Login
@@ -66,6 +95,11 @@ export default function ForgotPasswordPage() {
         </div>
 
         <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-purple-100/20 p-10 border border-gray-100">
+          {isDevStub && (
+            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-100 text-yellow-800 text-sm rounded-xl">
+              Supabase not configured — running in dev stub mode. No real email will be sent; submitting will show a simulated reset link.
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Calendar, MapPin, Users, ArrowRight, Clock } from 'lucide-react';
 import { cn, formatDate, formatDateTime } from '@/lib/utils';
 import { MOCK_EVENTS } from '@/lib/mock-data';
@@ -119,11 +120,7 @@ export default function EventsPreviewSection({
               {/* Thumbnail */}
               {event.thumbnail_path && (
                 <div className="h-64 relative overflow-hidden">
-                  <img 
-                    src={event.thumbnail_path} 
-                    alt={event.title} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                  />
+                  <Image src={event.thumbnail_path} alt={event.title} fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw" className="object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
                   <div className="absolute bottom-6 right-6">
                     <span className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-accent text-white shadow-lg">

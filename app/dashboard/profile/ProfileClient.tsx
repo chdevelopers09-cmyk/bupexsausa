@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { User, Mail, Phone, MapPin, Building, GraduationCap, Briefcase, Camera, Save, CheckCircle2 } from 'lucide-react';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
@@ -96,9 +97,9 @@ export default function ProfileClient({ initialSession, initialProfile }: { init
         <div className="flex flex-col md:flex-row items-center gap-6">
           {/* Avatar Upload */}
           <div className="relative group">
-            <div className="h-28 w-28 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-100 shrink-0">
+            <div className="h-28 w-28 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-100 shrink-0 relative">
               {profile.avatar_path ? (
-                <img src={profile.avatar_path} alt={profile.full_name} className="h-full w-full object-cover" />
+                <Image src={profile.avatar_path} alt={profile.full_name} fill sizes="128px" className="object-cover" />
               ) : (
                 <div className="h-full w-full flex items-center justify-center bg-purple-50 text-primary">
                   <User size={40} />

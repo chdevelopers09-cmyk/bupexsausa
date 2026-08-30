@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { Download, X } from 'lucide-react';
+import Image from 'next/image';
 
 export default function MemberCardModal({ profile, onClose }: { profile: any, onClose: () => void }) {
   const [downloading, setDownloading] = useState(false);
@@ -111,9 +112,9 @@ export default function MemberCardModal({ profile, onClose }: { profile: any, on
             {/* Middle Section */}
             <div className="flex gap-4 items-center">
               <div className="w-16 h-16 rounded-xl bg-white/10 border-2 border-white/20 overflow-hidden shrink-0 flex items-center justify-center backdrop-blur-md">
-                 {profile.avatar_path ? (
-                    <img src={profile.avatar_path} alt="Avatar" className="w-full h-full object-cover" />
-                 ) : (
+                  {profile.avatar_path ? (
+                    <Image src={profile.avatar_path} alt="Avatar" width={64} height={64} className="w-full h-full object-cover" />
+                  ) : (
                     <span className="font-black text-xl opacity-50">{userInitials}</span>
                  )}
               </div>

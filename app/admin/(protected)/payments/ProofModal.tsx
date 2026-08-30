@@ -1,7 +1,9 @@
+
 'use client';
 
 import { X, Check, AlertCircle, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
+import Image from 'next/image';
 import { approvePayment, rejectPayment } from './actions';
 
 export default function ProofModal({ payment, onClose }: { payment: any, onClose: () => void }) {
@@ -35,19 +37,17 @@ export default function ProofModal({ payment, onClose }: { payment: any, onClose
       
       <div className="relative bg-white w-full max-w-5xl rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row animate-in fade-in zoom-in duration-300">
         {/* Left: Image View */}
-        <div className="lg:flex-1 bg-slate-100 relative min-h-[300px] flex items-center justify-center p-8">
-           <img 
-             src={proofUrl} 
-             alt="Payment Proof" 
-             className="max-w-full max-h-[70vh] object-contain shadow-2xl rounded-xl"
-           />
-           <a 
-             href={proofUrl} 
-             target="_blank" 
-             className="absolute top-6 left-6 p-3 bg-white/90 hover:bg-white rounded-full shadow-lg text-slate-500 hover:text-primary transition-all flex items-center gap-2 text-xs font-bold"
-           >
-              <ExternalLink size={14} /> View Full Image
-           </a>
+            <div className="lg:flex-1 bg-slate-100 relative min-h-[300px] flex items-center justify-center p-8">
+                <div className="relative w-full h-[70vh] max-h-[70vh] flex items-center justify-center">
+                   <Image src={proofUrl} alt="Payment Proof" fill sizes="(max-width: 768px) 90vw, 600px" className="object-contain shadow-2xl rounded-xl" unoptimized />
+                </div>
+                <a 
+                   href={proofUrl} 
+                   target="_blank" 
+                   className="absolute top-6 left-6 p-3 bg-white/90 hover:bg-white rounded-full shadow-lg text-slate-500 hover:text-primary transition-all flex items-center gap-2 text-xs font-bold"
+                >
+                     <ExternalLink size={14} /> View Full Image
+                </a>
         </div>
 
         {/* Right: Details & Actions */}

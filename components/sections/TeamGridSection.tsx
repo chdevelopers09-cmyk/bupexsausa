@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { MOCK_LEADERSHIP } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
 import { Mail, Briefcase, Users } from 'lucide-react';
@@ -48,7 +49,7 @@ function TeamMemberCard({ member }: { member: typeof MOCK_LEADERSHIP[0] }) {
         <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
         <div className="h-56 w-56 rounded-full overflow-hidden border-8 border-white shadow-2xl relative z-10 bg-gray-100">
           {member.photo_path ? (
-            <img src={member.photo_path} alt={member.name} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out" />
+            <Image src={member.photo_path} alt={member.name} fill sizes="(max-width: 768px) 50vw, 33vw" className="object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out" />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Users className="h-16 w-16 text-gray-300" />
