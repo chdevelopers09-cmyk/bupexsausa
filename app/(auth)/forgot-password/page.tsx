@@ -35,8 +35,8 @@ export default function ForgotPasswordPage() {
     // Supabase-backed app. It sends a reset link that brings the user back to
     // /reset-password where they can set their new password via supabase.auth.updateUser().
     try {
-      const redirectTo =
-        `${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')}/reset-password`;
+      const origin = typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bupexsausa.org');
+      const redirectTo = `${origin}/auth/callback?next=/reset-password`;
 
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo,
