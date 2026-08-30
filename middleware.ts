@@ -13,7 +13,8 @@ export async function middleware(request: NextRequest) {
     // Canonical domain enforcement: redirect to SITE_CONFIG.url if host differs
     try {
       const { SITE_CONFIG } = await import('@/lib/config');
-      const canonical = new URL(SITE_CONFIG.url).hostname;
+      const canonicalUrl = new URL(SITE_CONFIG.url);
+      const canonical = canonicalUrl.hostname;
       const requestHost = request.nextUrl.hostname;
 
       // Skip canonical redirect for local development or when request is already localhost
@@ -25,9 +26,9 @@ export async function middleware(request: NextRequest) {
           // In development, do not redirect to production canonical host
           // This prevents localhost from being redirected to the production domain during dev.
         } else {
-          const dest = new URL(request.nextUrl.href);
-          dest.hostname = canonical;
-          return NextResponse.redirect(dest);
+          // Clean redirection using SITE_CONFIG.url base to prevent leaking internal port (e.g. :3000)
+          const dest = new URL(request.nextUrl.pathname + request.nextUrl.search, SITE_CONFIG.url);
+          return NextResponse.redirect(dest, 301);
         }
       }
     } catch (e) {
@@ -40,7 +41,8 @@ export async function middleware(request: NextRequest) {
     
     if (code && (pathname === '/' || pathname === '')) {
       console.log('Middleware: Intercepted auth code, redirecting to callback...');
-      const callbackUrl = new URL('/auth/callback', request.url);
+      const { SITE_CONFIG } = await import('@/lib/config');
+      const callbackUrl = new URL('/auth/callback', SITE_CONFIG.url);
       callbackUrl.searchParams.set('code', code);
       if (type) callbackUrl.searchParams.set('type', type);
       // Ensure we preserve the "next" destination if it exists

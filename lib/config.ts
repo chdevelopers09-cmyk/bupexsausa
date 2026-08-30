@@ -14,7 +14,8 @@ export const SITE_CONFIG = {
   get url() {
     const envUrl = process.env.NEXT_PUBLIC_SITE_URL;
     if (envUrl) {
-      return envUrl.startsWith('http') ? envUrl : `https://${envUrl}`;
+      const formatted = envUrl.startsWith('http') ? envUrl : `https://${envUrl}`;
+      return formatted.replace(/:3000\/?$/, '').replace(/\/$/, '');
     }
     // Fallback for Vercel preview deployments
     if (process.env.VERCEL_URL) {
