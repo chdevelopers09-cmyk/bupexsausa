@@ -143,9 +143,10 @@ export async function regenerateMembershipId(memberId: string) {
 
 export async function sendPasswordReset(email: string) {
   const supabase = await createClient(); // Use server client for standard auth
+  const origin = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.bupexsausa.org';
   
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/reset-password`,
+    redirectTo: `${origin}/auth/callback?next=/reset-password`,
   });
 
   if (error) return { error: error.message };
