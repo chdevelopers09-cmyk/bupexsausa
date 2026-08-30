@@ -46,16 +46,9 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
     membership_plan: 'annual'
   });
 
-  const [paymentMethod, setPaymentMethod] = useState<'card' | 'stripe' | 'paypal' | 'cashapp' | 'zelle' | 'applepay'>('card');
+  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'cashapp' | 'zelle'>('paypal');
   const [proofFile, setProofFile] = useState<File | null>(null);
   
-  const [paymentData, setPaymentData] = useState({
-    cardNumber: '',
-    expiry: '',
-    cvc: '',
-    cardName: ''
-  });
-
   const [copied, setCopied] = useState<string | null>(null);
 
   const copyToClipboard = (text: string, id: string) => {
@@ -82,25 +75,7 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
     }
   };
 
-  const handlePaymentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === 'cardNumber') {
-      const formatted = value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim().slice(0, 19);
-      setPaymentData(prev => ({ ...prev, [name]: formatted }));
-      return;
-    }
-    if (name === 'expiry') {
-      const formatted = value.replace(/\D/g, '').replace(/(.{2})/, '$1/').slice(0, 5);
-      setPaymentData(prev => ({ ...prev, [name]: formatted }));
-      return;
-    }
-    if (name === 'cvc') {
-      const formatted = value.replace(/\D/g, '').slice(0, 4);
-      setPaymentData(prev => ({ ...prev, [name]: formatted }));
-      return;
-    }
-    setPaymentData(prev => ({ ...prev, [name]: value }));
-  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -405,12 +380,9 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                   <h2 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-1">Payment Method</h2>
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { id: 'card', label: 'Card', icon: <CreditCard className="h-4 w-4" /> },
-                      { id: 'stripe', label: 'Stripe', icon: <ShieldCheck className="h-4 w-4" /> },
                       { id: 'paypal', label: 'PayPal', icon: <DollarSign className="h-4 w-4" /> },
                       { id: 'cashapp', label: 'Cash App', icon: <DollarSign className="h-4 w-4" /> },
                       { id: 'zelle', label: 'Zelle', icon: <Mail className="h-4 w-4" /> },
-                      { id: 'applepay', label: 'Apple Pay', icon: <Smartphone className="h-4 w-4" /> },
                     ].map((method) => (
                       <button
                         key={method.id}
@@ -435,54 +407,6 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
 
                 {/* Payment Details Content */}
                 <div className="bg-white rounded-2xl p-1 border border-gray-50">
-                  {paymentMethod === 'card' && (
-                    <div className="p-4 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <div className="space-y-1.5">
-                        <label className="text-[11px] font-black text-gray-500 ml-1">Cardholder Name</label>
-                        <input name="cardName" type="text" value={paymentData.cardName} onChange={handlePaymentChange} className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-100 text-dark focus:bg-white focus:border-[#8B5CF6] outline-none font-bold text-[13px]" placeholder="e.g. John Doe" />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[11px] font-black text-gray-500 ml-1">Card Number</label>
-                        <div className="relative">
-                          <input name="cardNumber" type="text" value={paymentData.cardNumber} onChange={handlePaymentChange} className="w-full pl-4 pr-12 py-3 rounded-xl bg-gray-50/50 border border-gray-100 text-dark focus:bg-white focus:border-[#8B5CF6] outline-none font-mono text-[14px] font-black" placeholder="0000 0000 0000 0000" />
-                          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-1 opacity-40">
-                            <div className="h-4 w-6 bg-blue-600 rounded-sm" />
-                            <div className="h-4 w-6 bg-red-500 rounded-sm" />
-                            <div className="h-4 w-6 bg-orange-400 rounded-sm" />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-1.5">
-                          <label className="text-[11px] font-black text-gray-500 ml-1">Expiry</label>
-                          <input name="expiry" type="text" value={paymentData.expiry} onChange={handlePaymentChange} className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-100 text-dark focus:bg-white focus:border-[#8B5CF6] outline-none font-black text-[13px]" placeholder="MM / YY" />
-                        </div>
-                        <div className="space-y-1.5">
-                          <label className="text-[11px] font-black text-gray-500 ml-1">CVC</label>
-                          <div className="relative">
-                            <input name="cvc" type="text" value={paymentData.cvc} onChange={handlePaymentChange} className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-100 text-dark focus:bg-white focus:border-[#8B5CF6] outline-none font-black text-[13px]" placeholder="123" />
-                            <ShieldCheck className="absolute right-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-emerald-400" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {(paymentMethod === 'stripe') && (
-                    <div className="p-6 text-center space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <div className="h-16 w-16 bg-indigo-50 rounded-full flex items-center justify-center mx-auto">
-                        <CreditCard className="h-8 w-8 text-indigo-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-black text-dark uppercase tracking-widest text-[10px] mb-1">Stripe Secure Checkout</h3>
-                        <p className="text-gray-400 text-[11px] font-bold mb-3">You&apos;ll be redirected to Stripe&apos;s hosted checkout for secure payment.</p>
-                        <a href={SITE_CONFIG.payments.stripe.checkoutUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-black text-xs hover:bg-indigo-700 transition-colors">
-                          <ExternalLink className="h-3.5 w-3.5" /> Open Stripe Checkout
-                        </a>
-                      </div>
-                    </div>
-                  )}
-
                   {paymentMethod === 'paypal' && (
                     <div className="p-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
                       <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-2xl border border-blue-100">
@@ -546,19 +470,6 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                               />
                            </label>
                         </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {paymentMethod === 'applepay' && (
-                    <div className="p-10 text-center space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <div className="h-20 w-20 bg-gray-900 text-white rounded-3xl flex items-center justify-center mx-auto shadow-2xl">
-                        <Smartphone className="h-10 w-10" />
-                      </div>
-                      <div>
-                        <h3 className="font-black text-dark uppercase tracking-[0.2em] text-[11px] mb-2">Apple Pay</h3>
-                        <p className="text-gray-400 text-[12px] font-bold">Double-click side button to pay</p>
-                        <p className="text-[#8B5CF6] font-black text-2xl mt-2">${totalDue.toFixed(2)}</p>
                       </div>
                     </div>
                   )}
@@ -766,7 +677,7 @@ export default function RegisterClient({ settings = {} }: { settings?: any }) {
                   <button type="submit" disabled={isPending} className="flex-[2] py-4 rounded-2xl bg-[#8B5CF6] text-white font-black text-sm shadow-xl shadow-purple-200 hover:scale-[1.02] active:scale-[0.98] transition-all relative overflow-hidden group">
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                     <span className="relative z-10">
-                      {isPending ? 'PROCESSING...' : (paymentMethod === 'card' ? 'COMPLETE PAYMENT' : 'I HAVE SENT PAYMENT')}
+                      {isPending ? 'PROCESSING...' : 'SUBMIT REGISTRATION & PROOF'}
                     </span>
                   </button>
                 </div>
